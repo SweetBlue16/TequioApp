@@ -66,15 +66,39 @@ La identidad visual integra una cinta multicolor de 6 segmentos simétricos (`Co
 
 ## 4. Estándares Responsivos y Breakpoints
 
-Para evitar inconsistencias en el diseño, la plataforma utiliza un único punto de quiebre estructural entre móvil y escritorio:
+Para mantener consistencia en toda la plataforma y evitar desbordes en dispositivos móviles, se define un único punto de quiebre estructural entre la visualización en celular y pantallas mayores:
 
-| Dispositivo | Breakpoint | Comportamiento del Layout |
+| Dispositivo / Pantalla | Rango de Ancho | Comportamiento del Layout |
 | :--- | :--- | :--- |
 | **Móvil (Smartphones)** | `< 768px` | 1 columna vertical fluida, drawer de navegación, botones al 100% de ancho[cite: 4, 5]. |
-| **Tablet** | `768px – 1023px` | Grillas adaptables de 2 columnas, menús de navegación visibles[cite: 5]. |
+| **Tablet / Laptop compacta** | `768px – 1023px` | Grillas adaptables de 2 columnas, menús de navegación visibles. |
 | **Escritorio (Desktop)** | `≥ 1024px` | Navegación horizontal completa, catálogos en 3 o 4 columnas[cite: 4, 5]. |
 
-### Reglas de Maquetación
-1. **Contenedor elástico:** Ancho máximo centralizado de `1200px` con padding lateral de `1rem` (16px) en celular y `1.5rem` (24px) en pantallas amplias.
-2. **Cero anchos fijos horizontales:** Prohibido el uso de `width: [px]` estáticos en elementos contenedores. Emplear siempre `width: 100%` con `max-width`.
-3. **Flujo táctil prioritario (Mobile-First):** Controles interactivos organizados verticalmente en pantallas pequeñas con espaciado adecuado para el toque del pulgar[cite: 4, 5].
+---
+
+### 4.1 Reglas Generales de Maquetación
+1. **Contenedor elástico (`pageContainer`):** Toda vista debe envolverse en un contenedor central con ancho máximo de `1200px` (`--container-max-width`), centrado con `margin: 0 auto`, y padding horizontal de `1rem` (16px) en celular y `1.5rem` (24px) en pantallas medianas y grandes[cite: 5].
+2. **Cero anchos fijos horizontales:** Prohibido el uso de `width: [px]` estáticos en elementos contenedores o tarjetas. Utilizar siempre `width: 100%` restringido por `max-width`[cite: 5].
+3. **Flujo táctil prioritario (Mobile-First):** Asumir primero el espacio vertical de pantallas de 360px a 390px, permitiendo desplazamiento natural con el pulgar[cite: 5].
+4. **Contención de medios:** Toda imagen o gráfico debe incluir `max-width: 100%`, `height: auto` y `display: block` para prevenir desbordes de caja.
+
+---
+
+### 4.2 Estándar para Componentes con Tamaños Dinámicos
+
+#### Botones de Acción (`Button`)
+* **En celular (`< 768px`):** Ocupan el 100% del ancho del contenedor (`fullWidth`) con una altura táctil de `48px` a `52px` (`--button-height-large`) para facilitar pulsaciones cómodas en exteriores[cite: 4, 5].
+* **En escritorio (`≥ 768px`):** Se adaptan al tamaño de su contenido (`width: auto`) con un ancho mínimo recomendado de `160px` a `180px`, alineados a la derecha o al centro según el flujo del formulario.
+
+#### Campos de Entrada de Datos (`InputField`)
+* Ocupan siempre el `100%` del ancho de su contenedor padre (`width: 100%`) con altura mínima de `48px` (`--target-size-min`)[cite: 5].
+* **En celular:** Apilamiento estrictamente vertical (1 campo por renglón)[cite: 4, 5].
+* **En escritorio:** Dos campos relacionados pueden distribuirse en una grilla de 2 columnas paralelas (`grid-template-columns: 1fr 1fr`) separadas por un espacio de `1rem` a `1.5rem`.
+
+#### Tarjetas y Módulos de Contenido (`Card` / `AuthCard`)
+* Ancho elástico restringido: `width: 100%; max-width: 440px; margin: 0 auto;` para formularios centrados (como Login y Registro).
+* Grillas de productos o lotes: 1 columna en móvil, 2 columnas en tablet (`≥ 768px`) y 3 columnas en escritorio (`≥ 1024px`)[cite: 5].
+
+#### Elementos Circulares y Multimedia (`Avatar`, Íconos)
+* El componente interno se dimensiona al 100% de su envoltorio con `object-fit: cover` o `contain`.
+* El tamaño del contenedor se define según la zona: `38px` en Navbar, `48px` en listas o comentarios, y `80px` a `96px` en la vista de perfil.

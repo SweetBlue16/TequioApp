@@ -1,0 +1,84 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: var(--target-size-min, 48px);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-button, 14px);
+  border: 1px solid transparent;
+  font-weight: 700;
+  font-size: var(--font-size-body, 1rem);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.1s ease;
+  user-select: none;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.button:focus-visible {
+  outline: 3px solid rgba(0, 191, 165, 0.4);
+  outline-offset: 2px;
+}
+
+/* Dynamic width modifier */
+.fullWidth {
+  width: 100%;
+}
+
+/* Primary emerald/turquoise variant for authentication actions */
+.primary {
+  background-color: #00bfa5;
+  color: #ffffff;
+}
+
+.primary:hover:not(:disabled) {
+  background-color: #00a892;
+}
+
+/* Official Tequio terracotta action variant */
+.terracotta {
+  background-color: var(--color-terracotta, #d9481e);
+  color: #ffffff;
+}
+
+.terracotta:hover:not(:disabled) {
+  opacity: 0.92;
+}
+
+/* Outline secondary action variant */
+.outline {
+  background-color: transparent;
+  border-color: rgba(24, 17, 10, 0.2);
+  color: var(--color-espresso, #18110a);
+}
+
+.outline:hover:not(:disabled) {
+  background-color: rgba(24, 17, 10, 0.04);
+}
+
+/* Disabled and loading states */
+.button:disabled,
+.loading {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Spinner indicator for async actions */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,92 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  width: 100%;
+}
+
+.label {
+  font-size: var(--font-size-small, 0.875rem);
+  font-weight: 700;
+  color: var(--color-espresso, #18110a);
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  min-height: var(--target-size-min, 48px);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(24, 17, 10, 0.2);
+  background-color: var(--color-surface-white, #ffffff);
+  color: var(--color-espresso, #18110a);
+  font-size: var(--font-size-body, 1rem);
+  line-height: 1.5;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input::placeholder {
+  color: rgba(24, 17, 10, 0.45);
+}
+
+.input:focus {
+  outline: none;
+  border-color: #00bfa5;
+  box-shadow: 0 0 0 3px rgba(0, 191, 165, 0.2);
+}
+
+/* Extra right padding when an action button or icon is present */
+.hasRightAction {
+  padding-right: 3rem;
+}
+
+/* Error state */
+.inputError {
+  border-color: var(--color-terracotta, #d9481e);
+}
+
+.inputError:focus {
+  border-color: var(--color-terracotta, #d9481e);
+  box-shadow: 0 0 0 3px rgba(217, 72, 30, 0.2);
+}
+
+.errorMessage {
+  font-size: var(--font-size-small, 0.875rem);
+  color: var(--color-terracotta, #d9481e);
+  margin-top: 0.125rem;
+  font-weight: 500;
+}
+
+/* Toggle password visibility button */
+.toggleButton {
+  position: absolute;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-ash-brown, #63584F);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.toggleButton:hover {
+  color: var(--color-espresso, #18110a);
+  background-color: rgba(24, 17, 10, 0.05);
+}
+
+.toggleButton:focus-visible {
+  outline: 2px solid #00bfa5;
+  outline-offset: 2px;
+}

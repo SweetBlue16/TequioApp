@@ -1,0 +1,134 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  background-color: var(--color-warm-ivory, #fffdf9);
+  box-shadow: 0 2px 8px rgba(24, 17, 10, 0.05);
+}
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* --- Contenedor del Logo con Texto --- */
+.brand {
+  display: flex;
+  align-items: center;
+  height: 48px; 
+  text-decoration: none;
+}
+
+.logoImage {
+  height: 100%;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain; 
+  display: block;
+}
+
+/* --- Sección de Navegación y Acciones --- */
+.navSection {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.navLinks {
+  display: none;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+@media (min-width: 860px) {
+  .navLinks {
+    display: flex;
+  }
+}
+
+/* --- Perfil de Usuario --- */
+.userProfile {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  color: var(--color-espresso, #18110a);
+}
+
+.avatarWrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.userName {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--color-espresso, #18110a);
+  white-space: nowrap;
+}
+
+/* --- Contenedor del Carrito de Compras --- */
+.cartButton {
+  min-height: 48px;
+  min-width: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  position: relative;
+  transition: transform 0.15s ease;
+}
+
+.cartButton:hover {
+  transform: scale(1.08);
+}
+
+.cartIcon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+}
+
+/* --- Botón Menú Móvil --- */
+.mobileToggle {
+  min-height: 48px;
+  min-width: 48px;
+  background: transparent;
+  border: none;
+  color: var(--color-espresso, #18110a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+@media (min-width: 860px) {
+  .mobileToggle {
+    display: none;
+  }
+}
+
+.mobileDrawer {
+  background-color: var(--color-warm-ivory, #fffdf9);
+  border-top: 1px solid rgba(24, 17, 10, 0.08);
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 860px) {
+  .mobileDrawer {
+    display: none;
+  }
+}

@@ -1,0 +1,41 @@
+.card {
+  width: 100%;
+  background-color: var(--color-surface-white, #ffffff);
+  border-radius: var(--radius-card, 18px);
+  box-shadow: var(--shadow-card, 0 6px 16px rgba(24, 17, 10, 0.04));
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s ease;
+}
+
+/* Optional subtle border when extra contrast is required */
+.bordered {
+  border: 1px solid var(--color-border-subtle, #f0ece4);
+}
+
+/* Centered horizontally in its parent container */
+.centered {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Padding variants */
+.paddingSm {
+  padding: 1rem;
+}
+
+.paddingMd {
+  padding: 1.5rem;
+}
+
+.paddingLg {
+  padding: 2rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .paddingLg {
+    padding: 2.5rem 2rem;
+  }
+}

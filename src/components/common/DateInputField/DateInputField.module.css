@@ -1,0 +1,76 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  width: 100%;
+}
+
+.label {
+  font-size: var(--font-size-small, 0.875rem);
+  font-weight: 700;
+  color: var(--color-espresso, #18110a);
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.dateInput {
+  width: 100%;
+  min-height: var(--target-size-min, 48px);
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(24, 17, 10, 0.2);
+  background-color: var(--color-surface-white, #ffffff);
+  color: var(--color-espresso, #18110a);
+  font-size: var(--font-size-body, 1rem);
+  line-height: 1.5;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.dateInput:focus {
+  outline: none;
+  border-color: #00bfa5;
+  box-shadow: 0 0 0 3px rgba(0, 191, 165, 0.2);
+}
+
+.dateInput::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  opacity: 0;
+  width: 28px;
+  height: 28px;
+}
+
+.calendarIcon {
+  position: absolute;
+  right: 0.875rem;
+  pointer-events: none;
+  color: var(--color-ash-brown, #63584f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputError {
+  border-color: var(--color-terracotta, #d9481e);
+}
+
+.inputError:focus {
+  border-color: var(--color-terracotta, #d9481e);
+  box-shadow: 0 0 0 3px rgba(217, 72, 30, 0.2);
+}
+
+.errorMessage {
+  font-size: var(--font-size-small, 0.875rem);
+  color: var(--color-terracotta, #d9481e);
+  margin-top: 0.125rem;
+  font-weight: 500;
+}

@@ -1,0 +1,31 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-family-base, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--color-espresso, #18110a);
+  transition: color 0.15s ease;
+  position: relative;
+}
+
+.button:hover {
+  color: var(--color-terracotta, #d9481e);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-terracotta, #d9481e);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.active {
+  color: var(--color-terracotta, #d9481e);
+}

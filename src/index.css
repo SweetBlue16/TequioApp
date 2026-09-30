@@ -1,5 +1,48 @@
+:root {
+  --color-warm-ivory: #FFFDF9;    /* Fondo general */
+  --color-surface-white: #FFFFFF; /* Tarjetas y contenedores */
+  --color-espresso: #18110A;      /* Texto principal / Títulos */
+  --color-terracotta: #D9481E;    /* Color de acción principal */
+  --color-emerald: #1E6F43;       /* Éxito y avances */
+  --color-amber-honey: #FFB703;   /* Avisos y etiquetas */
+  --color-ash-brown: #63584F;     /* Textos secundarios */
+
+  /* Tipografía oficial */
+  --font-family-base: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+body {
+  background-color: var(--color-warm-ivory);
+  color: var(--color-espresso);
+  font-family: var(--font-family-base);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+/* Títulos principales */
+h1, h2, h3 {
+  color: var(--color-espresso);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+/* Área táctil */
+button, 
+.accessible-button {
+  min-height: 48px;
+  font-family: var(--font-family-base);
 }

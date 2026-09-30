@@ -1,14 +1,42 @@
 :root {
-  --color-warm-ivory: #FFFDF9;    /* Fondo general */
-  --color-surface-white: #FFFFFF; /* Tarjetas y contenedores */
-  --color-espresso: #18110A;      /* Texto principal / Títulos */
-  --color-terracotta: #D9481E;    /* Color de acción principal */
-  --color-emerald: #1E6F43;       /* Éxito y avances */
-  --color-amber-honey: #FFB703;   /* Avisos y etiquetas */
-  --color-ash-brown: #63584F;     /* Textos secundarios */
+  /* Colors */
+  --color-warm-ivory: #FFFDF9;    /* General background */
+  --color-surface-white: #FFFFFF; /* Cards and containers */
+  --color-espresso: #18110A;      /* Main text / Titles */
+  --color-terracotta: #D9481E;    /* Primary action color */
+  --color-emerald: #1E6F43;       /* Success and progress */
+  --color-amber-honey: #FFB703;   /* Alerts and labels */
+  --color-ash-brown: #63584F;     /* Secondary text */
 
-  /* Tipografía oficial */
+  /* Official font */
   --font-family-base: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  /* Typographic scale */
+  --font-size-h1: 2rem;         
+  --font-size-h1-mobile: 1.625rem; 
+  --font-size-h2: 1.375rem;     
+  --font-size-h2-mobile: 1.25rem; 
+  --font-size-h3: 1.125rem;     
+  --font-size-body: 1rem;     
+  --font-size-body-mobile: 1.0625rem; 
+  --font-size-small: 0.875rem;  
+
+  /* Target sizes and accessibility */
+  --target-size-min: 48px;        
+  --button-height-large: 52px;    
+
+  /*Containers, spacing and radii*/
+  --container-max-width: 1200px;
+  --container-padding-desktop: 1.5rem; 
+  --container-padding-mobile: 1rem;    
+  
+  --radius-card: 18px;           
+  --radius-button: 14px;         
+  --radius-pill: 9999px;          
+
+  --shadow-subtle: 0 2px 8px rgba(24, 17, 10, 0.05);
+  --shadow-card: 0 6px 16px rgba(24, 17, 10, 0.04);
+  --shadow-active: 0 8px 20px rgba(217, 72, 30, 0.25);
 }
 
 * {
@@ -24,6 +52,7 @@ body {
   font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button,
@@ -31,18 +60,47 @@ input,
 textarea,
 select {
   font-family: inherit;
+  font-size: inherit;
+  color: inherit;
 }
 
-/* Títulos principales */
-h1, h2, h3 {
+/* Main titles */
+h1, h2, h3, h4 {
   color: var(--color-espresso);
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
-/* Área táctil */
-button, 
-.accessible-button {
-  min-height: 48px;
-  font-family: var(--font-family-base);
+h1 {
+  font-size: var(--font-size-h1);
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+}
+
+/* Touch target */
+button,
+.accessible-target {
+  min-height: var(--target-size-min);
+  min-width: var(--target-size-min);
+}
+
+/* Base adaptation for mobile screens */
+@media (max-width: 767px) {
+  body {
+    font-size: var(--font-size-body-mobile);
+  }
+
+  h1 {
+    font-size: var(--font-size-h1-mobile);
+  }
+
+  h2 {
+    font-size: var(--font-size-h2-mobile);
+  }
 }

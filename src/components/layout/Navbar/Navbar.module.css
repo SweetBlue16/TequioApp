@@ -1,90 +1,117 @@
+/* Header container sticky at the top */
 .header {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 100;
   width: 100%;
-  background-color: var(--color-warm-ivory, #fffdf9);
-  box-shadow: 0 2px 8px rgba(24, 17, 10, 0.05);
+  background-color: var(--color-warm-ivory);
+  box-shadow: var(--shadow-subtle);
 }
 
+/* Main inner navigation row */
 .container {
-  max-width: 1300px;
+  width: 100%;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 0 1.5rem;
-  height: 72px;
+  padding: 0 var(--container-padding-mobile);
+  height: 68px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
 }
 
-/* --- Contenedor del Logo con Texto --- */
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--container-padding-desktop);
+    height: 72px;
+  }
+}
+
+/* 1. Brand & Logo lockup */
 .brand {
   display: flex;
   align-items: center;
-  height: 48px; 
+  flex-shrink: 0;
+  height: var(--target-size-min);
   text-decoration: none;
 }
 
 .logoImage {
-  height: 100%;
+  height: 38px;
   width: auto;
-  max-width: 180px;
-  object-fit: contain; 
+  max-width: 170px;
+  object-fit: contain;
   display: block;
 }
 
-/* --- Sección de Navegación y Acciones --- */
+@media (max-width: 480px) {
+  .logoImage {
+    height: 32px;
+    max-width: 135px;
+  }
+}
+
+/* 2. Actions and Navigation Area */
 .navSection {
   display: flex;
   align-items: center;
-  gap: 1.75rem;
+  gap: 1.25rem;
 }
 
 .navLinks {
   display: none;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
-@media (min-width: 860px) {
+@media (min-width: 768px) {
   .navLinks {
     display: flex;
   }
 }
 
-/* --- Perfil de Usuario --- */
+/* User profile button / link */
 .userProfile {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.5rem;
   text-decoration: none;
-  color: var(--color-espresso, #18110a);
+  color: var(--color-espresso);
+  min-height: var(--target-size-min);
 }
 
 .avatarWrapper {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
   flex-shrink: 0;
 }
 
 .userName {
-  font-size: 0.98rem;
+  display: none;
+  font-size: var(--font-size-small);
   font-weight: 700;
-  color: var(--color-espresso, #18110a);
+  color: var(--color-espresso);
   white-space: nowrap;
 }
 
-/* --- Contenedor del Carrito de Compras --- */
+@media (min-width: 600px) {
+  .userName {
+    display: inline;
+  }
+}
+
+/* 3. Shopping cart icon button (WCAG 2.5.5 touch target) */
 .cartButton {
-  min-height: 48px;
-  min-width: 48px;
+  min-height: var(--target-size-min);
+  min-width: var(--target-size-min);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  position: relative;
+  flex-shrink: 0;
   transition: transform 0.15s ease;
 }
 
@@ -99,35 +126,38 @@
   display: block;
 }
 
-/* --- Botón Menú Móvil --- */
+/* 4. Menu toggle button (Mobile only) */
 .mobileToggle {
-  min-height: 48px;
-  min-width: 48px;
+  min-height: var(--target-size-min);
+  min-width: var(--target-size-min);
   background: transparent;
   border: none;
-  color: var(--color-espresso, #18110a);
+  color: var(--color-espresso);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  padding: 0;
 }
 
-@media (min-width: 860px) {
+@media (min-width: 768px) {
   .mobileToggle {
     display: none;
   }
 }
 
+/* 5. Mobile drawer menu */
 .mobileDrawer {
-  background-color: var(--color-warm-ivory, #fffdf9);
-  border-top: 1px solid rgba(24, 17, 10, 0.08);
-  padding: 1rem 1.5rem;
   display: flex;
   flex-direction: column;
+  background-color: var(--color-warm-ivory);
+  border-top: 1px solid var(--color-border-subtle);
+  padding: 0.75rem var(--container-padding-mobile) 1.25rem var(--container-padding-mobile);
   gap: 0.5rem;
+  box-shadow: var(--shadow-subtle);
 }
 
-@media (min-width: 860px) {
+@media (min-width: 768px) {
   .mobileDrawer {
     display: none;
   }

@@ -1,0 +1,195 @@
+/* ==========================================================================
+   Register Module Styles
+   Responsive layout for role selection, wizard, and bottom color bar.
+   ========================================================================== */
+
+.pageWrapper {
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--color-warm-ivory, #fffdf9);
+}
+
+.mainContentArea {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+}
+
+.centeredContainer {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: center;
+}
+
+.rolesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+.roleOptionButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 0.5rem;
+  border-radius: var(--radius-card, 18px);
+  border: 1.5px solid var(--color-border-subtle, #f0ece4);
+  background-color: var(--color-surface-white, #ffffff);
+  cursor: pointer;
+  min-height: var(--target-size-min, 48px);
+  transition: border-color 0.2s ease, transform 0.15s ease;
+}
+
+.roleOptionButton:hover {
+  border-color: #00bfa5;
+  transform: translateY(-2px);
+}
+
+.roleIconWrapper {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.roleIcon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.roleLabel {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-espresso, #18110a);
+}
+
+.wizardLayoutContainer {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.wizardCardWrapper {
+  flex: 1 1 520px;
+  max-width: 520px;
+  width: 100%;
+}
+
+.sideDecorationPanel {
+  display: none;
+  flex: 0 0 280px;
+  border-radius: var(--radius-card, 18px);
+  overflow: hidden;
+  max-height: 720px;
+}
+
+@media (min-width: 860px) {
+  .sideDecorationPanel {
+    display: block;
+  }
+}
+
+.sideDecorationImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center right;
+  display: block;
+}
+
+.title {
+  font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+  font-weight: 800;
+  color: var(--color-espresso, #18110a);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.formContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.requirementsBox {
+  background-color: #faf6f0;
+  border: 1px solid var(--color-border-subtle, #f0ece4);
+  border-radius: 10px;
+  padding: 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.requirementsTitle {
+  font-weight: 700;
+  color: var(--color-espresso, #18110a);
+  margin-bottom: 0.25rem;
+}
+
+.requirementsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.requirementItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-ash-brown, #63584f);
+}
+
+.requirementMet {
+  color: var(--color-emerald, #1e6f43);
+  font-weight: 600;
+}
+
+.footerText {
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--color-espresso, #18110a);
+  margin-top: 1rem;
+  line-height: 1.4;
+}
+
+.alertBox {
+  background-color: #fdedec;
+  border: 1px solid var(--color-terracotta, #d9481e);
+  color: var(--color-terracotta, #d9481e);
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.bottomColorBar {
+  margin-top: auto;
+  width: 100%;
+}

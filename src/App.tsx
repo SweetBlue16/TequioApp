@@ -1,23 +1,31 @@
-import { BrowserRouter as Router} from 'react-router-dom';
-import { AppRouter } from '@/routes/AppRouter';
 import React from 'react';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
+import { AppRouter } from '@/routes/AppRouter';
 
-export const App = () => {
+const AppContent: React.FC = () => {
+  const location = useLocation();
+
+  const isAuthRoute =
+    location.pathname.startsWith('/registro') ||
+    location.pathname.startsWith('/verificar') ||
+    location.pathname.startsWith('/login');
+
+  return (
+    <div style={{ minHeight: '100dvh', backgroundColor: 'var(--color-warm-ivory, #fffdf9)' }}>
+      {!isAuthRoute && <Navbar userName="Mauricio" cartCount={2} />}
+
+      <main>
+        <AppRouter />
+      </main>
+    </div>
+  );
+};
+
+export const App: React.FC = () => {
   return (
     <Router>
-      <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-warm-ivory)' }}>
-        {/* Encabezado visible */}
-        <Navbar userName="Mauricio" cartCount={2} />
-
-        {/* Contenido temporal de prueba */}
-        <main style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px' }}>
-          <h1>Bienvenido a Tequio</h1>
-          <p style={{ marginTop: '12px', color: 'var(--color-ash-brown)' }}>
-            Mercado comunitario de café, miel y cosechas locales de la región.
-          </p>
-        </main>
-      </div>
+      <AppContent />
     </Router>
   );
 };

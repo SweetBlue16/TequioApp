@@ -1,0 +1,72 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.inputsWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.digitInput {
+  width: 46px;
+  height: 52px;
+  min-height: var(--target-size-min, 48px);
+  border-radius: 12px;
+  border: 1.5px solid rgba(24, 17, 10, 0.2);
+  background-color: var(--color-surface-white, #ffffff);
+  color: var(--color-espresso, #18110a);
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  caret-color: #00bfa5;
+}
+
+.digitInput:focus {
+  outline: none;
+  border-color: #00bfa5;
+  box-shadow: 0 0 0 3px rgba(0, 191, 165, 0.25);
+}
+
+.digitInput:disabled {
+  background-color: #f7f5f0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Error state */
+.inputError {
+  border-color: var(--color-terracotta, #d9481e);
+}
+
+.inputError:focus {
+  border-color: var(--color-terracotta, #d9481e);
+  box-shadow: 0 0 0 3px rgba(217, 72, 30, 0.25);
+}
+
+.errorMessage {
+  font-size: var(--font-size-small, 0.875rem);
+  color: var(--color-terracotta, #d9481e);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Mobile responsive layout */
+@media (max-width: 420px) {
+  .inputsWrapper {
+    gap: 0.35rem;
+  }
+
+  .digitInput {
+    width: 40px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+}

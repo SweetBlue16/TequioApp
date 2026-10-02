@@ -1,18 +1,27 @@
-import { Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { Register } from '@/pages/auth/Register';
+import { VerifyAccount } from '@/pages/auth/VerifyAccount';
 
-export const AppRouter = () => {
+export const AppRouter: React.FC = () => {
   return (
     <Routes>
       <Route
         path="/"
         element={
-          <main style={{ padding: '2rem', textAlign: 'center' }}>
-            <h1>Tequio</h1>
-            <p>Esqueleto base de React y TypeScript configurado correctamente.</p>
-          </main>
+          <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px', textAlign: 'center' }}>
+            <h1>Bienvenido a Tequio</h1>
+            <p style={{ marginTop: '12px', color: 'var(--color-ash-brown)' }}>
+              Mercado comunitario de café, miel y cosechas locales de la región.
+            </p>
+          </div>
         }
       />
-      {/* Las rutas por actor (auth, catalog, producer, admin) se registrarán aquí */}
+      <Route path="/registro" element={<Register />} />
+      <Route path="/verificar" element={<VerifyAccount />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
+
+export default AppRouter;

@@ -1,6 +1,6 @@
 # Guía de Diseño y Estándares de Interfaz: Tequio
 
-La plataforma web Tequio está diseñada para conectar directamente a consumidores con pequeños productores agrícolas y artesanales (cafetaleros, apicultores, artesanos) de la región de Xalapa y sus alrededores[cite: 4, 7]. 
+La plataforma web Tequio está diseñada para conectar directamente a consumidores con pequeños productores agrícolas y artesanales (cafetaleros, apicultores, artesanos) de la región de Xalapa y sus alrededores[cite: 4, 7].
 
 Una parte significativa de los usuarios que gestionan productos y confirman entregas corresponde a adultos mayores o personas del entorno rural no nativas digitales[cite: 7]. Asimismo, la interacción ocurre frecuentemente en espacios físicos abiertos, sobre dispositivos móviles y bajo la luz directa del sol[cite: 7]. Por ello, la accesibilidad (WCAG) y el diseño inclusivo son pilares de la arquitectura visual de Tequio[cite: 4, 7, 8].
 
@@ -9,15 +9,18 @@ Una parte significativa de los usuarios que gestionan productos y confirman entr
 ## 1. Pautas de Accesibilidad (WCAG)
 
 ### 1.1 Accesibilidad Visual y Legibilidad
+
 * **Alto contraste (WCAG 1.4.3 / AAA):** Las combinaciones de color entre texto y fondo garantizan un contraste superior a 13:1 en cuerpos principales, asegurando legibilidad inmediata bajo luz solar en exteriores[cite: 4, 7].
 * **Escalabilidad de texto (WCAG 1.4.4):** El diseño respeta el tamaño preconfigurado por el usuario en su navegador o móvil sin truncar contenido ni quebrar el layout[cite: 7, 8].
 * **Sin dependencia exclusiva del color:** Los estados y validaciones se acompañan de texto semántico e iconografía clara[cite: 8].
 
 ### 1.2 Accesibilidad Táctil y Física
+
 * **Área táctil mínima (WCAG 2.5.5 - Target Size):** Todo control interactivo (botones, inputs, enlaces principales y selectores) cuenta con una dimensión mínima de `48px x 48px` para facilitar su pulsación con manos cansadas o poca precisión motriz[cite: 4, 7, 8].
 * **Botones primarios amplios:** En pantallas móviles, los botones de acción principal abarcan el 100% del ancho del contenedor con alturas entre `48px` y `52px`[cite: 4, 8].
 
 ### 1.3 Accesibilidad Cognitiva y Claridad
+
 * **Confirmación obligatoria antes de acciones definitivas:** Diálogos explícitos previos a cualquier modificación irreversible o eliminación de datos[cite: 4, 7, 8].
 * **Lenguaje directo y libre de tecnicismos:** Notificaciones y etiquetas redactadas en vocabulario cotidiano, omitiendo términos internos como *endpoint*, *token* o *backend*[cite: 7, 8].
 * **Flujos paso a paso:** Formularios complejos divididos en fases cortas y numeradas con indicador de progreso[cite: 7, 8].
@@ -39,7 +42,9 @@ Una parte significativa de los usuarios que gestionan productos y confirman entr
 | `--color-border-subtle` | `#F0ECE4` | Delimitadores y bordes | Separación suave entre contenedores. |
 
 ### Cintas Culturales (Isotipo Tequio)
+
 La identidad visual integra una cinta multicolor de 6 segmentos simétricos (`ColorBar`), inspirada en el trabajo colectivo y el tejido tradicional de la región[cite: 4, 7]:
+
 1. Ámbar Miel (`#FFB703`)[cite: 4, 7]
 2. Rosa Mexicano (`#D81B60`)[cite: 4]
 3. Turquesa Esmeralda (`#00BFA5`)
@@ -55,12 +60,13 @@ La identidad visual integra una cinta multicolor de 6 segmentos simétricos (`Co
 * **Regla de herencia:** Todos los controles nativos (`button`, `input`, `textarea`, `select`) deben heredar la tipografía mediante `font-family: inherit` desde `src/index.css`.
 
 ### Escala Tipográfica
+
 * **Títulos Principales (H1):** `32px` (escritorio) / `26px` (móvil) — ExtraBold 800[cite: 4, 7].
 * **Subtítulos y Encabezados de Tarjetas (H2):** `22px` (escritorio) / `20px` (móvil) — Bold 700[cite: 4, 7].
 * **Encabezados de Sección (H3):** `18px` — Bold 700[cite: 4, 7].
 * **Cuerpo de Texto y Párrafos:** `16px` base (en móvil `17px` para confort de lectura) — Regular 400 o Medium 500[cite: 4, 7].
 * **Textos en Botones y Enlaces:** Bold 700[cite: 4, 7].
-* **Textos Pequeños / Badges:** `14px` (límite inferior accesible)[cite: 4].
+* **Textos Pequeños / Badges:** `14px` [límite inferior accesible](cite: 4).
 
 ---
 
@@ -77,6 +83,7 @@ Para mantener consistencia en toda la plataforma y evitar desbordes en dispositi
 ---
 
 ### 4.1 Reglas Generales de Maquetación
+
 1. **Contenedor elástico (`pageContainer`):** Toda vista debe envolverse en un contenedor central con ancho máximo de `1200px` (`--container-max-width`), centrado con `margin: 0 auto`, y padding horizontal de `1rem` (16px) en celular y `1.5rem` (24px) en pantallas medianas y grandes[cite: 5].
 2. **Cero anchos fijos horizontales:** Prohibido el uso de `width: [px]` estáticos en elementos contenedores o tarjetas. Utilizar siempre `width: 100%` restringido por `max-width`[cite: 5].
 3. **Flujo táctil prioritario (Mobile-First):** Asumir primero el espacio vertical de pantallas de 360px a 390px, permitiendo desplazamiento natural con el pulgar[cite: 5].
@@ -87,18 +94,22 @@ Para mantener consistencia en toda la plataforma y evitar desbordes en dispositi
 ### 4.2 Estándar para Componentes con Tamaños Dinámicos
 
 #### Botones de Acción (`Button`)
+
 * **En celular (`< 768px`):** Ocupan el 100% del ancho del contenedor (`fullWidth`) con una altura táctil de `48px` a `52px` (`--button-height-large`) para facilitar pulsaciones cómodas en exteriores[cite: 4, 5].
 * **En escritorio (`≥ 768px`):** Se adaptan al tamaño de su contenido (`width: auto`) con un ancho mínimo recomendado de `160px` a `180px`, alineados a la derecha o al centro según el flujo del formulario.
 
 #### Campos de Entrada de Datos (`InputField`)
+
 * Ocupan siempre el `100%` del ancho de su contenedor padre (`width: 100%`) con altura mínima de `48px` (`--target-size-min`)[cite: 5].
-* **En celular:** Apilamiento estrictamente vertical (1 campo por renglón)[cite: 4, 5].
+* **En celular:** Apilamiento estrictamente vertical [1 campo por renglón](cite: 4, 5).
 * **En escritorio:** Dos campos relacionados pueden distribuirse en una grilla de 2 columnas paralelas (`grid-template-columns: 1fr 1fr`) separadas por un espacio de `1rem` a `1.5rem`.
 
 #### Tarjetas y Módulos de Contenido (`Card` / `AuthCard`)
+
 * Ancho elástico restringido: `width: 100%; max-width: 440px; margin: 0 auto;` para formularios centrados (como Login y Registro).
 * Grillas de productos o lotes: 1 columna en móvil, 2 columnas en tablet (`≥ 768px`) y 3 columnas en escritorio (`≥ 1024px`)[cite: 5].
 
 #### Elementos Circulares y Multimedia (`Avatar`, Íconos)
+
 * El componente interno se dimensiona al 100% de su envoltorio con `object-fit: cover` o `contain`.
 * El tamaño del contenedor se define según la zona: `38px` en Navbar, `48px` en listas o comentarios, y `80px` a `96px` en la vista de perfil.

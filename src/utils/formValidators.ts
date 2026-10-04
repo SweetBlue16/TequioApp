@@ -89,6 +89,20 @@ export const validateTelephoneNumber: ValidatorFunction = (telephoneNumber: stri
 };
 
 /**
+ * Validate that a string does not exceed a specified maximum length.
+ */
+export const validateMaximumLength = (
+  fieldDisplayName: string,
+  maxLength: number
+): ValidatorFunction => {
+  return (value: string): ValidationResult => {
+    return value.trim().length <= maxLength
+      ? createSuccessResult()
+      : createFailureResult(`El ${fieldDisplayName.toLowerCase()} no puede exceder los ${maxLength} caracteres.`);
+  };
+};
+
+/**
  * Calculates full chronological age based on a birth date string (YYYY-MM-DD).
  */
 export const calculateAgeFromBirthDate = (birthDateString: string): number => {

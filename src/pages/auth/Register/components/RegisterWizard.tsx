@@ -14,6 +14,7 @@ import {
   validateLegalAdultAge,
   evaluatePasswordComplexity,
   validatePasswordConfirmationMatch,
+  validateMaximumLength
 } from '@/utils/formValidators';
 import styles from '../Register.module.css';
 
@@ -81,10 +82,12 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
     const firstNameError = executeFieldValidation(formData.firstName, [
       validateRequiredField('Nombre'),
       validateAlphabeticTextOnly('Nombre'),
+      validateMaximumLength('Nombre', 40),
     ]);
     const firstLastNameError = executeFieldValidation(formData.firstLastName, [
       validateRequiredField('Apellido paterno'),
       validateAlphabeticTextOnly('Apellido paterno'),
+      validateMaximumLength('Apellido paterno', 40),
     ]);
 
     if (firstNameError) errors.firstName = firstNameError;
@@ -93,6 +96,7 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
     if (formData.secondLastName.trim().length > 0) {
       const secondLastNameError = executeFieldValidation(formData.secondLastName, [
         validateAlphabeticTextOnly('Apellido materno'),
+        validateMaximumLength('Apellido materno', 40),
       ]);
       if (secondLastNameError) errors.secondLastName = secondLastNameError;
     }
@@ -104,7 +108,10 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
   const validateContactAndAgeStep = (): boolean => {
     const errors: Record<string, string> = {};
 
-    const emailError = executeFieldValidation(formData.email, [validateEmailAddress]);
+    const emailError = executeFieldValidation(formData.email, [
+      validateEmailAddress, 
+      validateMaximumLength('Correo electrónico', 80)
+    ]);
     const phoneError = executeFieldValidation(formData.phone, [validateTelephoneNumber]);
     const ageError = executeFieldValidation(formData.birthDate, [validateLegalAdultAge]);
 
@@ -119,7 +126,13 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
   const validateAccountSecurityStep = (): boolean => {
     const errors: Record<string, string> = {};
 
-    if (!passwordRequirementsStatus.isFullyValid) {
+    const passwordLengthError = executeFieldValidation(formData.password, [
+      validateMaximumLength('Contraseña', 64),
+    ]);
+
+    if (passwordLengthError) {
+      errors.password = passwordLengthError;
+    } else if (!passwordRequirementsStatus.isFullyValid) {
       errors.password = 'La contraseña no cumple con todos los requisitos mínimos de seguridad.';
     }
 
@@ -189,6 +202,7 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
               onChange={(e) => handleFieldChange('firstName', e.target.value)}
               errorMessage={fieldErrors.firstName}
               required
+              maxLength={40}
             />
 
             <InputField
@@ -198,6 +212,7 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
               onChange={(e) => handleFieldChange('firstLastName', e.target.value)}
               errorMessage={fieldErrors.firstLastName}
               required
+              maxLength={40}
             />
 
             <InputField
@@ -206,6 +221,7 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
               value={formData.secondLastName}
               onChange={(e) => handleFieldChange('secondLastName', e.target.value)}
               errorMessage={fieldErrors.secondLastName}
+              maxLength={40}
             />
 
             <div className={styles.buttonRow}>
@@ -228,6 +244,7 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
               value={formData.email}
               onChange={(e) => handleFieldChange('email', e.target.value)}
               errorMessage={fieldErrors.email}
+              maxLength={80}
               required
             />
 
@@ -271,6 +288,7 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
               value={formData.password}
               onChange={(e) => handleFieldChange('password', e.target.value)}
               errorMessage={fieldErrors.password}
+              maxLength={64}
               required
             />
 
@@ -315,6 +333,7 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
               value={formData.confirmPassword}
               onChange={(e) => handleFieldChange('confirmPassword', e.target.value)}
               errorMessage={fieldErrors.confirmPassword}
+              maxLength={64}
               required
             />
 

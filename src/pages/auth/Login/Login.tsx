@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Login.module.css';
 
 import InputField from '@/components/common/InputField';
@@ -9,6 +9,9 @@ import logoTequio from '@/assets/images/logoTequio.png';
 
 export const Login: React.FC = () => {
   // todo: Implementar la funcionalidad de inicio de sesión
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
+  
   const handleNotImplemented = (e: React.MouseEvent) => {
     e.preventDefault();
     alert('Agrega funcionalidad aquí');
@@ -43,11 +46,17 @@ export const Login: React.FC = () => {
               type="text"
               placeholder="Correo electrónico o número de teléfono"
               aria-label="Correo electrónico o número de teléfono"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              maxLength={80}
             />
             <InputField
               type="password"
               placeholder="Contraseña"
               aria-label="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              maxLength={64}
             />
           </div>
 

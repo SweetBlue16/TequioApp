@@ -1,6 +1,10 @@
+/* ==========================================================================
+   Login Module Styles
+   ========================================================================== */
+
 .layout {
   display: flex;
-  min-height: 100vh;
+  min-height: 100dvh; 
   width: 100%;
   background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url('../../../assets/images/fondo_login.jpg') no-repeat center center;
   background-size: cover;
@@ -10,7 +14,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 4rem 2rem 2rem 2rem;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 2rem);
 }
 
 .logoContainer {
@@ -18,12 +22,13 @@
 }
 
 .logo {
-  max-width: 140px;
+  max-width: clamp(110px, 15vw, 140px);
   height: auto;
+  object-fit: contain;
 }
 
 .greetingContainer {
-  margin-top: 2rem;
+  margin-top: clamp(1.5rem, 4vh, 2rem);
   display: flex;
   flex-direction: column;
 }
@@ -38,6 +43,7 @@
   font-size: var(--font-size-h1);
   font-weight: 800;
   color: var(--color-espresso);
+  line-height: 1.1;
 }
 
 .greetingItalic {
@@ -49,17 +55,25 @@
 
 .footerText {
   margin-top: auto; 
-  color: var(--color-surface-white);
+  color: var(--color-espresso); 
   font-size: var(--font-size-small);
+  font-weight: 600;
 }
 
 .rightDivision {
   flex: 1;
+  max-width: 100%;
   background-color: var(--color-warm-ivory); 
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 2rem 4rem;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 4rem);
+}
+
+@media (min-width: 768px) {
+  .rightDivision {
+    max-width: 50%;
+  }
 }
 
 .formContainer {
@@ -73,17 +87,17 @@
   font-weight: 800;
   color: var(--color-espresso);
   text-align: left;
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2rem);
 }
 
 .inputGroup {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: clamp(1rem, 2vw, 1.5rem);
 }
 
 .buttonWrapper {
-  margin-top: 4rem; 
+  margin-top: clamp(2rem, 4vw, 3rem); 
   display: flex;
   justify-content: center;
 }
@@ -93,12 +107,12 @@
 }
 
 .forgotPasswordWrapper {
-  margin-top: 2rem; 
+  margin-top: 1.5rem; 
   text-align: center;
 }
 
 .registerSection {
-  margin-top: 4rem; 
+  margin-top: clamp(2rem, 4vw, 3rem); 
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -115,17 +129,40 @@
   margin-top: 0.5rem;
 }
 
+/* ==========================================================================
+   Mobile Responsiveness
+   ========================================================================== */
 @media (max-width: 767px) {
   .layout {
     flex-direction: column;
   }
+
   .leftDivision {
-    padding: 2rem 1.5rem;
+    flex: none; 
+    padding: 2.5rem 1.5rem;
+    align-items: center;
+    text-align: center;
   }
+
+  .logoContainer {
+    align-self: center;
+  }
+
+  .footerText {
+    display: none; 
+  }
+
   .rightDivision {
-    padding: 2rem 1.5rem;
-    border-radius: 24px 24px 0 0;
+    flex: 1; 
+    padding: 2.5rem 1.5rem;
+    border-radius: 32px 32px 0 0;
+    box-shadow: 0 -8px 24px rgba(24, 17, 10, 0.08); 
   }
+
+  .title {
+    text-align: center;
+  }
+
   .loginButton {
     width: 100%; 
   }

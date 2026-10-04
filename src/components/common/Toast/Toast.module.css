@@ -1,0 +1,80 @@
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: var(--target-size-min, 48px);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-button, 14px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  font-size: var(--font-size-body, 1rem);
+  font-weight: 500;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  user-select: none;
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.message {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.info {
+  background-color: #e6f9f6;
+  border: 1px solid #00bfa5;
+  color: #00796b;
+}
+
+.error {
+  background-color: #fdf2ef;
+  border: 1px solid var(--color-terracotta, #d9481e);
+  color: var(--color-terracotta, #d9481e);
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  color: currentColor;
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-left: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.closeButton:hover {
+  opacity: 1;
+}
+
+.closeButton:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 1px;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

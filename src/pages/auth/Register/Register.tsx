@@ -1,3 +1,5 @@
+import type { RegistrationRequest} from '@/types/registration/RegistrationRequest';
+import { useAuthService } from '@/contexts/AuthServiceContext';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RoleSelector } from './components/RoleSelector';
@@ -6,7 +8,18 @@ import { ColorBar } from '@/components/common/ColorBar';
 import registerBannerImage from '@/assets/images/fondo_register.jpg';
 import styles from './Register.module.css';
 
+function formatToUtcIsoDate(dateString: string): string | null {
+  if (!dateString) return null;
+
+  const date = new Date(`${dateString}T00:00:00.000Z`);
+
+  if (Number.isNaN(date.getTime())) return null;
+
+  return date.toISOString();
+}
+
 export const Register: React.FC = () => {
+  const authService = useAuthService();
   const navigate = useNavigate();
   const [selectedRole, setSelectedRole] = useState<'producer' | 'buyer' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -26,9 +39,21 @@ export const Register: React.FC = () => {
     setGeneralErrorMessage(null);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1400));
-      console.info('Payload de registro listo:', formData);
-      navigate('/verificar', { state: { email: formData.email } });
+      const payload: RegistrationRequest = {
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.firstName,
+          paternalLastName: formData.firstLastName,
+          maternalLastName: formData.secondLastName || undefined,
+          birthDate: formatToUtcIsoDate(formData.birthDate) || '',
+          phoneNumber: formData.phone || undefined,
+          roleId: formData.roleId,
+      };
+
+      await authService.register(payload);
+      console.info('Registro exitoso:', payload.email);
+
+      void navigate('/verificar', { state: { email: formData.email } });
     } catch {
       setGeneralErrorMessage('No fue posible completar tu registro. Intenta más tarde.');
     } finally {

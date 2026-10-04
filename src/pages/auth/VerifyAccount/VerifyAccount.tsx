@@ -1,3 +1,5 @@
+import { useAuthService } from '@/contexts/AuthServiceContext';
+import type { VerificationRequest } from '@/types/registration/VerificationRequest';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Card } from '@/components/common/Card';
@@ -14,6 +16,7 @@ interface NavigationLocationState {
 }
 
 export const VerifyAccount: React.FC = () => {
+  const authService = useAuthService();
   const location = useLocation();
   const navigate = useNavigate();
   const navigationState = location.state as NavigationLocationState | null;
@@ -29,7 +32,7 @@ export const VerifyAccount: React.FC = () => {
   useEffect(() => {
     if (isVerifiedSuccessfully) {
       const redirectTimer = setTimeout(() => {
-        navigate('/login');
+        void navigate('/login');
       }, 2500);
 
       return () => clearTimeout(redirectTimer);
@@ -56,11 +59,13 @@ export const VerifyAccount: React.FC = () => {
     setIsVerifying(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1400));
-      console.info('Petición de verificación lista:', {
+      const payload: VerificationRequest = {
         email: email.trim().toLowerCase(),
-        code: verificationCode,
-      });
+        verificationCode: verificationCode,
+      };
+
+      await authService.verify(payload);
+      console.info('Verificación exitosa para:', email);
 
       setIsVerifiedSuccessfully(true);
     } catch {

@@ -65,7 +65,6 @@ export const Stepper: React.FC<StepperProps> = ({
       {steps.map((step) => {
         const isCompleted = step.stepNumber < currentStep;
         const isActive = step.stepNumber === currentStep;
-        const isPending = step.stepNumber > currentStep;
         const isClickable = Boolean(onStepClick && isCompleted);
 
         const stepStateClass = isCompleted

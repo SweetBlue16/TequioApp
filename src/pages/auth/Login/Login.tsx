@@ -8,28 +8,68 @@ import TextLink from '@/components/common/TextLink';
 import Toast from '@/components/common/Toast';
 import logoTequio from '@/assets/images/logoTequio.png';
 import { useNavigate } from 'react-router-dom';
+import {
+  executeFieldValidation,
+  validateRequiredField,
+  validateEmailAddress,
+  validateMaximumLength,
+} from '@/utils/formValidators';
 
 export const Login: React.FC = () => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [notification, setNotification] = useState<{ message: string; variant: 'info' | 'error' } | null>(null);
   const authService = useAuthService();
   const navigate = useNavigate();
 
-  const handleLoginSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  /**
+   * Valida los campos obligatorios en el cliente antes de llamar a la red.
+   */
+  const validateLoginForm = (): boolean => {
+    const errors: Record<string, string> = {};
+
+    const identifierError = executeFieldValidation(identifier, [
+      validateRequiredField('Correo electrónico'),
+      validateEmailAddress,
+      validateMaximumLength('Correo electrónico', 80),
+    ]);
+
+    const passwordError = executeFieldValidation(password, [
+      validateRequiredField('Contraseña'),
+      validateMaximumLength('Contraseña', 64),
+    ]);
+
+    if (identifierError) errors.identifier = identifierError;
+    if (passwordError) errors.password = passwordError;
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  /**
+   * Manejador de envío con compuerta de validación previa.
+   */
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // 1. Barrera de validación en cliente: Detiene el envío si hay datos vacíos o inválidos
+    if (!validateLoginForm()) {
+      return;
+    }
+
+    // 2. Solo si los datos son válidos, iniciamos el estado de carga y conectamos con el servidor
     setIsLoggingIn(true);
 
     try {
       const loginRequest: LoginRequest = {
-        email: identifier,
+        email: identifier.trim(),
         password: password,
       };
 
       await authService.login(loginRequest);
-      void navigate('/perfil'); // todo: Navigate to the dashboard or home page after successful login
+      void navigate('/perfil');
     } catch (error) {
       console.error('Error during login:', error);
       setNotification({ message: 'Error al iniciar sesión. Intenta nuevamente.', variant: 'error' });
@@ -67,35 +107,48 @@ export const Login: React.FC = () => {
         <div className={styles.formContainer}>
           <h1 className={styles.title}>¡Bienvenid@ de vuelta!</h1>
 
-          <div className={styles.inputGroup}>
+          <form onSubmit={handleLoginSubmit} noValidate className={styles.inputGroup}>
             <InputField
               type="text"
               placeholder="Correo electrónico o número de teléfono"
               aria-label="Correo electrónico o número de teléfono"
               value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
+              onChange={(e) => {
+                setIdentifier(e.target.value);
+                if (fieldErrors.identifier) {
+                  setFieldErrors((prev) => ({ ...prev, identifier: '' }));
+                }
+              }}
+              errorMessage={fieldErrors.identifier}
               maxLength={80}
             />
+
             <InputField
               type="password"
               placeholder="Contraseña"
               aria-label="Contraseña"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (fieldErrors.password) {
+                  setFieldErrors((prev) => ({ ...prev, password: '' }));
+                }
+              }}
+              errorMessage={fieldErrors.password}
               maxLength={64}
             />
-          </div>
 
-          <div className={styles.buttonWrapper}>
-            <Button
-              variant="primary"
-              className={styles.loginButton}
-              onClick={handleLoginSubmit}
-              isLoading={isLoggingIn}
-            >
-              Iniciar Sesión
-            </Button>
-          </div>
+            <div className={styles.buttonWrapper}>
+              <Button
+                type="submit"
+                variant="primary"
+                className={styles.loginButton}
+                isLoading={isLoggingIn}
+              >
+                Iniciar Sesión
+              </Button>
+            </div>
+          </form>
 
           <div className={styles.forgotPasswordWrapper}>
             <TextLink variant="terracotta" onClick={handleNotImplemented}>

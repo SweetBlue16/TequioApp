@@ -1,0 +1,162 @@
+.wrapper {
+  width: 100%;
+  max-width: 520px;
+  box-sizing: border-box;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+/* Empty Dropzone State */
+.dropzone {
+  width: 100%;
+  min-height: 170px;
+  padding: 24px 16px;
+  border-radius: 24px;
+  border: 2px dashed #93c5fd;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  user-select: none;
+  outline: none;
+}
+
+.dropzone:hover {
+  border-color: #60a5fa;
+  background-color: #f8fafc;
+}
+
+.dropzone.dragging {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.dropzoneIcon {
+  width: 56px;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+
+.primaryText {
+  margin: 0 0 6px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #374151;
+  text-align: center;
+}
+
+.ctaLink {
+  color: #0284c7;
+}
+
+.helperText {
+  margin: 0;
+  font-size: 13px;
+  color: #9ca3af;
+  text-align: center;
+}
+
+/* Preview Card State */
+.previewContainer {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  background-color: #fafafa;
+  box-sizing: border-box;
+}
+
+.previewImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: filter 0.25s ease;
+}
+
+.previewOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.previewContainer:hover .previewImg {
+  filter: blur(2px) brightness(0.7);
+}
+
+.previewContainer:hover .previewOverlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.removeButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #ef4444;
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.removeButton:hover {
+  background-color: #dc2626;
+  transform: scale(1.08);
+}
+
+.changeButton {
+  padding: 8px 18px;
+  border-radius: 20px;
+  background-color: #ffffff;
+  color: #1f2937;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  margin-bottom: 8px;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.changeButton:hover {
+  background-color: #f3f4f6;
+  transform: scale(1.04);
+}
+
+.filename {
+  color: #f9fafb;
+  font-size: 12px;
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

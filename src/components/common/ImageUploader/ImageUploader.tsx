@@ -26,7 +26,7 @@ export const ImageUploader: FC<ImageUploaderAttributes> = ({
 
   const validateFile = (selectedFile: File): boolean => {
     if (!ALLOWED_MIME_TYPES.includes(selectedFile.type)) {
-      showErrorToast('Formato no permitido. Solo se aceptan imágenes JPG, JPEG o PNG.');
+      showErrorToast('Formato no permitido. Solo se aceptan imágenes JPG, PNG o WebP.');
       return false;
     }
     if (selectedFile.size > MAX_FILE_SIZE) {
@@ -124,7 +124,7 @@ export const ImageUploader: FC<ImageUploaderAttributes> = ({
           </p>
 
           <p className={styles.helperText}>
-            JPG, JPEG, PNG menos de 5MB
+            JPG, PNG o WebP, máximo 5 MiB
           </p>
         </div>
       )}

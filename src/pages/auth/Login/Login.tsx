@@ -1,5 +1,5 @@
 import type { LoginRequest } from '@/types/login/LoginRequest';
-// import { useAuthService } from '@/contexts/AuthServiceContext';
+import { useSession } from '@/contexts/AuthContext';
 import React, { useState } from 'react';
 import styles from './Login.module.css';
 import InputField from '@/components/common/InputField';
@@ -7,7 +7,7 @@ import Button from '@/components/common/Button';
 import TextLink from '@/components/common/TextLink';
 import Toast from '@/components/common/Toast';
 import logoTequio from '@/assets/images/logoTequio.png';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   executeFieldValidation,
   validateRequiredField,
@@ -15,20 +15,18 @@ import {
   validateMaximumLength,
 } from '@/utils/formValidators';
 
-/**
- * Login view component with secure client-side validations and backend integration.
- */
 export const Login: React.FC = () => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [notification, setNotification] = useState<{ message: string; variant: 'info' | 'error' } | null>(null);
-  const authService = useAuthService();
+  const { login } = useSession();
   const navigate = useNavigate();
+  const location = useLocation();
 
   /**
-   * Validates form inputs before dispatching the request to the network.
+   * Valida los campos obligatorios en el cliente antes de llamar a la red.
    */
   const validateLoginForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -52,34 +50,39 @@ export const Login: React.FC = () => {
   };
 
   /**
-   * Handles user login submission with guard clauses against invalid input.
+   * Manejador de envío con compuerta de validación previa.
    */
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // 1. Barrera de validación en cliente: Detiene el envío si hay datos vacíos o inválidos
     if (!validateLoginForm()) {
       return;
     }
 
+    // 2. Solo si los datos son válidos, iniciamos el estado de carga y conectamos con el servidor
     setIsLoggingIn(true);
 
     try {
       const loginRequest: LoginRequest = {
-        email: identifier.trim().toLowerCase(),
+        email: identifier.trim(),
         password: password,
       };
 
-      await authService.login(loginRequest);
-      void navigate('/perfil');
+      await login(loginRequest);
+      const from = (location.state as { from?: string } | null)?.from;
+      void navigate(from?.startsWith('/') && !from.startsWith('//') ? from : '/perfil', { replace: true });
     } catch (error) {
       console.error('Error during login:', error);
-      setNotification({
-        message: 'Credenciales incorrectas. Verifica tus datos e inténtalo de nuevo.',
-        variant: 'error',
-      });
+      setNotification({ message: 'Error al iniciar sesión. Intenta nuevamente.', variant: 'error' });
     } finally {
       setIsLoggingIn(false);
     }
+  };
+
+  const handleNotImplemented = (e: React.MouseEvent) => {
+    e.preventDefault();
+    alert('Agrega funcionalidad aquí');
   };
 
   return (
@@ -88,7 +91,7 @@ export const Login: React.FC = () => {
         <div className={styles.logoContainer}>
           <img src={logoTequio} alt="Tequio Logo" className={styles.logo} />
         </div>
-
+        
         <div className={styles.greetingContainer}>
           <span className={styles.greetingMedium}>Hola</span>
           <span className={styles.greetingLarge}>Tequio!</span>
@@ -108,9 +111,9 @@ export const Login: React.FC = () => {
 
           <form onSubmit={handleLoginSubmit} noValidate className={styles.inputGroup}>
             <InputField
-              type="email"
-              placeholder="Correo electrónico"
-              aria-label="Correo electrónico"
+              type="text"
+              placeholder="Correo electrónico o número de teléfono"
+              aria-label="Correo electrónico o número de teléfono"
               value={identifier}
               onChange={(e) => {
                 setIdentifier(e.target.value);
@@ -150,7 +153,7 @@ export const Login: React.FC = () => {
           </form>
 
           <div className={styles.forgotPasswordWrapper}>
-            <TextLink variant="terracotta" to="/recuperar">
+            <TextLink variant="terracotta" onClick={handleNotImplemented}>
               Olvidé mi contraseña
             </TextLink>
           </div>

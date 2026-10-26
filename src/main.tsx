@@ -6,14 +6,16 @@ import './index.css'
 import App from './App.tsx'
 import { TokenStorage } from './services/auth/TokenStorage.ts';
 import { createClient } from './services/api.ts';
+import { ProfileService } from './services/profile/ProfileService.ts';
 
 const tokenStorage = new TokenStorage();
 const client = createClient(tokenStorage);
 const authService = new AuthService(client, tokenStorage);
+const profileService = new ProfileService(client);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthServiceProvider authService={authService}>
+    <AuthServiceProvider authService={authService} tokenStorage={tokenStorage} profileService={profileService}>
       <App />
     </AuthServiceProvider>
   </StrictMode>,

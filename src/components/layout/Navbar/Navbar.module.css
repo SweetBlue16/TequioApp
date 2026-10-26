@@ -97,6 +97,16 @@
   white-space: nowrap;
 }
 
+.logoutButton {
+  min-height: var(--target-size-min);
+  border: 0;
+  background: transparent;
+  color: var(--color-espresso);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 @media (min-width: 600px) {
   .userName {
     display: inline;

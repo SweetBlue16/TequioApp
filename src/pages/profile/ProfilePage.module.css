@@ -1,0 +1,13 @@
+.page { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1rem 4rem; background: var(--color-warm-ivory); }
+.page h1 { margin-bottom: 1.5rem; }
+.card { background: var(--color-surface-white); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 1.5rem; margin-bottom: 1.5rem; }
+.card h2 { margin-bottom: 1.25rem; }
+.photoRow { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.field { display: flex; flex-direction: column; gap: .5rem; font-weight: 700; }
+.field textarea { border: 1px solid #b9aea4; border-radius: 12px; padding: .75rem; resize: vertical; }
+.fullRow { grid-column: 1 / -1; }
+.details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.details dt { color: var(--color-ash-brown); font-size: var(--font-size-small); }
+.details dd { overflow-wrap: anywhere; font-weight: 700; }
+@media (max-width: 640px) { .form, .details { grid-template-columns: 1fr; } }

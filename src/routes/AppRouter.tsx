@@ -3,7 +3,10 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from '@/pages/auth/Login';
 import { Register } from '@/pages/auth/Register';
 import { VerifyAccount } from '@/pages/auth/VerifyAccount';
-import { RecoverAccount } from '@/pages/auth/RecoverAccount'; 
+import { RecoverAccount } from '@/pages/auth/RecoverAccount';
+import { ProtectedRoutes } from './ProtectedRoutes';
+import { ProfilePage } from '@/pages/profile/ProfilePage';
+import { MyProducts } from '@/pages/MyProducts';
 
 export const AppRouter: React.FC = () => {
   return (
@@ -23,6 +26,13 @@ export const AppRouter: React.FC = () => {
       <Route path="/registro" element={<Register />} />
       <Route path="/verificar" element={<VerifyAccount />} />
       <Route path="/recuperar" element={<RecoverAccount />} />
+      <Route element={<ProtectedRoutes />}>
+        <Route path="/perfil" element={<ProfilePage />} />
+      </Route>
+      <Route element={<ProtectedRoutes requiredRoleId={2} />}>
+        <Route path="/mis-productos" element={<MyProducts />} />
+      </Route>
+
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

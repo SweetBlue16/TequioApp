@@ -15,6 +15,9 @@ import {
   validateMaximumLength,
 } from '@/utils/formValidators';
 
+/**
+ * Login view component with secure client-side validations and backend integration.
+ */
 export const Login: React.FC = () => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
@@ -25,7 +28,7 @@ export const Login: React.FC = () => {
   const navigate = useNavigate();
 
   /**
-   * Valida los campos obligatorios en el cliente antes de llamar a la red.
+   * Validates form inputs before dispatching the request to the network.
    */
   const validateLoginForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -48,23 +51,18 @@ export const Login: React.FC = () => {
     return Object.keys(errors).length === 0;
   };
 
-  /**
-   * Manejador de envío con compuerta de validación previa.
-   */
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 1. Barrera de validación en cliente: Detiene el envío si hay datos vacíos o inválidos
     if (!validateLoginForm()) {
       return;
     }
 
-    // 2. Solo si los datos son válidos, iniciamos el estado de carga y conectamos con el servidor
     setIsLoggingIn(true);
 
     try {
       const loginRequest: LoginRequest = {
-        email: identifier.trim(),
+        email: identifier.trim().toLowerCase(),
         password: password,
       };
 
@@ -72,15 +70,13 @@ export const Login: React.FC = () => {
       void navigate('/perfil');
     } catch (error) {
       console.error('Error during login:', error);
-      setNotification({ message: 'Error al iniciar sesión. Intenta nuevamente.', variant: 'error' });
+      setNotification({
+        message: 'Credenciales incorrectas. Verifica tus datos e inténtalo de nuevo.',
+        variant: 'error',
+      });
     } finally {
       setIsLoggingIn(false);
     }
-  };
-
-  const handleNotImplemented = (e: React.MouseEvent) => {
-    e.preventDefault();
-    alert('Agrega funcionalidad aquí');
   };
 
   return (
@@ -89,7 +85,7 @@ export const Login: React.FC = () => {
         <div className={styles.logoContainer}>
           <img src={logoTequio} alt="Tequio Logo" className={styles.logo} />
         </div>
-        
+
         <div className={styles.greetingContainer}>
           <span className={styles.greetingMedium}>Hola</span>
           <span className={styles.greetingLarge}>Tequio!</span>
@@ -109,9 +105,9 @@ export const Login: React.FC = () => {
 
           <form onSubmit={handleLoginSubmit} noValidate className={styles.inputGroup}>
             <InputField
-              type="text"
-              placeholder="Correo electrónico o número de teléfono"
-              aria-label="Correo electrónico o número de teléfono"
+              type="email"
+              placeholder="Correo electrónico"
+              aria-label="Correo electrónico"
               value={identifier}
               onChange={(e) => {
                 setIdentifier(e.target.value);
@@ -151,7 +147,7 @@ export const Login: React.FC = () => {
           </form>
 
           <div className={styles.forgotPasswordWrapper}>
-            <TextLink variant="terracotta" onClick={handleNotImplemented}>
+            <TextLink variant="terracotta" to="/recuperar">
               Olvidé mi contraseña
             </TextLink>
           </div>

@@ -10,6 +10,7 @@ const AppContent: React.FC = () => {
     location.pathname.startsWith('/registro') ||
     location.pathname.startsWith('/verificar') ||
     location.pathname.startsWith('/login');
+    location.pathname.startsWith('/recuperar');
 
   return (
     <div style={{ minHeight: '100dvh', backgroundColor: 'var(--color-warm-ivory, #fffdf9)' }}>

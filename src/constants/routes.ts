@@ -14,9 +14,11 @@ export const ROUTES = {
     VERIFY_ACCOUNT: '/verificar',
   },
   PRODUCER: {
-    ROOT: '/productor/*',
-    DASHBOARD: '/productor/panel',
-    CREATE_BATCH: '/productor/nuevo-lote',
+    ROOT: '/panel-vendedor',
+    PRODUCTS: '/panel-vendedor/productos',
+    BATCHES: '/panel-vendedor/lotes',
+    STATISTICS: '/panel-vendedor/estadisticas',
+    VALIDATE_DELIVERY: '/panel-vendedor/validar-entrega',
   },
   BUYER: {
     MY_PURCHASES: '/mis-compras',

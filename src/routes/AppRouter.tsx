@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from '@/pages/auth/Login';
 import { Register } from '@/pages/auth/Register';
 import { VerifyAccount } from '@/pages/auth/VerifyAccount';
+import { RecoverAccount } from '@/pages/auth/RecoverAccount'; 
 
 export const AppRouter: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ export const AppRouter: React.FC = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/registro" element={<Register />} />
       <Route path="/verificar" element={<VerifyAccount />} />
+      <Route path="/recuperar" element={<RecoverAccount />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

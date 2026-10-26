@@ -5,6 +5,8 @@ import type { LoginResponse } from "@/types/login/LoginResponse";
 import type { RegistrationRequest } from "@/types/registration/RegistrationRequest";
 import type { VerificationRequest } from "@/types/registration/VerificationRequest";
 import type { AxiosInstance } from "axios";
+import type { ResetPasswordRequest } from "@/types/passwordRecovery/ResetPasswordrequest";
+import type { PasswordRecoveryRequest } from "@/types/passwordRecovery/PasswordRecoveryRequest";
 
 export class AuthService implements AuthServiceInterface {
     private readonly serviceBaseUrl = "/auth";
@@ -34,4 +36,13 @@ export class AuthService implements AuthServiceInterface {
     async verify(request: VerificationRequest): Promise<void> {
         await this.client.post(`${this.serviceBaseUrl}/verify`, request);
     }
+
+    async requestPasswordReset(request: PasswordRecoveryRequest): Promise<void> {
+        await this.client.post(`${this.serviceBaseUrl}/recover`, request);
+    }
+
+    async resetPassword(request: ResetPasswordRequest): Promise<void> {
+        await this.client.post(`${this.serviceBaseUrl}/reset-password`, request);
+    }
+
 }

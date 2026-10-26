@@ -1,0 +1,201 @@
+.pageWrapper {
+  width: 100%;
+  min-height: calc(100dvh - 74px);
+  background-color: var(--color-warm-ivory, #fffdf9);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* --- Mobile / Tablet (< 1024px) --- */
+.illustrationContainer {
+  width: 100%;
+  height: clamp(260px, 45vh, 420px);
+  background-color: #f6f3ee;
+  overflow: hidden;
+  position: relative;
+}
+
+.illustrationImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.contentContainer {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem var(--container-padding-mobile, 1rem) 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.headerSection {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.title {
+  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+  font-weight: 800;
+  color: var(--color-espresso, #18110a);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.25;
+}
+
+.subtitle {
+  font-size: var(--font-size-small, 0.875rem);
+  color: var(--color-ash-brown, #63584f);
+  margin: 0 auto;
+  max-width: 500px;
+  line-height: 1.45;
+}
+
+.benefitsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.benefitCard {
+  background-color: var(--color-surface-white, #ffffff);
+  border: 1px solid var(--color-border-subtle, #f0ece4);
+  border-radius: var(--radius-card, 16px);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  box-shadow: 0 4px 16px rgba(24, 17, 10, 0.04);
+}
+
+.benefitIconWrapper {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+  line-height: 1;
+}
+
+.benefitTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--color-espresso, #18110a);
+  margin: 0;
+}
+
+.benefitDescription {
+  font-size: 0.8125rem;
+  color: var(--color-ash-brown, #63584f);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.actionWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.registerButton {
+  min-height: var(--target-size-min, 48px);
+  width: 100%;
+  max-width: 380px;
+  background-color: #00bfa5; 
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-button, 14px);
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0.85rem 1.75rem;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 191, 165, 0.25);
+}
+
+.registerButton:hover {
+  background-color: #00a892;
+  transform: translateY(-1px);
+}
+
+.registerButton:focus-visible {
+  outline: 3px solid rgba(0, 191, 165, 0.4);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Desktop Adaptation (>= 1024px)
+   Full-height image stuck to the left edge with overlapping floating cards.
+   ========================================================================== */
+@media (min-width: 1024px) {
+  .pageWrapper {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+
+  .illustrationContainer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 45%;
+    max-width: 600px;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .illustrationImage {
+    object-position: left center;
+  }
+
+  .contentContainer {
+    width: 60%;
+    max-width: 780px;
+    margin: 0;
+    padding: 2.5rem 3rem 2.5rem 2rem;
+    align-items: flex-start;
+    z-index: 2; 
+  }
+
+  .headerSection {
+    text-align: left;
+    margin-bottom: 2rem;
+  }
+
+  .subtitle {
+    margin: 0;
+  }
+
+  .benefitsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2.25rem;
+    margin-left: -50px; 
+  }
+
+  .benefitCard {
+    box-shadow: 0 8px 24px rgba(24, 17, 10, 0.08); 
+  }
+
+  .actionWrapper {
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .registerButton {
+    max-width: 320px;
+  }
+}

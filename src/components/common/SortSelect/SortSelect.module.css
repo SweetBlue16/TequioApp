@@ -1,0 +1,73 @@
+.container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--target-size-min, 48px);
+  background-color: #f1f4f9;
+  border-radius: var(--radius-pill, 9999px);
+  border: 1.5px solid transparent;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.container:focus-within {
+  background-color: var(--color-surface-white, #ffffff);
+  border-color: #00bfa5;
+  box-shadow: 0 0 0 3px rgba(0, 191, 165, 0.15);
+}
+
+.prefixLabel {
+  font-size: var(--font-size-small, 0.875rem);
+  color: #7a869a;
+  white-space: nowrap;
+  margin-right: 0.35rem;
+  user-select: none;
+}
+
+.selectWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.select {
+  width: 100%;
+  min-height: var(--target-size-min, 48px);
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: var(--font-size-small, 0.875rem);
+  font-weight: 700;
+  color: var(--color-espresso, #18110a);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 1.5rem;
+}
+
+.select option {
+  background-color: var(--color-surface-white, #ffffff);
+  color: var(--color-espresso, #18110a);
+  font-weight: normal;
+}
+
+.chevronIcon {
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+  color: #7a869a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: auto;
+    min-width: 220px;
+  }
+}

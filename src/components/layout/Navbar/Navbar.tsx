@@ -7,6 +7,7 @@ import { Avatar } from '@/components/common/Avatar';
 import tequioLogo from '@/assets/images/tequioLogoTexto.png';
 import cartIcon from '@/assets/icons/icon_carroCompra.png';
 import styles from './Navbar.module.css';
+import { ROUTES } from '@/constants/routes';
 
 export interface NavbarProps {
   userName?: string;
@@ -26,12 +27,15 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className={styles.header}>
-      {/* Barra de colores en el borde superior exacto */}
       <ColorBar height={6} />
 
       <div className={styles.container}>
-        {/* Contenedor del Logo con Imagen */}
-        <Link to="/" className={styles.brand} onClick={closeMobile} aria-label="Ir al inicio de Tequio">
+        <Link
+          to={ROUTES.PUBLIC.HOME}
+          className={styles.brand}
+          onClick={closeMobile}
+          aria-label="Ir al inicio de Tequio"
+        >
           <img
             src={tequioLogo}
             alt="Logotipo de Tequio"
@@ -39,25 +43,26 @@ export const Navbar: React.FC<NavbarProps> = ({
           />
         </Link>
 
-        {/* Sección de Botones, Usuario y Carrito */}
         <div className={styles.navSection}>
           <nav className={styles.navLinks} aria-label="Navegación principal">
-            <NavTextButton label="Categorías" to="/categorias" />
-            <NavTextButton label="Mis compras" to="/mis-compras" />
-            <NavTextButton label="Panel de vendedor" to="/panel-vendedor" />
+            <NavTextButton label="Categorías" to={ROUTES.PUBLIC.CATALOG} />
+            <NavTextButton label="Mis compras" to={ROUTES.BUYER.MY_PURCHASES} />
+            <NavTextButton label="Panel de vendedor" to={ROUTES.PRODUCER.ROOT} />
           </nav>
 
-          {/* Bloque de Usuario con Avatar Adaptable */}
-          <Link to="/perfil" className={styles.userProfile} onClick={closeMobile}>
+          <Link
+            to={ROUTES.BUYER.PROFILE}
+            className={styles.userProfile}
+            onClick={closeMobile}
+          >
             <div className={styles.avatarWrapper}>
               <Avatar src={userAvatarUrl} altName={userName} />
             </div>
             <span className={styles.userName}>Hola, {userName}</span>
           </Link>
 
-          {/* Botón e Ícono de Carrito */}
           <Link
-            to="/carrito"
+            to={ROUTES.BUYER.CART}
             className={styles.cartButton}
             aria-label={`Carrito de compras, ${cartCount} productos`}
           >
@@ -69,7 +74,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             />
           </Link>
 
-          {/* Menú para Móvil */}
           <button
             type="button"
             className={styles.mobileToggle}
@@ -82,12 +86,23 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Menú desplegable para móviles */}
       {isMobileOpen && (
         <nav className={styles.mobileDrawer} aria-label="Menú móvil">
-          <NavTextButton label="Categorías" to="/categorias" onClick={closeMobile} />
-          <NavTextButton label="Mis compras" to="/mis-compras" onClick={closeMobile} />
-          <NavTextButton label="Panel de vendedor" to="/panel-vendedor" onClick={closeMobile} />
+          <NavTextButton
+            label="Categorías"
+            to={ROUTES.PUBLIC.CATALOG}
+            onClick={closeMobile}
+          />
+          <NavTextButton
+            label="Mis compras"
+            to={ROUTES.BUYER.MY_PURCHASES}
+            onClick={closeMobile}
+          />
+          <NavTextButton
+            label="Panel de vendedor"
+            to={ROUTES.PRODUCER.ROOT}
+            onClick={closeMobile}
+          />
         </nav>
       )}
     </header>

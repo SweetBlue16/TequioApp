@@ -7,7 +7,7 @@ import CodeInput from '@/components/common/CodeInput';
 import Toast from '@/components/common/Toast';
 import { ColorBar } from '@/components/common/ColorBar';
 import logoTequio from '@/assets/images/logoTequio.png';
-import { useAuthService } from '@/contexts/AuthServiceContext';
+import { useAuthService } from '@/contexts/AuthService';
 import {
   executeFieldValidation,
   validateRequiredField,

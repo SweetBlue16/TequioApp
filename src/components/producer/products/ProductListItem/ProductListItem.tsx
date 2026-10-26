@@ -18,15 +18,10 @@ export interface ProductItemData {
  * Properties contract for the ProductListItem component.
  */
 export interface ProductListItemProps {
-  /** Base product data payload */
   product: ProductItemData;
-  /** Callback triggered when clicking the row to edit/inspect the product */
   onClick: (productId: number) => void;
-  /** Callback triggered when confirming deactivation */
   onDeactivate: (productId: number) => void;
-  /** Flag indicating whether the deactivation process is ongoing */
   isDeactivating?: boolean;
-  /** Optional custom CSS class name */
   className?: string;
 }
 

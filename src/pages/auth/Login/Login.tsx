@@ -1,5 +1,5 @@
 import type { LoginRequest } from '@/types/login/LoginRequest';
-import { useAuthService } from '@/contexts/AuthServiceContext';
+// import { useAuthService } from '@/contexts/AuthServiceContext';
 import React, { useState } from 'react';
 import styles from './Login.module.css';
 import InputField from '@/components/common/InputField';
@@ -51,6 +51,9 @@ export const Login: React.FC = () => {
     return Object.keys(errors).length === 0;
   };
 
+  /**
+   * Handles user login submission with guard clauses against invalid input.
+   */
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

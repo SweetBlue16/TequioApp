@@ -1,5 +1,5 @@
 import type { LoginRequest } from '@/types/login/LoginRequest';
-import { useAuthService } from '@/contexts/AuthServiceContext';
+import { useSession } from '@/contexts/AuthContext';
 import React, { useState } from 'react';
 import styles from './Login.module.css';
 import InputField from '@/components/common/InputField';
@@ -7,7 +7,7 @@ import Button from '@/components/common/Button';
 import TextLink from '@/components/common/TextLink';
 import Toast from '@/components/common/Toast';
 import logoTequio from '@/assets/images/logoTequio.png';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   executeFieldValidation,
   validateRequiredField,
@@ -21,8 +21,9 @@ export const Login: React.FC = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [notification, setNotification] = useState<{ message: string; variant: 'info' | 'error' } | null>(null);
-  const authService = useAuthService();
+  const { login } = useSession();
   const navigate = useNavigate();
+  const location = useLocation();
 
   /**
    * Valida los campos obligatorios en el cliente antes de llamar a la red.
@@ -68,8 +69,9 @@ export const Login: React.FC = () => {
         password: password,
       };
 
-      await authService.login(loginRequest);
-      void navigate('/perfil');
+      await login(loginRequest);
+      const from = (location.state as { from?: string } | null)?.from;
+      void navigate(from?.startsWith('/') && !from.startsWith('//') ? from : '/perfil', { replace: true });
     } catch (error) {
       console.error('Error during login:', error);
       setNotification({ message: 'Error al iniciar sesión. Intenta nuevamente.', variant: 'error' });

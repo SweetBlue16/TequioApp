@@ -17,9 +17,13 @@ export const ImagePreview: FC<ImagePreviewAttributes> = ({
 
   useEffect(() => {
     const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
+    let active = true;
+    queueMicrotask(() => {
+      if (active) setPreviewUrl(objectUrl);
+    });
 
     return () => {
+      active = false;
       URL.revokeObjectURL(objectUrl);
     };
   }, [file]);

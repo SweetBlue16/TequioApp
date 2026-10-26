@@ -4,22 +4,14 @@ import { Menu, X } from 'lucide-react';
 import { ColorBar } from '@/components/common/ColorBar';
 import { NavTextButton } from '@/components/common/NavTextButton';
 import { Avatar } from '@/components/common/Avatar';
+import { useSession } from '@/contexts/AuthContext';
 import tequioLogo from '@/assets/images/tequioLogoTexto.png';
-import cartIcon from '@/assets/icons/icon_carroCompra.png';
 import styles from './Navbar.module.css';
 
-export interface NavbarProps {
-  userName?: string;
-  userAvatarUrl?: string | null;
-  cartCount?: number;
-}
-
-export const Navbar: React.FC<NavbarProps> = ({
-  userName = 'Mauricio',
-  userAvatarUrl = null,
-  cartCount = 0,
-}) => {
+export const Navbar: React.FC = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const { session, profile, logout } = useSession();
+  const userName = profile?.firstName || 'Mi cuenta';
 
   const toggleMobile = () => setIsMobileOpen((prev) => !prev);
   const closeMobile = () => setIsMobileOpen(false);
@@ -42,32 +34,19 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Sección de Botones, Usuario y Carrito */}
         <div className={styles.navSection}>
           <nav className={styles.navLinks} aria-label="Navegación principal">
-            <NavTextButton label="Categorías" to="/categorias" />
-            <NavTextButton label="Mis compras" to="/mis-compras" />
-            <NavTextButton label="Panel de vendedor" to="/panel-vendedor" />
+            {session?.roleId === 2 && <NavTextButton label="Mis productos" to="/mis-productos" />}
+            {!session && <NavTextButton label="Iniciar sesión" to="/login" />}
+            {!session && <NavTextButton label="Registrarse" to="/registro" />}
           </nav>
 
-          {/* Bloque de Usuario con Avatar Adaptable */}
-          <Link to="/perfil" className={styles.userProfile} onClick={closeMobile}>
+          {session && <Link to="/perfil" className={styles.userProfile} onClick={closeMobile}>
             <div className={styles.avatarWrapper}>
-              <Avatar src={userAvatarUrl} altName={userName} />
+              <Avatar key={profile?.profilePictureUrl ?? 'no-photo'} src={profile?.profilePictureUrl} altName={userName} />
             </div>
             <span className={styles.userName}>Hola, {userName}</span>
-          </Link>
+          </Link>}
 
-          {/* Botón e Ícono de Carrito */}
-          <Link
-            to="/carrito"
-            className={styles.cartButton}
-            aria-label={`Carrito de compras, ${cartCount} productos`}
-          >
-            <img
-              src={cartIcon}
-              alt=""
-              aria-hidden="true"
-              className={styles.cartIcon}
-            />
-          </Link>
+          {session && <button type="button" className={styles.logoutButton} onClick={() => { logout(); closeMobile(); }}>Salir</button>}
 
           {/* Menú para Móvil */}
           <button
@@ -85,9 +64,10 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Menú desplegable para móviles */}
       {isMobileOpen && (
         <nav className={styles.mobileDrawer} aria-label="Menú móvil">
-          <NavTextButton label="Categorías" to="/categorias" onClick={closeMobile} />
-          <NavTextButton label="Mis compras" to="/mis-compras" onClick={closeMobile} />
-          <NavTextButton label="Panel de vendedor" to="/panel-vendedor" onClick={closeMobile} />
+          {session && <NavTextButton label="Mi perfil" to="/perfil" onClick={closeMobile} />}
+          {session?.roleId === 2 && <NavTextButton label="Mis productos" to="/mis-productos" onClick={closeMobile} />}
+          {!session && <NavTextButton label="Iniciar sesión" to="/login" onClick={closeMobile} />}
+          {!session && <NavTextButton label="Registrarse" to="/registro" onClick={closeMobile} />}
         </nav>
       )}
     </header>

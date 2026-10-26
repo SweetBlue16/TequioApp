@@ -1,4 +1,4 @@
-import { useAuthService } from '@/contexts/AuthServiceContext';
+import { useAuthService } from '@/contexts/AuthContext';
 import type { VerificationRequest } from '@/types/registration/VerificationRequest';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';

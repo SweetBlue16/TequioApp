@@ -1,5 +1,5 @@
 import type { RegistrationRequest} from '@/types/registration/RegistrationRequest';
-import { useAuthService } from '@/contexts/AuthServiceContext';
+import { useAuthService } from '@/contexts/AuthContext';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RoleSelector } from './components/RoleSelector';

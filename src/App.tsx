@@ -2,9 +2,11 @@ import React from 'react';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
 import { AppRouter } from '@/routes/AppRouter';
+import { useSession } from '@/contexts/AuthContext';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
+  const { isInitializing } = useSession();
 
   const isAuthRoute =
     location.pathname.startsWith('/registro') ||
@@ -13,7 +15,7 @@ const AppContent: React.FC = () => {
 
   return (
     <div style={{ minHeight: '100dvh', backgroundColor: 'var(--color-warm-ivory, #fffdf9)' }}>
-      {!isAuthRoute && <Navbar userName="Mauricio" cartCount={2} />}
+      {!isAuthRoute && !isInitializing && <Navbar />}
 
       <main>
         <AppRouter />

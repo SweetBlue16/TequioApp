@@ -9,6 +9,7 @@ export interface AuthServiceInterface {
     login(request: LoginRequest): Promise<LoginResponse>
     register(request: RegistrationRequest): Promise<void>
     verify(request: VerificationRequest): Promise<void>
+    resendVerificationCode(email: string): Promise<void>;
     requestPasswordReset(request: PasswordRecoveryRequest): Promise<void>;
     resetPassword(request: ResetPasswordRequest): Promise<void>;
 }

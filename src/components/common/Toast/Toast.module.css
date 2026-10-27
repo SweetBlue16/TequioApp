@@ -1,4 +1,14 @@
+/* ==========================================================================
+   Toast Component Styles
+   Anchored to the top-right viewport corner adhering to WCAG notification patterns.
+   ========================================================================== */
+
 .toast {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  max-width: 420px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -6,12 +16,12 @@
   min-height: var(--target-size-min, 48px);
   padding: 0.75rem 1.25rem;
   border-radius: var(--radius-button, 14px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(24, 17, 10, 0.15);
   font-size: var(--font-size-body, 1rem);
   font-weight: 500;
   transition: opacity 0.2s ease, transform 0.2s ease;
   user-select: none;
-  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .content {
@@ -68,13 +78,22 @@
   outline-offset: 1px;
 }
 
-@keyframes slideIn {
+@keyframes slideInRight {
   from {
-    transform: translateY(10px);
+    transform: translateX(100%);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: translateX(0);
     opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .toast {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: none;
   }
 }

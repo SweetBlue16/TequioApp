@@ -45,4 +45,8 @@ export class AuthService implements AuthServiceInterface {
         await this.client.post(`${this.serviceBaseUrl}/reset-password`, request);
     }
 
+    async resendVerificationCode(email: string): Promise<void> {
+        await this.client.post(`${this.serviceBaseUrl}/resend-verification-code`, { email });
+    }
+
 }

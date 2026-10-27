@@ -80,11 +80,6 @@ export const Login: React.FC = () => {
     }
   };
 
-  const handleNotImplemented = (e: React.MouseEvent) => {
-    e.preventDefault();
-    alert('Agrega funcionalidad aquí');
-  };
-
   return (
     <div className={styles.layout}>
       <div className={styles.leftDivision}>
@@ -153,7 +148,7 @@ export const Login: React.FC = () => {
           </form>
 
           <div className={styles.forgotPasswordWrapper}>
-            <TextLink variant="terracotta" onClick={handleNotImplemented}>
+            <TextLink variant="terracotta" to="/recuperar">
               Olvidé mi contraseña
             </TextLink>
           </div>
@@ -168,12 +163,14 @@ export const Login: React.FC = () => {
           </div>
 
           {notification && (
-            <Toast
-              message={notification.message}
-              variant={notification.variant}
-              duration={5000}
-              onClose={() => setNotification(null)}
-            />
+            <div className={styles.toastViewport}>
+              <Toast
+                message={notification.message}
+                variant={notification.variant}
+                duration={5000}
+                onClose={() => setNotification(null)}
+              />
+            </div>
           )}
         </div>
       </div>

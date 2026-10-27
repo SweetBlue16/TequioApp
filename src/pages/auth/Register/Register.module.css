@@ -177,19 +177,40 @@
   line-height: 1.4;
 }
 
-.alertBox {
-  background-color: #fdedec;
-  border: 1px solid var(--color-terracotta, #d9481e);
-  color: var(--color-terracotta, #d9481e);
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
 .bottomColorBar {
   margin-top: auto;
   width: 100%;
+}
+
+.toastViewport {
+  position: fixed;
+  top: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 3vw, 2rem);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: min(90vw, 420px);
+  pointer-events: auto;
+  animation: slideInFromRight 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .toastViewport {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: none;
+  }
 }

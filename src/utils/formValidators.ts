@@ -191,6 +191,33 @@ export const validatePasswordConfirmationMatch = (
 };
 
 // ============================================================================
+// FILE & MEDIA ATOMIC VALIDATORS (RN-12)
+// ============================================================================
+
+const MAXIMUM_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MiB
+const ACCEPTED_IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+
+/**
+ * Validates that an image file exists, adheres to permitted MIME formats,
+ * and does not exceed the platform's 5 MiB limit (RN-12).
+ */
+export const validateImageFile = (file: File | null): ValidationResult => {
+  if (!file) {
+    return createFailureResult('Debes seleccionar una fotografía.');
+  }
+
+  if (!ACCEPTED_IMAGE_MIME_TYPES.includes(file.type)) {
+    return createFailureResult('Solo se admiten fotografías en formato JPG, PNG o WebP.');
+  }
+
+  if (file.size > MAXIMUM_FILE_SIZE_BYTES) {
+    return createFailureResult('La fotografía no debe superar los 5 MB de tamaño.');
+  }
+
+  return createSuccessResult();
+};
+
+// ============================================================================
 // FIELD RUNNER EXECUTOR
 // ============================================================================
 
@@ -208,4 +235,6 @@ export const executeFieldValidation = (
     }
   }
   return null;
+
+  
 };

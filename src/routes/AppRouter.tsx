@@ -7,6 +7,7 @@ import { RecoverAccount } from '@/pages/auth/RecoverAccount';
 import { ProtectedRoutes } from './ProtectedRoutes';
 import { ProfilePage } from '@/pages/profile/ProfilePage';
 import { MyProducts } from '@/pages/MyProducts';
+import { ProducerRoutes } from './ProducerRoutes';
 
 export const AppRouter: React.FC = () => {
   return (
@@ -32,7 +33,8 @@ export const AppRouter: React.FC = () => {
       <Route element={<ProtectedRoutes requiredRoleId={2} />}>
         <Route path="/mis-productos" element={<MyProducts />} />
       </Route>
-
+      {/*Panel de Vendedor */}
+      <Route path="/panel-vendedor/*" element={<ProducerRoutes />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

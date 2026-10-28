@@ -4,7 +4,6 @@ import { ImagePreview } from './ImagePreview';
 import logoImagenes from '../../../assets/images/logo_imagenes.png';
 import styles from './ImageUploader.module.css';
 
-// 5 MB size limit strictly enforced by RN-12
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 

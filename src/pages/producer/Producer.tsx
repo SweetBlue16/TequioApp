@@ -2,43 +2,64 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ProducerSidebar } from '@/components/layout/ProducerSidebar';
 import { JoinSellersPrompt } from '@/components/producer/JoinSellersPrompt';
-import styles from './ProducerLayout.module.css';
+import { BecomeSellerModal } from '@/components/producer/BecomeSellerModal';
+import { Toast } from '@/components/common/Toast';
+import { useSession } from '@/contexts/AuthContext';
+import styles from './Producer.module.css';
 
 /**
  * Layout orchestrator for the seller panel.
- * Conditionally displays the sidebar navigation if the user holds a seller role,
- * or redirects visual presentation to JoinSellersPrompt if buyer/unregistered.
+ * Conditionally displays sidebar navigation if the user holds a seller role,
+ * or guides non-seller users through community seller terms agreement.
  */
 export const Producer: React.FC = () => {
-  const [isProducer, setIsProducer] = useState<boolean>(() => {
-    return localStorage.getItem('mock_is_producer') === 'true';
-  });
+  const { session, profileService, refreshProfile } = useSession();
+  const isProducerInSession = session?.roleId === 2;
+  const [hasPromotedInCurrentSession, setHasPromotedInCurrentSession] = useState<boolean>(false);
 
-  const handleToggleRole = () => {
-    const nextState = !isProducer;
-    setIsProducer(nextState);
-    localStorage.setItem('mock_is_producer', String(nextState));
+  const isProducer = isProducerInSession || hasPromotedInCurrentSession;
+
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const handleOpenTermsModal = (): void => {
+    setIsTermsModalOpen(true);
+  };
+
+  const handleCloseTermsModal = (): void => {
+    if (isSubmitting) return;
+    setIsTermsModalOpen(false);
+  };
+
+  const handleConfirmSellerActivation = async (): Promise<void> => {
+    if (!profileService) {
+      setToastMessage('La sesión no está lista. Inicia sesión nuevamente.');
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      await profileService.becomeProducer();
+
+      if (refreshProfile) {
+        await refreshProfile();
+      }
+
+      setHasPromotedInCurrentSession(true);
+      setIsTermsModalOpen(false);
+    } catch (error) {
+      console.error('Error al promover a productor:', error);
+      setToastMessage('Ocurrió un error al activar tu cuenta de vendedor. Intenta nuevamente.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className={styles.layoutRoot}>
-      {/* Botón flotante para alternar vistas sin requerir login en el backend */}
-      <aside className={styles.mockControl} aria-label="Control de pruebas de desarrollo">
-        <span>
-          Modo: <strong>{isProducer ? 'Vendedor Activo' : 'Comprador (No Vendedor)'}</strong>
-        </span>
-        <button
-          type="button"
-          onClick={handleToggleRole}
-          className={styles.mockButton}
-        >
-          Alternar rol
-        </button>
-      </aside>
-
-      {/* Renderizado condicional según el rol */}
       {!isProducer ? (
-        <JoinSellersPrompt />
+        <JoinSellersPrompt onStartOnboarding={handleOpenTermsModal} />
       ) : (
         <div className={styles.producerContainer}>
           <ProducerSidebar />
@@ -46,6 +67,22 @@ export const Producer: React.FC = () => {
             <Outlet />
           </main>
         </div>
+      )}
+
+      <BecomeSellerModal
+        isOpen={isTermsModalOpen}
+        onClose={handleCloseTermsModal}
+        onConfirm={handleConfirmSellerActivation}
+        isSubmitting={isSubmitting}
+      />
+
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          variant="error"
+          duration={5000}
+          onClose={() => setToastMessage(null)}
+        />
       )}
     </div>
   );

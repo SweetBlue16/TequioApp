@@ -1,0 +1,131 @@
+/* ==========================================================================
+   AddProductForm Styles
+   Two-column grid: form fields on the left, photo uploader on the right.
+   ========================================================================== */
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  width: 100%;
+}
+
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+/* Sección izquierda: campos del formulario */
+.fieldsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  order: 1;
+}
+
+/* Sección derecha: fotografía */
+.photoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  order: 2;
+}
+
+.sectionLabel {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-espresso, #18110a);
+}
+
+.requiredAsterisk {
+  color: var(--color-terracotta, #d9481e);
+  margin-left: 0.25rem;
+}
+
+.fieldsRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputLabel {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-espresso, #18110a);
+}
+
+.textArea {
+  width: 100%;
+  min-height: 110px;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-button, 14px);
+  border: 1.5px solid var(--color-border-subtle, #f0ece4);
+  background-color: var(--color-surface-white, #ffffff);
+  color: var(--color-espresso, #18110a);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.textArea:focus-visible {
+  border-color: #00bfa5;
+  box-shadow: 0 0 0 3px rgba(0, 191, 165, 0.15);
+}
+
+.textAreaError {
+  border-color: var(--color-terracotta, #d9481e) !important;
+}
+
+.textAreaError:focus-visible {
+  border-color: var(--color-terracotta, #d9481e) !important;
+  box-shadow: 0 0 0 3px rgba(217, 72, 30, 0.2) !important;
+}
+
+.charCounter {
+  font-size: 0.75rem;
+  color: var(--color-ash-brown, #63584f);
+  text-align: right;
+  margin-top: 0.25rem;
+}
+
+.errorMessage {
+  font-size: 0.8rem;
+  color: #b91c1c;
+  margin-top: 0.25rem;
+}
+
+.actionsRow {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.25rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border-subtle, #f0ece4);
+}
+
+/* En escritorio: Campos a la izquierda (1fr), Foto a la derecha (320px) */
+@media (min-width: 1024px) {
+  .layoutGrid {
+    grid-template-columns: 1fr 320px;
+    align-items: start;
+  }
+
+  .fieldsRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .actionsRow {
+    flex-direction: column-reverse;
+  }
+}

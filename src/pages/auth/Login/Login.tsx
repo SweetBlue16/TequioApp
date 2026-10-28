@@ -55,12 +55,10 @@ export const Login: React.FC = () => {
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 1. Barrera de validación en cliente: Detiene el envío si hay datos vacíos o inválidos
     if (!validateLoginForm()) {
       return;
     }
 
-    // 2. Solo si los datos son válidos, iniciamos el estado de carga y conectamos con el servidor
     setIsLoggingIn(true);
 
     try {
@@ -71,10 +69,10 @@ export const Login: React.FC = () => {
 
       await login(loginRequest);
       const from = (location.state as { from?: string } | null)?.from;
-      void navigate(from?.startsWith('/') && !from.startsWith('//') ? from : '/perfil', { replace: true });
+      void navigate(from?.startsWith('/') && !from.startsWith('//') ? from : '/', { replace: true });
     } catch (error) {
       console.error('Error during login:', error);
-      setNotification({ message: 'Error al iniciar sesión. Intenta nuevamente.', variant: 'error' });
+      setNotification({ message: 'Credenciales incorrectas o error de conexión.', variant: 'error' });
     } finally {
       setIsLoggingIn(false);
     }

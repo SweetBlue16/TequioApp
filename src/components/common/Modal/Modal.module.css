@@ -1,0 +1,133 @@
+/* ==========================================================================
+   Modal Component Styles
+   Centered modal dialog featuring frosted glass backdrop and top color ribbon.
+   ========================================================================== */
+
+/* Fullscreen backdrop with backdrop blur */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: rgba(24, 17, 10, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Floating dialog window */
+.dialog {
+  background-color: var(--color-surface-white, #ffffff);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(24, 17, 10, 0.2);
+  width: 100%;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+  animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Internal body content: centered text and buttons */
+.contentArea {
+  padding: 2.5rem 2rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Primary modal title */
+.title {
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  font-weight: 800;
+  color: var(--color-espresso, #18110a);
+  margin: 0 0 1rem;
+  line-height: 1.25;
+}
+
+/* Secondary highlighted text (e.g., product name in violet) */
+.highlightText {
+  color: #5a30d6;
+  font-weight: 800;
+  font-size: 1.15rem;
+  margin: 0 0 1rem;
+}
+
+/* Explanatory description */
+.description {
+  font-size: 1rem;
+  color: var(--color-ash-brown, #63584f);
+  margin: 0 0 2rem;
+  line-height: 1.5;
+  max-width: 440px;
+}
+
+/* Action button row */
+.actionRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 360px;
+}
+
+/* Success icon container (glowing purple/magenta orb) */
+.successIconOrb {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #e040fb 0%, #b388ff 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 0 35px rgba(224, 64, 251, 0.45);
+  margin: 1.5rem 0 1rem;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Mobile viewport adjustments */
+@media (max-width: 480px) {
+  .dialog {
+    max-width: 100%;
+  }
+
+  .contentArea {
+    padding: 2rem 1.25rem 1.75rem;
+  }
+
+  .actionRow {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,65 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.actionGroup {
+  display: flex;
+  align-items: center;
+}
+
+.filtersGroup {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.addButton {
+  min-height: var(--target-size-min, 48px);
+  padding: 0 1.75rem;
+  border: none;
+  border-radius: var(--radius-pill, 9999px);
+  background-color: var(--color-turquoise, #00bfa5);
+  color: var(--color-surface-white, #ffffff);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.addButton:hover {
+  opacity: 0.92;
+}
+
+.addButton:active {
+  transform: scale(0.98);
+}
+
+.addButton:focus-visible {
+  outline: 2px solid var(--color-turquoise, #00bfa5);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actionGroup,
+  .filtersGroup {
+    width: 100%;
+  }
+
+  .addButton {
+    width: 100%;
+  }
+}

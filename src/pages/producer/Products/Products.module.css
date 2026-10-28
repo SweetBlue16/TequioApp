@@ -1,0 +1,43 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.headerSection {
+  margin-bottom: 1.5rem;
+  text-align: right;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-emerald, #1e6f43);
+  margin: 0;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.tableSection {
+  width: 100%;
+}
+
+.paginationSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--color-border-subtle, #f0ece4);
+  padding-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .headerSection {
+    text-align: left;
+  }
+}

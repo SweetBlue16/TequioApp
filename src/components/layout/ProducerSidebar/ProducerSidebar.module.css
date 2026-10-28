@@ -1,18 +1,36 @@
 .navigation {
+  position: relative;
   width: 100%;
   background-color: var(--color-surface-white, #ffffff);
   border-bottom: 1px solid rgba(24, 17, 10, 0.08);
   padding: 0.5rem var(--container-padding-mobile, 1rem);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; 
+  scrollbar-width: none;
+  box-sizing: border-box;
 }
 
 .navigation::-webkit-scrollbar {
-  display: none; 
+  display: none;
+}
+
+.navigation::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('@/assets/images/producer/sidebarProducer.png');
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  background-size: cover; 
+  opacity: 0.15;          
+  pointer-events: none;
+  z-index: 0;
+  display: none;
 }
 
 .navList {
+  position: relative;
+  z-index: 1;
   list-style: none;
   display: flex;
   align-items: center;
@@ -25,11 +43,12 @@
 .navItem {
   margin: 0;
   padding: 0;
+  width: 100%;
 }
 
 .navLink {
   min-height: var(--target-size-min, 48px);
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1rem;
   border-radius: var(--radius-button, 14px);
   display: inline-flex;
   align-items: center;
@@ -45,7 +64,7 @@
 }
 
 .navLink:hover {
-  background-color: rgba(30, 111, 67, 0.05);
+  background-color: rgba(30, 111, 67, 0.06);
 }
 
 .navLink:focus-visible {
@@ -54,19 +73,9 @@
 }
 
 .navLinkActive {
-  background-color: #ebf7ee; 
+  background-color: #ebf7ee;
   color: var(--color-emerald, #1e6f43);
   font-weight: 800;
-}
-
-.activeIndicator {
-  position: absolute;
-  bottom: 0;
-  left: 0.75rem;
-  right: 0.75rem;
-  height: 3px;
-  background-color: var(--color-emerald, #1e6f43);
-  border-radius: 2px 2px 0 0;
 }
 
 .iconWrapper {
@@ -90,29 +99,39 @@
   line-height: 1.25;
 }
 
-/* ==========================================================================
-   Tablet Viewport Adaptation (768px - 1023px)
-   Switches from horizontal top bar to compact left rail (~72px)
-   ========================================================================== */
+.activeIndicator {
+  position: absolute;
+  bottom: 0;
+  left: 0.75rem;
+  right: 0.75rem;
+  height: 3px;
+  background-color: var(--color-emerald, #1e6f43);
+  border-radius: 2px 2px 0 0;
+}
+
 @media (min-width: 768px) and (max-width: 1023px) {
   .navigation {
     width: 72px;
-    min-height: calc(100dvh - 72px);
+    height: calc(100dvh - 74px);
+    position: sticky;
+    top: 74px;
     border-bottom: none;
     border-right: 1px solid rgba(24, 17, 10, 0.08);
     padding: 1.25rem 0.5rem;
-    overflow-x: visible;
+    overflow-x: hidden;
+    overflow-y: auto;
     flex-shrink: 0;
+  }
+
+  .navigation::before {
+    display: block;
+    background-size: cover;
   }
 
   .navList {
     flex-direction: column;
     width: 100%;
     gap: 0.75rem;
-  }
-
-  .navItem {
-    width: 100%;
   }
 
   .navLink {
@@ -138,19 +157,24 @@
   }
 }
 
-/* ==========================================================================
-   Desktop Viewport Adaptation (>= 1024px)
-   Full sidebar occupying roughly one fifth (~240px)
-   ========================================================================== */
 @media (min-width: 1024px) {
   .navigation {
-    width: 240px;
-    min-height: calc(100dvh - 72px);
+    width: 270px; 
+    height: calc(100dvh - 74px);
+    position: sticky;
+    top: 74px;
     border-bottom: none;
     border-right: 1px solid rgba(24, 17, 10, 0.08);
-    padding: 1.5rem 0.75rem;
-    overflow-x: visible;
+    padding: 1.5rem 0.875rem;
+    overflow-x: hidden;
+    overflow-y: auto;
     flex-shrink: 0;
+  }
+
+  .navigation::before {
+    display: block;
+    background-size: 100% auto;
+    background-position: bottom center;
   }
 
   .navList {
@@ -159,30 +183,27 @@
     gap: 0.5rem;
   }
 
-  .navItem {
-    width: 100%;
-  }
-
   .navLink {
     width: 100%;
     min-height: var(--target-size-min, 48px);
-    padding: 0.875rem 1rem;
+    padding: 0.875rem 1.5rem 0.875rem 1rem;
     justify-content: flex-start;
-    border-radius: 12px;
+    border-radius: 14px;
   }
 
   .labelText {
     display: inline-block;
     font-size: 0.95rem;
+    white-space: normal; 
   }
 
   .activeIndicator {
-    top: 4px;
-    bottom: 4px;
+    top: 8px;
+    bottom: 8px;
     left: auto;
-    right: 0;
-    width: 5px;
+    right: 6px;
+    width: 4px;
     height: auto;
-    border-radius: 4px 0 0 4px;
+    border-radius: 4px;
   }
 }

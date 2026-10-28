@@ -30,6 +30,7 @@ export interface ProfileServiceInterface {
   updateProfile(data: UpdateUserProfile): Promise<void>;
   uploadImage(file: File): Promise<string>;
   updatePicture(pictureUrl: string): Promise<void>;
+  becomeProducer(): Promise<void>;
 }
 
 export class ProfileService implements ProfileServiceInterface {
@@ -59,4 +60,9 @@ export class ProfileService implements ProfileServiceInterface {
   async updatePicture(pictureUrl: string): Promise<void> {
     await this.client.put('/users/me/profile-picture', { pictureUrl });
   }
+
+  async becomeProducer(): Promise<void> {
+    await this.client.patch('/users/me/role/producer');
+  }
+
 }

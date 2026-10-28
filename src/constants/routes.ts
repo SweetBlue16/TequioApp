@@ -16,6 +16,7 @@ export const ROUTES = {
   PRODUCER: {
     ROOT: '/panel-vendedor',
     PRODUCTS: '/panel-vendedor/productos',
+    NEW_PRODUCT: '/panel-vendedor/productos/nuevo',
     BATCHES: '/panel-vendedor/lotes',
     STATISTICS: '/panel-vendedor/estadisticas',
     VALIDATE_DELIVERY: '/panel-vendedor/validar-entrega',

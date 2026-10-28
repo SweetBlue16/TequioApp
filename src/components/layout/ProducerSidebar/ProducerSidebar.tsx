@@ -1,9 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import iconProductos from '@/assets/icons/navbarProducer/icon_navbarProducerProductos.png';
-import iconLotes from '@/assets/icons/navbarProducer/icon_navbarProducerLotes.png';
-import iconEstadisticas from '@/assets/icons/navbarProducer/icon_navbarProducerEstadisticas.png';
-import iconValidar from '@/assets/icons/navbarProducer/icon_navbarProducerValidar.png';
+import { ROUTES } from '@/constants/routes';
+
+import iconProductos from '@/assets/icons/producerSidebar/icon_navbarProducerProductos.png';
+import iconLotes from '@/assets/icons/producerSidebar/icon_navbarProducerLotes.png';
+import iconEstadisticas from '@/assets/icons/producerSidebar/icon_navbarProducerEstadisticas.png';
+import iconValidar from '@/assets/icons/producerSidebar/icon_navbarProducerValidar.png';
 
 import styles from './ProducerSidebar.module.css';
 
@@ -24,25 +26,25 @@ const PRODUCER_NAV_ITEMS: readonly ProducerSideBarItem[] = [
   {
     id: 'products',
     label: 'Mis productos',
-    path: '/panel-vendedor/productos',
+    path: ROUTES.PRODUCER.PRODUCTS,
     iconSrc: iconProductos,
   },
   {
     id: 'batches',
     label: 'Mis lotes',
-    path: '/panel-vendedor/lotes',
+    path: ROUTES.PRODUCER.BATCHES,
     iconSrc: iconLotes,
   },
   {
     id: 'statistics',
     label: 'Consultar estadísticas',
-    path: '/panel-vendedor/estadisticas',
+    path: ROUTES.PRODUCER.STATISTICS,
     iconSrc: iconEstadisticas,
   },
   {
     id: 'validate',
     label: 'Validar entrega',
-    path: '/panel-vendedor/validar-entrega',
+    path: ROUTES.PRODUCER.VALIDATE_DELIVERY,
     iconSrc: iconValidar,
   },
 ] as const;
@@ -51,13 +53,12 @@ const PRODUCER_NAV_ITEMS: readonly ProducerSideBarItem[] = [
  * Properties for the ProducerSidebar component.
  */
 export interface ProducerSidebarProps {
-  /** Optional custom CSS class name for layout overrides */
   className?: string;
 }
 
 /**
  * Adaptive sidebar for the agricultural and artisan producer panel.
- * Complies with WCAG 2.5.5 touch target sizes and fluid responsiveness.
+ * Features a semi-transparent cultural illustration background.
  */
 export const ProducerSidebar: React.FC<ProducerSidebarProps> = ({ className = '' }) => {
   return (

@@ -1,0 +1,52 @@
+/* ==========================================================================
+   ProductListTable Component Styles
+   ========================================================================== */
+
+.tableWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.headerRow {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .headerRow {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 1fr) 130px;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0 0.5rem 0.75rem 0.5rem;
+    border-bottom: 2px solid var(--color-border-subtle, #f0ece4);
+  }
+
+  .columnHeader {
+    font-size: var(--font-size-small, 0.875rem);
+    font-weight: 700;
+    color: var(--color-ash-brown, #63584f);
+    text-align: left;
+    user-select: none;
+  }
+
+  .columnHeaderAction {
+    font-size: var(--font-size-small, 0.875rem);
+    font-weight: 700;
+    color: var(--color-ash-brown, #63584f);
+    text-align: center;
+    user-select: none;
+  }
+}
+
+.itemsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.emptyState {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--color-ash-brown, #63584f);
+  font-size: 0.95rem;
+}

@@ -9,10 +9,13 @@ import type { ProfileServiceInterface } from '@/services/profile/ProfileService'
 import { ProtectedRoutes } from '../ProtectedRoutes';
 import { Navbar } from '@/components/layout/Navbar';
 
-const authService: AuthServiceInterface = { login: jest.fn(), register: jest.fn(), verify: jest.fn() };
+const authService: AuthServiceInterface = {
+  login: jest.fn(), register: jest.fn(), verify: jest.fn(),
+  resendVerificationCode: jest.fn(), requestPasswordReset: jest.fn(), resetPassword: jest.fn(),
+};
 const profileService: ProfileServiceInterface = {
   getProfile: jest.fn().mockResolvedValue({ id: 7, firstName: 'Ana', paternalLastName: 'Ruiz', profilePictureUrl: null }),
-  updateProfile: jest.fn(), uploadImage: jest.fn(), updatePicture: jest.fn(),
+  updateProfile: jest.fn(), uploadImage: jest.fn(), updatePicture: jest.fn(), becomeProducer: jest.fn(),
 };
 
 function token(roleId: number, exp = Math.floor(Date.now() / 1000) + 3600) {
@@ -78,11 +81,11 @@ test('productor accede a productos y logout borra sesión y navegación', async 
   storage.setToken(token(2));
   renderAt('/mis-productos', storage);
   expect(await screen.findByText('Productos privados')).toBeInTheDocument();
-  expect(screen.getByText('Mis productos')).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'Panel de vendedor' })).toBeInTheDocument();
   await userEvent.click(screen.getByRole('button', { name: 'Salir' }));
   expect(storage.getToken()).toBeNull();
   expect(await screen.findByText('Login requerido')).toBeInTheDocument();
-  expect(screen.queryByText('Mis productos')).not.toBeInTheDocument();
+  expect(screen.queryByRole('link', { name: 'Panel de vendedor' })).not.toBeInTheDocument();
 });
 
 test('limpieza del token sincroniza la UI', async () => {

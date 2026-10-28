@@ -11,6 +11,7 @@ test('login válido guarda sesión y navega al destino protegido', async () => {
   const authService: AuthServiceInterface = {
     login: jest.fn().mockResolvedValue({ token, mensaje: 'ok' }),
     register: jest.fn(), verify: jest.fn(),
+    resendVerificationCode: jest.fn(), requestPasswordReset: jest.fn(), resetPassword: jest.fn(),
   };
   render(
     <AuthServiceProvider authService={authService}>

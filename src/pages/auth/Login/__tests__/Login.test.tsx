@@ -28,6 +28,9 @@ const mockAuthService: AuthServiceInterface = {
   login: jest.fn<AuthServiceInterface['login']>(),
   register: jest.fn<AuthServiceInterface['register']>(),
   verify: jest.fn<AuthServiceInterface['verify']>(),
+  resendVerificationCode: jest.fn<AuthServiceInterface['resendVerificationCode']>(),
+  requestPasswordReset: jest.fn<AuthServiceInterface['requestPasswordReset']>(),
+  resetPassword: jest.fn<AuthServiceInterface['resetPassword']>(),
 };
 
 /**

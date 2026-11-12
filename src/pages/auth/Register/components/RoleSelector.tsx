@@ -3,6 +3,7 @@ import { Card } from '@/components/common/Card';
 import producerIconImage from '@/assets/icons/register/icon_vendedor.png';
 import buyerIconImage from '@/assets/icons/register/icon_comprador.png';
 import styles from '../Register.module.css';
+import { TextLink } from '@/components/common/TextLink/TextLink';
 
 /**
  * Properties contract for the RoleSelector subview component.
@@ -55,6 +56,12 @@ export const RoleSelector: React.FC<RoleSelectorProps> = ({ onSelectRole }) => {
           </div>
           <span className={styles.roleLabel}>Comprador</span>
         </button>
+
+          <div className={styles.forgotPasswordWrapper}>
+            <TextLink variant="terracotta" to="/verificar">
+              ¿Ya tienes una cuenta? Verifica tu correo
+            </TextLink>
+          </div>
       </div>
     </Card>
   );

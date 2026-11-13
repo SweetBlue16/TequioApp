@@ -26,4 +26,12 @@ export const ROUTES = {
     CART: '/carrito',
     PROFILE: '/perfil',
   },
+  ADMIN: {
+    ROOT: '/admin',
+    PROFILE: '/admin/perfil',
+    DELIVERY_POINTS: '/admin/puntos-entrega',
+    NEW_DELIVERY_POINT: '/admin/puntos-entrega/nuevo',
+    EDIT_DELIVERY_POINT: '/admin/puntos-entrega/edicion/:id',
+    AUTHENTICATE_USER: '/admin/autenticacion-usuarios',
+  }
 } as const;

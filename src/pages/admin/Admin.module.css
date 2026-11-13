@@ -1,0 +1,34 @@
+/* ==========================================================================
+   Admin Page Layout Styles
+   Responsive two-column shell pairing AdminSidebar with the active admin view.
+   ========================================================================== */
+
+.layout {
+  min-height: calc(100dvh - 74px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-warm-ivory, #fffdf9);
+}
+
+@media (min-width: 768px) {
+  .layout {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+.mainContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem var(--container-padding-mobile, 1rem);
+  box-sizing: border-box;
+}
+
+@media (min-width: 1024px) {
+  .mainContent {
+    padding: 2rem 2.5rem;
+  }
+}

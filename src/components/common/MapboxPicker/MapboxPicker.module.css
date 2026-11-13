@@ -1,0 +1,48 @@
+/* ==========================================================================
+   MapboxPicker Component Styles
+   Responsive container for interactive location selection and static preview.
+   ========================================================================== */
+
+.mapWrapper {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(24, 17, 10, 0.18);
+  background-color: #f6f3ee;
+  box-sizing: border-box;
+}
+
+.mapCanvas {
+  width: 100%;
+  height: 100%;
+}
+
+.helperBadge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  z-index: 2;
+  background-color: rgba(255, 253, 249, 0.92);
+  color: var(--color-espresso, #18110a);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(24, 17, 10, 0.12);
+  pointer-events: none;
+}
+
+.errorState {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-terracotta, #d9481e);
+  font-weight: 600;
+}

@@ -8,15 +8,17 @@ const AppContent: React.FC = () => {
   const location = useLocation();
   const { isInitializing } = useSession();
 
-  const isAuthRoute =
+
+  const hideNavbar =
     location.pathname.startsWith('/registro') ||
     location.pathname.startsWith('/verificar') ||
-    location.pathname.startsWith('/login');
-    location.pathname.startsWith('/recuperar');
+    location.pathname.startsWith('/login') ||
+    location.pathname.startsWith('/recuperar') ||
+    location.pathname.startsWith('/admin');
 
   return (
     <div style={{ minHeight: '100dvh', backgroundColor: 'var(--color-warm-ivory, #fffdf9)' }}>
-      {!isAuthRoute && !isInitializing && <Navbar />}
+      {!hideNavbar && !isInitializing && <Navbar />}
 
       <main>
         <AppRouter />

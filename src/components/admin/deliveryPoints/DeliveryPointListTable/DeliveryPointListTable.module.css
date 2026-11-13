@@ -1,0 +1,58 @@
+/* ==========================================================================
+   DeliveryPointListTable Styles
+   Responsive table wrapper pairing desktop column headers with item rows.
+   ========================================================================== */
+
+.tableWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.headerRow {
+  display: none;
+}
+
+.itemsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.emptyState {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--color-ash-brown, #63584f);
+  font-size: 0.95rem;
+  background-color: #faf8f5;
+  border-radius: 14px;
+  border: 1px dashed var(--color-border-subtle, #e2ddd5);
+}
+
+@media (min-width: 768px) {
+  .headerRow {
+    display: grid;
+    grid-template-columns: 1.3fr 1.6fr 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-bottom: 1px solid #e6e1d8;
+    margin-bottom: 0.25rem;
+  }
+
+  .columnHeader,
+  .columnHeaderActions {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-ash-brown, #63584f);
+  }
+
+  .columnHeaderActions {
+    text-align: right;
+    min-width: 256px;
+  }
+
+  .itemsContainer {
+    gap: 0;
+  }
+}

@@ -1,0 +1,202 @@
+/* ==========================================================================
+   DeliveryPointListItem Styles
+   Dual-layout: touch card on mobile, 4-column tabular row on desktop (>= 768px).
+   ========================================================================== */
+
+.itemRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding: 1rem;
+  background-color: var(--color-surface-white, #ffffff);
+  border: 1px solid var(--color-border-subtle, #f0ece4);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  width: 100%;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.itemRow:hover {
+  border-color: rgba(30, 111, 67, 0.25);
+}
+
+.itemRow:focus-visible {
+  outline: 3px solid rgba(0, 191, 165, 0.4);
+  outline-offset: 2px;
+}
+
+.columnName {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pointName {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--color-espresso, #18110a);
+  line-height: 1.3;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.statusActive {
+  background-color: #e8f5e9;
+  color: #1e6f43;
+}
+
+.statusInactive {
+  background-color: #f3f1ed;
+  color: #63584f;
+}
+
+.columnLocation {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.addressPrimary {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-espresso, #18110a);
+  line-height: 1.35;
+}
+
+.addressSecondary {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--color-ash-brown, #63584f);
+}
+
+.columnHours {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-espresso, #18110a);
+}
+
+.actionsGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.mapsButton {
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0.45rem;
+  border-radius: 12px;
+  border: 1px solid #e2ddd5;
+  background-color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.mapsButton:hover {
+  background-color: #f6f3ee;
+  transform: translateY(-1px);
+}
+
+.mapsIcon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+
+.actionButton {
+  flex: 1;
+  min-height: 48px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editButton {
+  background-color: #d8f8e8;
+  border: 1px solid #8ce0b8;
+  color: #135e37;
+}
+
+.editButton:hover {
+  background-color: #c2f2da;
+}
+
+.deactivateButton {
+  background-color: #fde8e8;
+  border: 1px solid #f8b4b4;
+  color: #c81e1e;
+}
+
+.deactivateButton:hover {
+  background-color: #fbd5d5;
+}
+
+.activateButton {
+  background-color: #fff8db;
+  border: 1px solid #e6d17a;
+  color: #6b5900;
+}
+
+.activateButton:hover {
+  background-color: #fdf1bf;
+}
+
+/* ==========================================================================
+   Desktop & Tablet Adaptation (>= 768px)
+   ========================================================================== */
+@media (min-width: 768px) {
+  .itemRow {
+    display: grid;
+    grid-template-columns: 1.3fr 1.6fr 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0.75rem;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #f0ece4;
+  }
+
+  .itemRow:hover {
+    background-color: rgba(30, 111, 67, 0.02);
+  }
+
+  .actionsGroup {
+    margin-top: 0;
+    justify-content: flex-end;
+  }
+
+  .mapsButton {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .actionButton {
+    flex: none;
+    min-height: 40px;
+    min-width: 96px;
+  }
+}

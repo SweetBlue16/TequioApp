@@ -2,72 +2,91 @@ import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import type { DeliveryPointCoordinates } from '@/types/deliveryPoint/DeliveryPoint';
+import pinIcon from '@/assets/icons/common/icon_maps.png';
 import styles from './MapboxPicker.module.css';
+
+/**
+ * Geographic bounding box formatted as [[minLng, minLat], [maxLng, maxLat]].
+ */
+export type GeographicBounds = readonly [
+  readonly [number, number],
+  readonly [number, number],
+];
 
 /**
  * Properties contract for the MapboxPicker component.
  */
 export interface MapboxPickerProps {
+  /** Current geographic coordinates displayed by the pin */
   coordinates: DeliveryPointCoordinates;
+  /** Enables dragging the marker and clicking on the map to adjust location */
   interactive?: boolean;
-  onCoordinatesChange?: (coords: DeliveryPointCoordinates) => void;
-  className?: string;
+  /** Optional bounding box restricting map navigation to an authorized region */
+  maxBounds?: GeographicBounds;
+  /** Callback triggered when the user repositions the marker */
+  onCoordinatesChange?: (coordinates: DeliveryPointCoordinates) => void;
 }
 
-const DEFAULT_ZOOM = 15;
-
 /**
- * Reusable Mapbox GL component serving both as an interactive coordinate picker
- * in forms and as a read-only preview thumbnail in summary screens.
+ * Reusable Mapbox GL JS map wrapper displaying a custom Tequio location pin.
  */
 export const MapboxPicker: React.FC<MapboxPickerProps> = ({
   coordinates,
-  interactive = true,
+  interactive = false,
+  maxBounds,
   onCoordinatesChange,
-  className = '',
 }) => {
-  const mapContainerRef = useRef<HTMLDivElement | null>(null);
-  const mapInstanceRef = useRef<mapboxgl.Map | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
   const markerRef = useRef<mapboxgl.Marker | null>(null);
-
   const accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN as string | undefined;
 
   useEffect(() => {
-    if (!mapContainerRef.current || !accessToken) return;
+    if (!containerRef.current || !accessToken) return;
 
     mapboxgl.accessToken = accessToken;
 
-    const map = new mapboxgl.Map({
-      container: mapContainerRef.current,
+    const mapInstance = new mapboxgl.Map({
+      container: containerRef.current,
       style: 'mapbox://styles/mapbox/streets-v12',
       center: [coordinates.longitude, coordinates.latitude],
-      zoom: DEFAULT_ZOOM,
+      zoom: 15,
       interactive,
-      attributionControl: false,
+      maxBounds: maxBounds
+        ? [
+            [maxBounds[0][0], maxBounds[0][1]],
+            [maxBounds[1][0], maxBounds[1][1]],
+          ]
+        : undefined,
     });
 
-    if (interactive) {
-      map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
-    }
+    const markerElement = document.createElement('img');
+    markerElement.src = pinIcon;
+    markerElement.alt = 'Ubicación del punto de entrega';
+    markerElement.style.width = '36px';
+    markerElement.style.height = '36px';
+    markerElement.style.objectFit = 'contain';
+    markerElement.style.cursor = interactive ? 'grab' : 'default';
 
-    const marker = new mapboxgl.Marker({
-      color: '#D9481E', 
+    const markerInstance = new mapboxgl.Marker({
+      element: markerElement,
       draggable: interactive,
+      anchor: 'bottom',
     })
       .setLngLat([coordinates.longitude, coordinates.latitude])
-      .addTo(map);
+      .addTo(mapInstance);
 
     if (interactive && onCoordinatesChange) {
-      marker.on('dragend', () => {
-        const lngLat = marker.getLngLat();
+      markerInstance.on('dragend', () => {
+        const lngLat = markerInstance.getLngLat();
         onCoordinatesChange({
           latitude: Number(lngLat.lat.toFixed(6)),
           longitude: Number(lngLat.lng.toFixed(6)),
         });
       });
 
-      map.on('click', (event) => {
-        marker.setLngLat(event.lngLat);
+      mapInstance.on('click', (event) => {
+        markerInstance.setLngLat(event.lngLat);
         onCoordinatesChange({
           latitude: Number(event.lngLat.lat.toFixed(6)),
           longitude: Number(event.lngLat.lng.toFixed(6)),
@@ -75,56 +94,50 @@ export const MapboxPicker: React.FC<MapboxPickerProps> = ({
       });
     }
 
-    mapInstanceRef.current = map;
-    markerRef.current = marker;
+    mapRef.current = mapInstance;
+    markerRef.current = markerInstance;
 
     return () => {
-      marker.remove();
-      map.remove();
-      mapInstanceRef.current = null;
+      markerInstance.remove();
+      mapInstance.remove();
+      mapRef.current = null;
       markerRef.current = null;
     };
-  }, [accessToken, interactive]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [interactive, accessToken]);
 
   useEffect(() => {
-    if (!mapInstanceRef.current || !markerRef.current) return;
+    if (!mapRef.current || !markerRef.current) return;
 
-    const currentLngLat = markerRef.current.getLngLat();
-    const hasMoved =
-      Math.abs(currentLngLat.lat - coordinates.latitude) > 0.00001 ||
-      Math.abs(currentLngLat.lng - coordinates.longitude) > 0.00001;
-
-    if (hasMoved) {
-      markerRef.current.setLngLat([coordinates.longitude, coordinates.latitude]);
-      mapInstanceRef.current.flyTo({
-        center: [coordinates.longitude, coordinates.latitude],
-        essential: true,
-      });
-    }
+    markerRef.current.setLngLat([coordinates.longitude, coordinates.latitude]);
+    mapRef.current.flyTo({
+      center: [coordinates.longitude, coordinates.latitude],
+      essential: true,
+    });
   }, [coordinates.latitude, coordinates.longitude]);
 
-  return (
-    <div
-      className={`${styles.mapWrapper} ${className}`.trim()}
-      aria-label={
-        interactive
-          ? 'Selector interactivo de ubicación en el mapa'
-          : 'Vista previa de ubicación en el mapa'
-      }
-    >
-      {!accessToken ? (
+  if (!accessToken) {
+    return (
+      <div className={styles.mapWrapper}>
         <div className={styles.errorState}>
-          Falta configurar VITE_MAPBOX_ACCESS_TOKEN en tu archivo .env.local
+          Falta configurar VITE_MAPBOX_ACCESS_TOKEN en tu archivo .env
         </div>
-      ) : (
-        <>
-          <div ref={mapContainerRef} className={styles.mapCanvas} />
-          {interactive && (
-            <span className={styles.helperBadge}>
-              Haz clic en el mapa o arrastra el marcador
-            </span>
-          )}
-        </>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.mapWrapper}>
+      <div
+        ref={containerRef}
+        className={styles.mapCanvas}
+        role="region"
+        aria-label="Mapa de ubicación del punto de entrega"
+      />
+      {interactive && (
+        <span className={styles.helperBadge}>
+          Arrastra el marcador o haz clic en el mapa
+        </span>
       )}
     </div>
   );

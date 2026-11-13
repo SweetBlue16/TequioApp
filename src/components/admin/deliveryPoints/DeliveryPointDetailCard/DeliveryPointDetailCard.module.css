@@ -1,0 +1,143 @@
+/* ==========================================================================
+   DeliveryPointDetailCard Styles
+   Shared summary and detail view wrapped inside OrnamentCard.
+   ========================================================================== */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+  gap: 1.25rem;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.backButton {
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: var(--color-espresso, #18110a);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.backButton:hover {
+  background-color: rgba(24, 17, 10, 0.06);
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-weight: 800;
+  color: var(--color-espresso, #18110a);
+  text-align: center;
+  flex: 1;
+}
+
+.spacer {
+  width: 48px;
+}
+
+.fieldsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.twoColumns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 600px) {
+  .twoColumns {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.fieldLabel {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-espresso, #18110a);
+}
+
+.fieldValue {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-ash-brown, #63584f);
+  line-height: 1.4;
+}
+
+.highlightValue {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #5c3a21;
+}
+
+.mapSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.mapsExternalLink {
+  align-self: flex-start;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-emerald, #1e6f43);
+  text-decoration: underline;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.confirmWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.confirmButton {
+  background-color: #00bfa5;
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  min-height: 48px;
+  min-width: 220px;
+  padding: 0.75rem 2rem;
+  font-size: 0.98rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confirmButton:hover:not(:disabled) {
+  background-color: #00a891;
+}
+
+.confirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

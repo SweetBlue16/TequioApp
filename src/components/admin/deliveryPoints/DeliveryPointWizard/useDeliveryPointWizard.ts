@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { getMapboxAccessToken } from '@/config/mapbox';
+import { useRef, useState } from 'react';
 import type { ComboBoxOption } from '@/components/common/ComboBox';
 import type { DeliveryPointSummaryData } from '../DeliveryPointDetailCard';
 import type { DeliveryPointCoordinates } from '@/types/deliveryPoint/DeliveryPoint';
@@ -31,6 +32,7 @@ export const useDeliveryPointWizard = (
   initialData: DeliveryPointSummaryData | undefined,
   onSubmit: (data: DeliveryPointSummaryData) => void
 ) => {
+  const locationRequestRef = useRef(0);
   const initialSchedule = parseInitialSchedule(initialData?.businessHours);
 
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -130,11 +132,13 @@ export const useDeliveryPointWizard = (
     const query = [formData.street, formData.number, formData.neighborhood, formData.city || 'Xalapa']
       .filter((part) => part.trim().length > 0)
       .join(', ');
-    const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN as string | undefined;
+    const token = getMapboxAccessToken();
 
+    const requestId = ++locationRequestRef.current;
     setIsSearchingMap(true);
     setMapFeedback('');
     const resolved = await searchRegionalAddress(query, token);
+    if (requestId !== locationRequestRef.current) return;
     setIsSearchingMap(false);
 
     if (!resolved) {
@@ -152,10 +156,12 @@ export const useDeliveryPointWizard = (
       return;
     }
 
+    const requestId = ++locationRequestRef.current;
+    setIsSearchingMap(false);
     setFormData((prev) => ({ ...prev, latitude: coords.latitude, longitude: coords.longitude }));
-    const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN as string | undefined;
+    const token = getMapboxAccessToken();
     const resolved = await reverseGeocodeCoordinates(coords, token);
-    if (resolved) {
+    if (resolved && requestId === locationRequestRef.current) {
       applyResolvedAddress(resolved);
       setMapFeedback('Dirección actualizada según la posición del pin.');
     }

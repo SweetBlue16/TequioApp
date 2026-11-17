@@ -1,3 +1,6 @@
+import { DeliveryPointRequestError, deliveryPointErrorMessage } from './deliveryPointError';
+import { createClient } from '@/services/api';
+import { TokenStorage } from '@/services/auth/TokenStorage';
 import type { AxiosInstance } from 'axios';
 import type {
   DeliveryPoint,
@@ -33,29 +36,49 @@ export class DeliveryPointService implements DeliveryPointServiceInterface {
     pageIndex: number,
     pageSize: number
   ): Promise<DeliveryPointPageResponse> {
-    const response = await this.client.get<DeliveryPointPageResponse>('/delivery-points', {
-      params: { pageIndex, pageSize },
-    });
-    return response.data;
+    try {
+      const response = await this.client.get<DeliveryPointPageResponse>('/delivery-points', {
+        params: { pageIndex, pageSize },
+      });
+      return response.data;
+    } catch (error) {
+      throw new DeliveryPointRequestError(deliveryPointErrorMessage(error));
+    }
   }
 
   async getDeliveryPointById(id: number): Promise<DeliveryPoint> {
-    const response = await this.client.get<DeliveryPoint>(`/delivery-points/${id}`);
-    return response.data;
+    try {
+      const response = await this.client.get<DeliveryPoint>(`/delivery-points/${id}`);
+      return response.data;
+    } catch (error) {
+      throw new DeliveryPointRequestError(deliveryPointErrorMessage(error));
+    }
   }
 
   async createDeliveryPoint(request: CreateDeliveryPointRequest): Promise<number> {
-    const response = await this.client.post<{ id: number }>('/delivery-points', request);
-    return response.data.id;
+    try {
+      const response = await this.client.post<{ id: number }>('/delivery-points', request);
+      return response.data.id;
+    } catch (error) {
+      throw new DeliveryPointRequestError(deliveryPointErrorMessage(error));
+    }
   }
 
   async updateDeliveryPoint(request: UpdateDeliveryPointRequest): Promise<void> {
-    await this.client.put(`/delivery-points/${request.id}`, request);
+    try {
+      await this.client.put(`/delivery-points/${request.id}`, request);
+    } catch (error) {
+      throw new DeliveryPointRequestError(deliveryPointErrorMessage(error));
+    }
   }
 
   async toggleDeliveryPointStatus(id: number, isActive: boolean): Promise<void> {
-    const actionSegment = isActive ? 'active' : 'deactive';
-    await this.client.patch(`/delivery-points/${id}/${actionSegment}`);
+    try {
+      const actionSegment = isActive ? 'active' : 'deactive';
+      await this.client.patch(`/delivery-points/${id}/${actionSegment}`);
+    } catch (error) {
+      throw new DeliveryPointRequestError(deliveryPointErrorMessage(error));
+    }
   }
 }
 
@@ -183,4 +206,4 @@ export class MockDeliveryPointService implements DeliveryPointServiceInterface {
   }
 }
 
-export const deliveryPointService: DeliveryPointServiceInterface = new MockDeliveryPointService();
+export const deliveryPointService: DeliveryPointServiceInterface = new DeliveryPointService(createClient(new TokenStorage()));

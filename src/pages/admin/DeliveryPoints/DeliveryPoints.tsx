@@ -1,3 +1,5 @@
+import { Toast } from '@/components/common/Toast';
+import { deliveryPointErrorMessage } from '@/services/deliveryPoints/deliveryPointError';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/common/Card';
@@ -52,6 +54,7 @@ const filterAndSortDeliveryPoints = (
  */
 export const DeliveryPoints: React.FC = () => {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [deliveryPoints, setDeliveryPoints] = useState<DeliveryPoint[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -64,13 +67,26 @@ export const DeliveryPoints: React.FC = () => {
 
   // Carga el catálogo paginado desde el servicio (base 1, mínimo 10 registros)
   const loadDeliveryPoints = useCallback(async (): Promise<void> => {
-    const response = await deliveryPointService.getDeliveryPoints(1, 50);
-    const items = 'items' in response ? response.items : [];
-    setDeliveryPoints([...items]);
+    try {
+      const items: DeliveryPoint[] = [];
+      let pageIndex = 1;
+      let totalCount = 0;
+      do {
+        const response = await deliveryPointService.getDeliveryPoints(pageIndex, 100);
+        items.push(...response.items);
+        totalCount = response.totalCount;
+        pageIndex += 1;
+        if (!response.items.length) break;
+      } while (items.length < totalCount);
+      setDeliveryPoints(items);
+    } catch (error) {
+      setErrorMessage(deliveryPointErrorMessage(error));
+    }
   }, []);
 
   useEffect(() => {
-    void loadDeliveryPoints();
+    const timer = window.setTimeout(() => void loadDeliveryPoints(), 0);
+    return () => window.clearTimeout(timer);
   }, [loadDeliveryPoints]);
 
   const processedPoints = useMemo(
@@ -104,13 +120,15 @@ export const DeliveryPoints: React.FC = () => {
     if (!pointToToggle) return;
 
     setIsUpdatingStatus(true);
-    await deliveryPointService.toggleDeliveryPointStatus(
-      pointToToggle.id,
-      !pointToToggle.isActive
-    );
-    await loadDeliveryPoints();
-    setIsUpdatingStatus(false);
-    setPointToToggle(null);
+    try {
+      await deliveryPointService.toggleDeliveryPointStatus(pointToToggle.id, !pointToToggle.isActive);
+      await loadDeliveryPoints();
+      setPointToToggle(null);
+    } catch (error) {
+      setErrorMessage(deliveryPointErrorMessage(error));
+    } finally {
+      setIsUpdatingStatus(false);
+    }
   };
 
   if (inspectedPoint) {
@@ -126,6 +144,7 @@ export const DeliveryPoints: React.FC = () => {
 
   return (
     <div className={styles.pageContainer}>
+      {errorMessage && <Toast message={errorMessage} variant="error" onClose={() => setErrorMessage(null)} />}
       <header className={styles.headerSection}>
         <h1 className={styles.pageTitle}>Puntos de entrega autorizados</h1>
       </header>

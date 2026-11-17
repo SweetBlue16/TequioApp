@@ -183,7 +183,24 @@ export const DeliveryPointWizard: React.FC<DeliveryPointWizardProps> = ({
                   ? 'Buscando en la región...'
                   : 'Ubicar y autocompletar desde el mapa'}
               </button>
-              {wizard.mapFeedback && <p className={styles.helperMessage}>{wizard.mapFeedback}</p>}
+              {wizard.mapFeedback && <p role="status" className={styles.helperMessage}>{wizard.mapFeedback}</p>}
+            </div>
+
+            <div className={styles.twoColumns}>
+              <InputField
+                label="Latitud*"
+                type="number"
+                step="any"
+                value={Number.isFinite(wizard.formData.latitude) ? wizard.formData.latitude : ''}
+                onChange={(event) => wizard.updateField('latitude', event.target.value === '' ? NaN : Number(event.target.value))}
+              />
+              <InputField
+                label="Longitud*"
+                type="number"
+                step="any"
+                value={Number.isFinite(wizard.formData.longitude) ? wizard.formData.longitude : ''}
+                onChange={(event) => wizard.updateField('longitude', event.target.value === '' ? NaN : Number(event.target.value))}
+              />
             </div>
 
             <MapboxPicker

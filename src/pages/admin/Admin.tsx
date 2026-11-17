@@ -1,3 +1,4 @@
+import { useSession } from '@/contexts/AuthContext';
 import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AdminSidebar } from '@/components/layout/AdminSidebar';
@@ -11,13 +12,15 @@ import styles from './Admin.module.css';
  */
 export const Admin: React.FC = () => {
   const navigate = useNavigate();
+  const { profile, logout } = useSession();
   const handleLogout = (): void => {
+    logout();
     navigate(ROUTES.AUTH.LOGIN);
   };
 
   return (
     <div className={styles.layout}>
-      <AdminSidebar userName="Daniel" onLogout={handleLogout} />
+      <AdminSidebar userName={profile?.firstName || 'Mi cuenta'} avatarUrl={profile?.profilePictureUrl || undefined} onLogout={handleLogout} />
       <main className={styles.mainContent}>
         <Outlet />
       </main>

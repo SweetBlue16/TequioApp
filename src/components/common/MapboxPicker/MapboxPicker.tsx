@@ -1,3 +1,4 @@
+import { getMapboxAccessToken } from '@/config/mapbox';
 import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -39,10 +40,17 @@ export const MapboxPicker: React.FC<MapboxPickerProps> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markerRef = useRef<mapboxgl.Marker | null>(null);
-  const accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN as string | undefined;
+  const accessToken = getMapboxAccessToken();
+
+  const hasValidCoordinates = Number.isFinite(coordinates.latitude) && Number.isFinite(coordinates.longitude)
+    && Math.abs(coordinates.latitude) <= 90 && Math.abs(coordinates.longitude) <= 180;
+  const changeHandlerRef = useRef(onCoordinatesChange);
+  useEffect(() => {
+    changeHandlerRef.current = onCoordinatesChange;
+  }, [onCoordinatesChange]);
 
   useEffect(() => {
-    if (!containerRef.current || !accessToken) return;
+    if (!containerRef.current || !accessToken || !hasValidCoordinates) return;
 
     mapboxgl.accessToken = accessToken;
 
@@ -76,10 +84,10 @@ export const MapboxPicker: React.FC<MapboxPickerProps> = ({
       .setLngLat([coordinates.longitude, coordinates.latitude])
       .addTo(mapInstance);
 
-    if (interactive && onCoordinatesChange) {
+    if (interactive) {
       markerInstance.on('dragend', () => {
         const lngLat = markerInstance.getLngLat();
-        onCoordinatesChange({
+        changeHandlerRef.current?.({
           latitude: Number(lngLat.lat.toFixed(6)),
           longitude: Number(lngLat.lng.toFixed(6)),
         });
@@ -87,7 +95,7 @@ export const MapboxPicker: React.FC<MapboxPickerProps> = ({
 
       mapInstance.on('click', (event) => {
         markerInstance.setLngLat(event.lngLat);
-        onCoordinatesChange({
+        changeHandlerRef.current?.({
           latitude: Number(event.lngLat.lat.toFixed(6)),
           longitude: Number(event.lngLat.lng.toFixed(6)),
         });
@@ -104,23 +112,23 @@ export const MapboxPicker: React.FC<MapboxPickerProps> = ({
       markerRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interactive, accessToken]);
+  }, [interactive, accessToken, hasValidCoordinates]);
 
   useEffect(() => {
-    if (!mapRef.current || !markerRef.current) return;
+    if (!mapRef.current || !markerRef.current || !hasValidCoordinates) return;
 
     markerRef.current.setLngLat([coordinates.longitude, coordinates.latitude]);
     mapRef.current.flyTo({
       center: [coordinates.longitude, coordinates.latitude],
       essential: true,
     });
-  }, [coordinates.latitude, coordinates.longitude]);
+  }, [coordinates.latitude, coordinates.longitude, hasValidCoordinates]);
 
   if (!accessToken) {
     return (
       <div className={styles.mapWrapper}>
         <div className={styles.errorState}>
-          Falta configurar VITE_MAPBOX_ACCESS_TOKEN en tu archivo .env
+          El mapa no está disponible. Puedes continuar con los datos de ubicación.
         </div>
       </div>
     );

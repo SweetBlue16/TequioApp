@@ -1,3 +1,4 @@
+import { deliveryPointErrorMessage } from '@/services/deliveryPoints/deliveryPointError';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DeliveryPointWizard } from '@/components/admin/deliveryPoints/DeliveryPointWizard';
@@ -41,9 +42,9 @@ export const AddDeliveryPoint: React.FC = () => {
       setTimeout(() => {
         navigate(ROUTES.ADMIN.DELIVERY_POINTS);
       }, 900);
-    } catch {
+    } catch (error) {
       setToastState({
-        message: 'No se pudo registrar el punto de entrega. Intenta de nuevo.',
+        message: deliveryPointErrorMessage(error),
         variant: 'error',
       });
       setIsSubmitting(false);

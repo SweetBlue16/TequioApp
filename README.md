@@ -73,3 +73,6 @@ export default defineConfig([
 ])
 
 ```
+
+
+Puntos físicos de entrega: [instalación, contrato y verificación](docs/PUNTOS_ENTREGA.md).

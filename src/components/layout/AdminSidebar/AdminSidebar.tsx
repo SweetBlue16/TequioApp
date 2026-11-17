@@ -39,7 +39,7 @@ const ADMIN_NAV_OPTIONS: readonly AdminNavOption[] = [
     iconSrc: logoEditarPerfil,
   },
   {
-    label: 'Gestionar puntos de entrega autorizados',
+    label: 'Puntos de entrega',
     to: ROUTES.ADMIN.DELIVERY_POINTS,
     iconSrc: logoEditarPuntos,
   },

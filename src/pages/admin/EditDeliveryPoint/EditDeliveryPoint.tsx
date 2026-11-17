@@ -1,3 +1,4 @@
+import { deliveryPointErrorMessage } from '@/services/deliveryPoints/deliveryPointError';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DeliveryPointWizard } from '@/components/admin/deliveryPoints/DeliveryPointWizard';
@@ -30,14 +31,14 @@ export const EditDeliveryPoint: React.FC = () => {
         return;
       }
 
-      const found = await deliveryPointService.getDeliveryPointById(parsedId);
-      if (!found) {
-        navigate(ROUTES.ADMIN.DELIVERY_POINTS);
-        return;
+      try {
+        const found = await deliveryPointService.getDeliveryPointById(parsedId);
+        setPointRecord(found);
+      } catch (error) {
+        setToastState({ message: deliveryPointErrorMessage(error), variant: 'error' });
+      } finally {
+        setIsLoading(false);
       }
-
-      setPointRecord(found);
-      setIsLoading(false);
     };
 
     void loadPoint();
@@ -70,16 +71,16 @@ export const EditDeliveryPoint: React.FC = () => {
       setTimeout(() => {
         navigate(ROUTES.ADMIN.DELIVERY_POINTS);
       }, 900);
-    } catch {
+    } catch (error) {
       setToastState({
-        message: 'No se pudieron guardar los cambios. Intenta de nuevo.',
+        message: deliveryPointErrorMessage(error),
         variant: 'error',
       });
       setIsSubmitting(false);
     }
   };
 
-  if (isLoading || !pointRecord) {
+  if (isLoading) {
     return null;
   }
 
@@ -93,13 +94,13 @@ export const EditDeliveryPoint: React.FC = () => {
         />
       )}
 
-      <DeliveryPointWizard
+      {pointRecord && <DeliveryPointWizard
         mode="edit"
         initialData={pointRecord}
         isSubmitting={isSubmitting}
         onCancel={() => navigate(ROUTES.ADMIN.DELIVERY_POINTS)}
         onSubmit={(data) => void handleEditSubmit(data)}
-      />
+      />}
     </>
   );
 };

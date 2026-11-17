@@ -27,3 +27,6 @@ release/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Public configuration example without credentials
+!.env.example

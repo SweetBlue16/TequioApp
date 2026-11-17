@@ -70,8 +70,7 @@ export const Login: React.FC = () => {
       await login(loginRequest);
       const from = (location.state as { from?: string } | null)?.from;
       void navigate(from?.startsWith('/') && !from.startsWith('//') ? from : '/', { replace: true });
-    } catch (error) {
-      console.error('Error during login:', error);
+    } catch {
       setNotification({ message: 'Credenciales incorrectas o error de conexión.', variant: 'error' });
     } finally {
       setIsLoggingIn(false);

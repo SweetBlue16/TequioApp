@@ -37,7 +37,9 @@ export const AppRouter: React.FC = () => {
       {/*Panel de Vendedor */}
       <Route path="/panel-vendedor/*" element={<ProducerRoutes />} />
       {/* Panel de Administrador */}
-      <Route path="/admin/*" element={<AdminRoutes />} />
+      <Route element={<ProtectedRoutes requiredRoleId={3} />}>
+        <Route path="/admin/*" element={<AdminRoutes />} />
+      </Route>
       
       <Route path="*" element={<Navigate to="/" replace />} />
 

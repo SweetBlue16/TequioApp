@@ -44,6 +44,9 @@ export const Navbar: React.FC = () => {
                 <NavTextButton label="Panel de vendedor" to={ROUTES.PRODUCER.ROOT} />
               </>
             )}
+            {session?.roleId === 3 && (
+              <NavTextButton label="Panel de administración" to={ROUTES.ADMIN.ROOT} />
+            )}
             {!session && (
               <>
                 <NavTextButton label="Iniciar sesión" to="/login" />
@@ -90,6 +93,9 @@ export const Navbar: React.FC = () => {
             <>
               <NavTextButton label="Panel de vendedor" to={ROUTES.PRODUCER.ROOT} onClick={closeMobile} />
               <NavTextButton label="Mis compras" to={ROUTES.BUYER.MY_PURCHASES} onClick={closeMobile} />
+              {session.roleId === 3 && (
+                <NavTextButton label="Panel de administración" to={ROUTES.ADMIN.ROOT} onClick={closeMobile} />
+              )}
               <NavTextButton label="Mi perfil" to="/perfil" onClick={closeMobile} />
               <button
                 type="button"

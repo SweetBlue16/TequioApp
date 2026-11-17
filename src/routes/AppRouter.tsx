@@ -34,11 +34,23 @@ export const AppRouter: React.FC = () => {
       <Route element={<ProtectedRoutes requiredRoleId={2} />}>
         <Route path="/mis-productos" element={<MyProducts />} />
       </Route>
+
       {/*Panel de Vendedor */}
       <Route path="/panel-vendedor/*" element={<ProducerRoutes />} />
+      
       {/* Panel de Administrador */}
       <Route element={<ProtectedRoutes requiredRoleId={3} />}>
         <Route path="/admin/*" element={<AdminRoutes />} />
+      </Route>
+
+      {/* Panel de Administrador Maestro */}
+      <Route element={<ProtectedRoutes requiredRoleId={4} />}>
+        <Route path="/adminMaestro/*" element={
+            <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px' }}>
+              <h1>Panel de Administrador Maestro</h1>
+            </div>
+          }
+        />
       </Route>
       
       <Route path="*" element={<Navigate to="/" replace />} />

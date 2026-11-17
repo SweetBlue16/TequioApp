@@ -6,6 +6,7 @@ import InputField from '@/components/common/InputField';
 import Button from '@/components/common/Button';
 import TextLink from '@/components/common/TextLink';
 import Toast from '@/components/common/Toast';
+import { ROUTES } from '@/constants/routes';
 import logoTequio from '@/assets/images/logoTequio.png';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -14,6 +15,13 @@ import {
   validateEmailAddress,
   validateMaximumLength,
 } from '@/utils/formValidators';
+
+const ROLE_DEFAULT_ROUTES: Record<number, string> = {
+  1: ROUTES.PUBLIC.HOME,
+  2: ROUTES.PUBLIC.HOME,
+  3: `${ROUTES.ADMIN.ROOT}/`,
+  4: ROUTES.MASTER_ADMIN.ROOT,
+};
 
 export const Login: React.FC = () => {
   const [identifier, setIdentifier] = useState('');
@@ -67,9 +75,10 @@ export const Login: React.FC = () => {
         password: password,
       };
 
-      await login(loginRequest);
+      const session = await login(loginRequest);
+      const defaultRoute = ROLE_DEFAULT_ROUTES[session.roleId] ?? ROUTES.PUBLIC.HOME;
       const from = (location.state as { from?: string } | null)?.from;
-      void navigate(from?.startsWith('/') && !from.startsWith('//') ? from : '/', { replace: true });
+      void navigate(from?.startsWith('/') && !from.startsWith('//') ? from : defaultRoute, { replace: true });
     } catch {
       setNotification({ message: 'Credenciales incorrectas o error de conexión.', variant: 'error' });
     } finally {
@@ -83,7 +92,7 @@ export const Login: React.FC = () => {
         <div className={styles.logoContainer}>
           <img src={logoTequio} alt="Tequio Logo" className={styles.logo} />
         </div>
-        
+
         <div className={styles.greetingContainer}>
           <span className={styles.greetingMedium}>Hola</span>
           <span className={styles.greetingLarge}>Tequio!</span>

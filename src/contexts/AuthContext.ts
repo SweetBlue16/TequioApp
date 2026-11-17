@@ -12,7 +12,7 @@ export interface AuthContextValue {
   isInitializing: boolean;
   profile: UserProfile | null;
   profileStatus: 'idle' | 'loading' | 'ready' | 'error';
-  login(request: LoginRequest): Promise<void>;
+  login(request: LoginRequest): Promise<Session>;
   logout(): void;
   refreshProfile(): Promise<UserProfile | null>;
 }

@@ -73,16 +73,17 @@ export const AuthServiceProvider: React.FC<AuthServiceProviderProps> = ({ authSe
     return () => window.clearTimeout(task);
   }, [session, profileService, refreshProfile]);
 
-  const login = useCallback(async (request: LoginRequest) => {
-    const response = await authService.login(request);
-    const restored = decodeSession(response.token);
-    if (!restored) {
-      storage.clearToken();
-      throw new Error('El servidor devolvió una sesión inválida.');
-    }
-    storage.setToken(response.token);
-    setSession(restored);
-  }, [authService, storage]);
+  const login = useCallback(async (request: LoginRequest): Promise<Session> => {
+      const response = await authService.login(request);
+      const restored = decodeSession(response.token);
+      if (!restored) {
+        storage.clearToken();
+        throw new Error('El servidor devolvió una sesión inválida.');
+      }
+      storage.setToken(response.token);
+      setSession(restored);
+      return restored;
+    }, [authService, storage]);
 
   const logout = useCallback(() => {
     storage.clearToken();

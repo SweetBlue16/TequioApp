@@ -33,5 +33,8 @@ export const ROUTES = {
     NEW_DELIVERY_POINT: '/admin/puntos-entrega/nuevo',
     EDIT_DELIVERY_POINT: '/admin/puntos-entrega/edicion/:id',
     AUTHENTICATE_USER: '/admin/autenticacion-usuarios',
-  }
+  },
+  MASTER_ADMIN: {
+    ROOT: '/adminMaestro',
+  },
 } as const;

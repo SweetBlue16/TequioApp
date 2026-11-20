@@ -30,3 +30,8 @@ Thumbs.db
 
 # Public configuration example without credentials
 !.env.example
+
+# =========================
+# Archivos de prueba y cobertura
+# =========================
+coverage/

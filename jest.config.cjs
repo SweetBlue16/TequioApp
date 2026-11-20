@@ -1,12 +1,27 @@
 module.exports = {
-  preset: 'ts-jest',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest',
+  '^.+\\.tsx?$': [
+    'ts-jest',
       {
         tsconfig: '<rootDir>/tsconfig.test.json',
+        diagnostics: false,
+        astTransformers: {
+          before: [
+            {
+              path: 'ts-jest-mock-import-meta',
+              options: {
+                metaObjectReplacement: {
+                  env: {
+                    VITE_API_BASE_URL: 'api/test',
+                    VITE_MAPBOX_ACCESS_TOKEN: 'test-mapbox-token',
+                  },
+                },
+              },
+            },
+          ],
+        },
       },
     ],
   },

@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
+    "isolatedModules": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "allowImportingTsExtensions": false,

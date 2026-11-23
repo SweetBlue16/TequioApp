@@ -35,3 +35,10 @@ Thumbs.db
 # Archivos de prueba y cobertura
 # =========================
 coverage/
+
+# Documentación y evidencias locales
+docs/reports/
+postman/evidence/
+
+# Archivos temporales de Office
+~$*

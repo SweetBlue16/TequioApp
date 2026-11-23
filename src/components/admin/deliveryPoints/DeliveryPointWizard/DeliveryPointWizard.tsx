@@ -183,7 +183,9 @@ export const DeliveryPointWizard: React.FC<DeliveryPointWizardProps> = ({
                   ? 'Buscando en la región...'
                   : 'Ubicar y autocompletar desde el mapa'}
               </button>
-              {wizard.mapFeedback && <p role="status" className={styles.helperMessage}>{wizard.mapFeedback}</p>}
+              {wizard.mapFeedback && (
+                <output className={styles.helperMessage}>{wizard.mapFeedback}</output>
+              )}
             </div>
 
             <div className={styles.twoColumns}>
@@ -192,14 +194,24 @@ export const DeliveryPointWizard: React.FC<DeliveryPointWizardProps> = ({
                 type="number"
                 step="any"
                 value={Number.isFinite(wizard.formData.latitude) ? wizard.formData.latitude : ''}
-                onChange={(event) => wizard.updateField('latitude', event.target.value === '' ? NaN : Number(event.target.value))}
+                onChange={(event) =>
+                  wizard.updateField(
+                    'latitude',
+                    event.target.value === '' ? Number.NaN : Number(event.target.value)
+                  )
+                }
               />
               <InputField
                 label="Longitud*"
                 type="number"
                 step="any"
                 value={Number.isFinite(wizard.formData.longitude) ? wizard.formData.longitude : ''}
-                onChange={(event) => wizard.updateField('longitude', event.target.value === '' ? NaN : Number(event.target.value))}
+                onChange={(event) =>
+                  wizard.updateField(
+                    'longitude',
+                    event.target.value === '' ? Number.NaN : Number(event.target.value)
+                  )
+                }
               />
             </div>
 

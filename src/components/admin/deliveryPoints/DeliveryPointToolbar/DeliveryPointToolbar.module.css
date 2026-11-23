@@ -13,7 +13,7 @@
 
 .addButton {
   background-color: #00bfa5;
-  color: #ffffff;
+  color: #18110a;
   border: none;
   border-radius: 14px;
   min-height: 48px;
@@ -22,7 +22,9 @@
   font-size: 0.92rem;
   line-height: 1.2;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
 }
 
 .addButton:hover {

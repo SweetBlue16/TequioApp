@@ -47,7 +47,9 @@
   background-color: var(--color-surface-white, #ffffff);
   cursor: pointer;
   min-height: var(--target-size-min, 48px);
-  transition: border-color 0.2s ease, transform 0.15s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.15s ease;
 }
 
 .roleOptionButton:hover {
@@ -65,7 +67,7 @@
 }
 
 .forgotPasswordWrapper {
-  margin-top: 1.5rem; 
+  margin-top: 1.5rem;
   text-align: center;
 }
 
@@ -217,5 +219,13 @@
     right: 1rem;
     left: 1rem;
     max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roleOptionButton,
+  .toastViewport {
+    animation: none;
+    transition: none;
   }
 }

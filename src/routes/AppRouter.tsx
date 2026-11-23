@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Toast } from '@/components/common/Toast';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from '@/pages/auth/Login';
 import { Register } from '@/pages/auth/Register';
@@ -9,53 +10,80 @@ import { ProfilePage } from '@/pages/profile/ProfilePage';
 import { MyProducts } from '@/pages/MyProducts';
 import { ProducerRoutes } from './ProducerRoutes';
 import { AdminRoutes } from './AdminRoutes';
+import { Catalog } from '@/pages/catalog/Catalog';
+import { ROUTES } from '@/constants/routes';
 
 export const AppRouter: React.FC = () => {
+  const [logoutNavigationFailed, setLogoutNavigationFailed] = useState(false);
+
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px', textAlign: 'center' }}>
-            <h1>Bienvenido a Tequio</h1>
-            <p style={{ marginTop: '12px', color: 'var(--color-ash-brown)' }}>
-              Mercado comunitario de café, miel y cosechas locales de la región.
-            </p>
-          </div>
-        }
-      />
-      <Route path="/login" element={<Login />} />
-      <Route path="/registro" element={<Register />} />
-      <Route path="/verificar" element={<VerifyAccount />} />
-      <Route path="/recuperar" element={<RecoverAccount />} />
-      <Route element={<ProtectedRoutes />}>
-        <Route path="/perfil" element={<ProfilePage />} />
-      </Route>
-      <Route element={<ProtectedRoutes requiredRoleId={2} />}>
-        <Route path="/mis-productos" element={<MyProducts />} />
-      </Route>
-
-      {/*Panel de Vendedor */}
-      <Route path="/panel-vendedor/*" element={<ProducerRoutes />} />
-      
-      {/* Panel de Administrador */}
-      <Route element={<ProtectedRoutes requiredRoleId={3} />}>
-        <Route path="/admin/*" element={<AdminRoutes />} />
-      </Route>
-
-      {/* Panel de Administrador Maestro */}
-      <Route element={<ProtectedRoutes requiredRoleId={4} />}>
-        <Route path="/adminMaestro/*" element={
-            <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px' }}>
-              <h1>Panel de Administrador Maestro</h1>
+    <>
+      {logoutNavigationFailed && (
+        <Toast
+          message="Cerraste sesión, pero no pudimos abrir la página de acceso."
+          variant="error"
+          onClose={() => setLogoutNavigationFailed(false)}
+        />
+      )}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div
+              style={{
+                maxWidth: '1200px',
+                margin: '40px auto',
+                padding: '0 20px',
+                textAlign: 'center',
+              }}
+            >
+              <h1>Bienvenido a Tequio</h1>
+              <p style={{ marginTop: '12px', color: 'var(--color-ash-brown)' }}>
+                Mercado comunitario de café, miel y cosechas locales de la región.
+              </p>
             </div>
           }
         />
-      </Route>
-      
-      <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path={ROUTES.PUBLIC.CATALOG} element={<Catalog />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Register />} />
+        <Route path="/verificar" element={<VerifyAccount />} />
+        <Route path="/recuperar" element={<RecoverAccount />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/perfil" element={<ProfilePage />} />
+        </Route>
+        <Route element={<ProtectedRoutes requiredRoleId={2} />}>
+          <Route path="/mis-productos" element={<MyProducts />} />
+        </Route>
 
-    </Routes>
+        {/*Panel de Vendedor */}
+        <Route path="/panel-vendedor/*" element={<ProducerRoutes />} />
+
+        {/* Panel de Administrador */}
+        <Route element={<ProtectedRoutes requiredRoleId={3} />}>
+          <Route
+            path="/admin/*"
+            element={
+              <AdminRoutes onLogoutNavigationError={() => setLogoutNavigationFailed(true)} />
+            }
+          />
+        </Route>
+
+        {/* Panel de Administrador Maestro */}
+        <Route element={<ProtectedRoutes requiredRoleId={4} />}>
+          <Route
+            path="/adminMaestro/*"
+            element={
+              <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px' }}>
+                <h1>Panel de Administrador Maestro</h1>
+              </div>
+            }
+          />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 };
 

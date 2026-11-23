@@ -172,3 +172,10 @@
     display: none;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .cartButton {
+    animation: none;
+    transition: none;
+  }
+}

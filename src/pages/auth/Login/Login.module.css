@@ -4,9 +4,11 @@
 
 .layout {
   display: flex;
-  min-height: 100dvh; 
+  min-height: 100dvh;
   width: 100%;
-  background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url('../../../assets/images/fondo_login.jpg') no-repeat center center;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
+    url('../../../assets/images/fondo_login.jpg') no-repeat center center;
   background-size: cover;
 }
 
@@ -18,7 +20,7 @@
 }
 
 .logoContainer {
-  align-self: flex-start; 
+  align-self: flex-start;
 }
 
 .logo {
@@ -54,8 +56,8 @@
 }
 
 .footerText {
-  margin-top: auto; 
-  color: var(--color-espresso); 
+  margin-top: auto;
+  color: var(--color-espresso);
   font-size: var(--font-size-small);
   font-weight: 600;
 }
@@ -63,7 +65,7 @@
 .rightDivision {
   flex: 1;
   max-width: 100%;
-  background-color: var(--color-warm-ivory); 
+  background-color: var(--color-warm-ivory);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -97,7 +99,7 @@
 }
 
 .buttonWrapper {
-  margin-top: clamp(2rem, 4vw, 3rem); 
+  margin-top: clamp(2rem, 4vw, 3rem);
   display: flex;
   justify-content: center;
 }
@@ -107,12 +109,12 @@
 }
 
 .forgotPasswordWrapper {
-  margin-top: 1.5rem; 
+  margin-top: 1.5rem;
   text-align: center;
 }
 
 .registerSection {
-  margin-top: clamp(2rem, 4vw, 3rem); 
+  margin-top: clamp(2rem, 4vw, 3rem);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -138,7 +140,7 @@
   }
 
   .leftDivision {
-    flex: none; 
+    flex: none;
     padding: 2.5rem 1.5rem;
     align-items: center;
     text-align: center;
@@ -149,14 +151,14 @@
   }
 
   .footerText {
-    display: none; 
+    display: none;
   }
 
   .rightDivision {
-    flex: 1; 
+    flex: 1;
     padding: 2.5rem 1.5rem;
     border-radius: 32px 32px 0 0;
-    box-shadow: 0 -8px 24px rgba(24, 17, 10, 0.08); 
+    box-shadow: 0 -8px 24px rgba(24, 17, 10, 0.08);
   }
 
   .title {
@@ -164,7 +166,7 @@
   }
 
   .loginButton {
-    width: 100%; 
+    width: 100%;
   }
 }
 
@@ -198,5 +200,11 @@
     right: 1rem;
     left: 1rem;
     max-width: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toastViewport {
+    animation: none;
+    transition: none;
   }
 }

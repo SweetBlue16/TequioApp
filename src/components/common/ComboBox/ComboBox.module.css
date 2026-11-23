@@ -1,8 +1,8 @@
-.container { 
-    display: flex;
-    felx-direction: column;
-    gap: 0.375rem;
-    width: 100%;
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  width: 100%;
 }
 
 .label {
@@ -31,7 +31,9 @@
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .select:focus {

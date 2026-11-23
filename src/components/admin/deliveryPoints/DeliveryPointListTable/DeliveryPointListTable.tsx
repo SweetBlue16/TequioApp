@@ -31,9 +31,9 @@ export const DeliveryPointListTable: React.FC<DeliveryPointListTableProps> = ({
 }) => {
   if (deliveryPoints.length === 0) {
     return (
-      <div className={styles.emptyState} role="status">
-        <p>No se encontraron puntos de entrega autorizados con ese criterio.</p>
-      </div>
+      <output className={styles.emptyState}>
+        No se encontraron puntos de entrega autorizados con ese criterio.
+      </output>
     );
   }
 
@@ -46,10 +46,7 @@ export const DeliveryPointListTable: React.FC<DeliveryPointListTableProps> = ({
         <span className={styles.columnHeaderActions}>Acciones</span>
       </header>
 
-      <section
-        className={styles.itemsContainer}
-        aria-label="Listado de puntos de entrega autorizados"
-      >
+      <ul className={styles.itemsContainer} aria-label="Listado de puntos de entrega autorizados">
         {deliveryPoints.map((point) => (
           <DeliveryPointListItem
             key={point.id}
@@ -59,7 +56,7 @@ export const DeliveryPointListTable: React.FC<DeliveryPointListTableProps> = ({
             onToggleStatus={onTogglePointStatus}
           />
         ))}
-      </section>
+      </ul>
     </div>
   );
 };

@@ -29,7 +29,10 @@ export const RecoverAccount: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [verificationCode, setVerificationCode] = useState<string>('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [notification, setNotification] = useState<{ message: string; variant: 'info' | 'error' } | null>(null);
+  const [notification, setNotification] = useState<{
+    message: string;
+    variant: 'info' | 'error';
+  } | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const clearFieldError = (fieldName: string) => {
@@ -58,7 +61,9 @@ export const RecoverAccount: React.FC = () => {
     const errors: Record<string, string> = {};
     const passwordStatus = evaluatePasswordComplexity(newPassword);
 
-    const lengthError = executeFieldValidation(newPassword, [validateMaximumLength('Contraseña', 64)]);
+    const lengthError = executeFieldValidation(newPassword, [
+      validateMaximumLength('Contraseña', 64),
+    ]);
     if (lengthError) {
       errors.newPassword = lengthError;
     } else if (!passwordStatus.isFullyValid) {
@@ -78,9 +83,11 @@ export const RecoverAccount: React.FC = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleRequestCode = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleRequestCode = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!validateRequestStep()) return;
+    if (!validateRequestStep()) {
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -112,9 +119,11 @@ export const RecoverAccount: React.FC = () => {
     }
   };
 
-  const handleResetPassword = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleResetPassword = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!validateResetStep()) return;
+    if (!validateResetStep()) {
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -136,9 +145,15 @@ export const RecoverAccount: React.FC = () => {
   };
 
   const handleResetFieldChange = (field: string, value: string) => {
-    if (field === 'newPassword') setNewPassword(value);
-    if (field === 'confirmPassword') setConfirmPassword(value);
-    if (field === 'code') setVerificationCode(value);
+    if (field === 'newPassword') {
+      setNewPassword(value);
+    }
+    if (field === 'confirmPassword') {
+      setConfirmPassword(value);
+    }
+    if (field === 'code') {
+      setVerificationCode(value);
+    }
     clearFieldError(field);
   };
 
@@ -175,9 +190,7 @@ export const RecoverAccount: React.FC = () => {
           />
         )}
 
-        {step === 'SUCCESS' && (
-          <SuccessStep onReturnToLogin={() => navigate('/login')} />
-        )}
+        {step === 'SUCCESS' && <SuccessStep onReturnToLogin={() => navigate('/login')} />}
       </div>
 
       <div className={styles.bottomBarWrapper}>

@@ -11,7 +11,10 @@
   font-size: var(--font-size-body, 1rem);
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.1s ease;
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.1s ease;
   user-select: none;
 }
 
@@ -32,7 +35,7 @@
 /* Primary emerald/turquoise variant for authentication actions */
 .primary {
   background-color: #00bfa5;
-  color: #ffffff;
+  color: #18110a;
 }
 
 .primary:hover:not(:disabled) {

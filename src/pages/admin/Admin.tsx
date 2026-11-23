@@ -5,22 +5,36 @@ import { AdminSidebar } from '@/components/layout/AdminSidebar';
 import { ROUTES } from '@/constants/routes';
 import styles from './Admin.module.css';
 
+interface AdminProps {
+  /** Reports a navigation error after the protected admin page unmounts. */
+  onLogoutNavigationError: () => void;
+}
+
 /**
  * Main layout orchestrator for the Tequio administrator panel.
  * Renders the navigation sidebar and delegates the active view to Outlet.
- * Ready to bind real user session data once backend endpoints are connected.
  */
-export const Admin: React.FC = () => {
+export const Admin: React.FC<AdminProps> = ({ onLogoutNavigationError }) => {
   const navigate = useNavigate();
   const { profile, logout } = useSession();
-  const handleLogout = (): void => {
+
+  const handleLogout = async (): Promise<void> => {
     logout();
-    navigate(ROUTES.AUTH.LOGIN);
+    try {
+      await navigate(ROUTES.AUTH.LOGIN, { replace: true });
+    } catch (error) {
+      console.error('Could not open login after signing out.', error);
+      onLogoutNavigationError();
+    }
   };
 
   return (
     <div className={styles.layout}>
-      <AdminSidebar userName={profile?.firstName || 'Mi cuenta'} avatarUrl={profile?.profilePictureUrl || undefined} onLogout={handleLogout} />
+      <AdminSidebar
+        userName={profile?.firstName || 'Mi cuenta'}
+        avatarUrl={profile?.profilePictureUrl || undefined}
+        onLogout={handleLogout}
+      />
       <main className={styles.mainContent}>
         <Outlet />
       </main>

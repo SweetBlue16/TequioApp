@@ -1,8 +1,5 @@
 import type { AxiosInstance } from 'axios';
-import type {
-  ProductPageResponse,
-  CreateBaseProductPayload,
-} from '@/types/product/Product';
+import type { ProductPageResponse, CreateBaseProductPayload } from '@/types/product/Product';
 
 /**
  * Contract defining catalog persistence and query actions against the API.
@@ -12,6 +9,12 @@ export interface ProductServiceInterface {
     producerId: number,
     pageIndex: number,
     pageSize: number
+  ): Promise<ProductPageResponse>;
+  getProductsByCategory(
+    categoryId: number,
+    pageIndex: number,
+    pageSize: number,
+    signal?: AbortSignal
   ): Promise<ProductPageResponse>;
   createBaseProduct(payload: CreateBaseProductPayload): Promise<number>;
   deactivateProduct(productId: number): Promise<void>;
@@ -44,11 +47,25 @@ export class ProductService implements ProductServiceInterface {
     return response.data;
   }
 
-  async createBaseProduct(payload: CreateBaseProductPayload): Promise<number> {
-    const response = await this.client.post<{ productId: number }>(
-      '/products',
-      payload
+  /** Retrieves one page of active products in the selected category. */
+  async getProductsByCategory(
+    categoryId: number,
+    pageIndex: number,
+    pageSize: number,
+    signal?: AbortSignal
+  ): Promise<ProductPageResponse> {
+    const response = await this.client.get<ProductPageResponse>(
+      `/products/category/${categoryId}`,
+      {
+        params: { pageIndex, pageSize },
+        signal,
+      }
     );
+    return response.data;
+  }
+
+  async createBaseProduct(payload: CreateBaseProductPayload): Promise<number> {
+    const response = await this.client.post<{ productId: number }>('/products', payload);
     return response.data.productId;
   }
 

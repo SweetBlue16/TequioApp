@@ -1,0 +1,22 @@
+
+> tequioapp@0.0.0 lint
+> eslint .
+
+
+C:\Projects\TEQUIO\TequioApp\jest.setup.ts
+  2:1  error  Definition for rule 'import/no-nodejs-modules' was not found  import/no-nodejs-modules
+
+C:\Projects\TEQUIO\TequioApp\src\pages\auth\Login\__tests__\Login.test.tsx
+  1:1  error  Do not use a triple slash reference for @testing-library/jest-dom, use `import` style instead  @typescript-eslint/triple-slash-reference
+
+C:\Projects\TEQUIO\TequioApp\src\pages\auth\Register\components\__tests__\RegisterWizard.test.tsx
+  1:1  error  Do not use a triple slash reference for @testing-library/jest-dom, use `import` style instead  @typescript-eslint/triple-slash-reference
+
+C:\Projects\TEQUIO\TequioApp\src\types\registration\RegistrationRequest.ts
+  2:7  error  'ROLE_ID' is assigned a value but only used as a type  @typescript-eslint/no-unused-vars
+
+C:\Projects\TEQUIO\TequioApp\src\utils\deliveryPointValidators.ts
+  19:29  error  Unnecessary escape character: \/  no-useless-escape
+
+✖ 5 problems (5 errors, 0 warnings)
+

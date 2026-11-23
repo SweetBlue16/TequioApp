@@ -30,9 +30,8 @@ export const ProductToolbar: React.FC<ProductToolbarProps> = ({
   className = '',
 }) => {
   return (
-    <div
+    <section
       className={`${styles.toolbar} ${className}`.trim()}
-      role="region"
       aria-label="Barra de herramientas de productos"
     >
       <div className={styles.actionGroup}>
@@ -47,11 +46,7 @@ export const ProductToolbar: React.FC<ProductToolbarProps> = ({
       </div>
 
       <div className={styles.filtersGroup}>
-        <SearchBar
-          value={searchTerm}
-          onChange={onSearchChange}
-          placeholder="Buscar por nombre"
-        />
+        <SearchBar value={searchTerm} onChange={onSearchChange} placeholder="Buscar por nombre" />
 
         <SortSelect
           options={sortOptions}
@@ -60,7 +55,7 @@ export const ProductToolbar: React.FC<ProductToolbarProps> = ({
           prefixLabel="Ordenar por :"
         />
       </div>
-    </div>
+    </section>
   );
 };
 

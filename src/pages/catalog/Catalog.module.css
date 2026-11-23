@@ -1,0 +1,39 @@
+.catalog {
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+  color: var(--color-espresso, #18110a);
+}
+
+.catalog > h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.products h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+}
+
+.products p {
+  margin: 0 0 0.5rem;
+  overflow-wrap: anywhere;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  object-fit: cover;
+}

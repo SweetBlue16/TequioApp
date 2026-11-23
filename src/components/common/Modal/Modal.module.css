@@ -3,27 +3,45 @@
    Centered modal dialog featuring frosted glass backdrop and top color ribbon.
    ========================================================================== */
 
-/* Fullscreen backdrop with backdrop blur */
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  padding: 1.25rem;
+  border: 0;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.overlay[open] {
+  display: grid;
+  place-items: center;
+}
+
+.overlay::backdrop {
   background-color: rgba(24, 17, 10, 0.45);
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.25rem;
-  box-sizing: border-box;
-  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fadeIn 0.2s ease;
+}
+
+.backdropButton {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  background: transparent;
 }
 
 /* Floating dialog window */
 .dialog {
   background-color: var(--color-surface-white, #ffffff);
   border-radius: 24px;
-  overflow: hidden;
+  z-index: 1;
+  max-height: 100%;
+  overflow: auto;
   box-shadow: 0 16px 40px rgba(24, 17, 10, 0.2);
   width: 100%;
   max-width: 580px;
@@ -89,7 +107,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: #18110a;
   box-shadow: 0 0 35px rgba(224, 64, 251, 0.45);
   margin: 1.5rem 0 1rem;
 }
@@ -129,5 +147,11 @@
     flex-direction: column-reverse;
     gap: 0.75rem;
     max-width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .overlay::backdrop,
+  .dialog {
+    animation: none;
   }
 }

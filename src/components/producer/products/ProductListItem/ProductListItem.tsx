@@ -27,7 +27,6 @@ export interface ProductListItemProps {
 
 /**
  * Interactive product item rendering a row on desktop and an accessible touch card on mobile.
- * Uses event.stopPropagation to separate row modification clicks from deactivation actions.
  */
 export const ProductListItem: React.FC<ProductListItemProps> = ({
   product,
@@ -36,31 +35,8 @@ export const ProductListItem: React.FC<ProductListItemProps> = ({
   isDeactivating = false,
   className = '',
 }) => {
-  const handleRowClick = () => {
-    onClick(product.id);
-  };
-
-  const handleDeactivateClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    onDeactivate(product.id);
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      onClick(product.id);
-    }
-  };
-
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={handleRowClick}
-      onKeyDown={handleKeyDown}
-      className={`${styles.itemRow} ${className}`.trim()}
-      aria-label={`Modificar producto ${product.name}`}
-    >
+    <div className={`${styles.itemRow} ${className}`.trim()}>
       <div className={styles.thumbnailWrapper}>
         {product.imageUrl ? (
           <img
@@ -76,7 +52,16 @@ export const ProductListItem: React.FC<ProductListItemProps> = ({
 
       <div className={styles.detailsContent}>
         <div className={styles.columnName}>
-          <h3 className={styles.productName}>{product.name}</h3>
+          <h3 className={styles.productName}>
+            <button
+              type="button"
+              className={styles.productButton}
+              onClick={() => onClick(product.id)}
+              aria-label={`Modificar producto ${product.name}`}
+            >
+              {product.name}
+            </button>
+          </h3>
         </div>
 
         <div className={styles.columnCategory}>
@@ -91,7 +76,7 @@ export const ProductListItem: React.FC<ProductListItemProps> = ({
       <div className={styles.actionsWrapper}>
         <button
           type="button"
-          onClick={handleDeactivateClick}
+          onClick={() => onDeactivate(product.id)}
           disabled={isDeactivating}
           className={styles.deactivateButton}
           aria-label={`Dar de baja ${product.name}`}

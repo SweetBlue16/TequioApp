@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useId, useRef } from 'react';
 import { ColorBar } from '@/components/common/ColorBar';
 import styles from './Modal.module.css';
 
@@ -28,42 +28,70 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   className = '',
 }) => {
-  useEffect(() => {
-    if (!isOpen) return;
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
+  const descriptionId = useId();
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && onClose) {
-        onClose();
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!isOpen || !dialog) {
+      return;
+    }
+
+    const trigger = document.activeElement;
+    dialog.showModal();
+    return () => {
+      dialog.close();
+      if (trigger instanceof HTMLElement && trigger.isConnected) {
+        trigger.focus();
       }
     };
+  }, [isOpen]);
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
-    <div
+    <dialog
+      ref={dialogRef}
       className={styles.overlay}
-      onClick={onClose}
-      aria-modal="true"
-      role="dialog"
+      aria-labelledby={title ? titleId : undefined}
+      aria-describedby={description ? descriptionId : undefined}
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose?.();
+      }}
     >
-      <div
-        className={`${styles.dialog} ${className}`.trim()}
-        onClick={(event) => event.stopPropagation()} 
-      >
+      <div className={`${styles.dialog} ${className}`.trim()}>
         <ColorBar height={8} />
 
         <div className={styles.contentArea}>
-          {title && <h2 className={styles.title}>{title}</h2>}
+          {title && (
+            <h2 id={titleId} className={styles.title}>
+              {title}
+            </h2>
+          )}
           {highlight && <p className={styles.highlightText}>{highlight}</p>}
-          {description && <p className={styles.description}>{description}</p>}
+          {description && (
+            <p id={descriptionId} className={styles.description}>
+              {description}
+            </p>
+          )}
           {children}
         </div>
       </div>
-    </div>
+      {onClose && (
+        <button
+          type="button"
+          className={styles.backdropButton}
+          tabIndex={-1}
+          aria-label="Cerrar diálogo"
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={onClose}
+        />
+      )}
+    </dialog>
   );
 };
 

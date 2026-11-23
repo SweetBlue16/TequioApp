@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import React from 'react';
 import { Button } from '@/components/common/Button';
 import { InputField } from '@/components/common/InputField';
@@ -21,6 +22,7 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({
   onCancel,
   isSubmitting = false,
 }) => {
+  const imageInputId = useId();
   const { values, fieldErrors, options, handlers } = useAddProductForm(onSubmit);
 
   return (
@@ -84,24 +86,38 @@ export const AddProductForm: React.FC<AddProductFormProps> = ({
               maxLength={180}
               aria-invalid={Boolean(fieldErrors.shortDescription)}
             />
-            <div className={styles.charCounter}>{values.shortDescription.length} / 180 caracteres</div>
+            <div className={styles.charCounter}>
+              {values.shortDescription.length} / 180 caracteres
+            </div>
             {fieldErrors.shortDescription && (
-              <span className={styles.errorMessage} role="alert">{fieldErrors.shortDescription}</span>
+              <span className={styles.errorMessage} role="alert">
+                {fieldErrors.shortDescription}
+              </span>
             )}
           </div>
         </div>
 
         {/* Columna Derecha: Fotografía */}
         <div className={styles.photoSection}>
-          <label className={styles.sectionLabel}>
+          <label
+            id={`${imageInputId}-label`}
+            htmlFor={imageInputId}
+            className={styles.sectionLabel}
+          >
             Fotografía del producto<span className={styles.requiredAsterisk}>*</span>
           </label>
           <ImageUploader
+            inputId={imageInputId}
+            labelId={`${imageInputId}-label`}
             file={values.imageFile}
             onChange={handlers.handleImageChange}
             showErrorToast={handlers.setImageError}
           />
-          {fieldErrors.image && <span className={styles.errorMessage} role="alert">{fieldErrors.image}</span>}
+          {fieldErrors.image && (
+            <span className={styles.errorMessage} role="alert">
+              {fieldErrors.image}
+            </span>
+          )}
         </div>
       </div>
 

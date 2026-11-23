@@ -12,7 +12,7 @@ export interface ResetPasswordStepProps {
   fieldErrors: Record<string, string>;
   isLoading: boolean;
   onFieldChange: (field: string, value: string) => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
   onResendCode?: () => Promise<void>;
 }
 
@@ -34,7 +34,9 @@ export const ResetPasswordStep: React.FC<ResetPasswordStepProps> = ({
   const passwordStatus = evaluatePasswordComplexity(newPassword);
 
   const handleResendClick = async () => {
-    if (!onResendCode || isResending) return;
+    if (!onResendCode || isResending) {
+      return;
+    }
     setIsResending(true);
     try {
       await onResendCode();
@@ -47,8 +49,8 @@ export const ResetPasswordStep: React.FC<ResetPasswordStepProps> = ({
     <>
       <h1 className={styles.title}>Recuperación de cuenta</h1>
       <p className={styles.description}>
-        Si esta cuenta está registrada, enviaremos un código para reestablecer la
-        contraseña al correo. Revisa tu bandeja de entrada o la bandeja de spam.
+        Si esta cuenta está registrada, enviaremos un código para reestablecer la contraseña al
+        correo. Revisa tu bandeja de entrada o la bandeja de spam.
       </p>
 
       <form onSubmit={onSubmit} noValidate className={styles.formContent}>
@@ -111,17 +113,26 @@ export const ResetPasswordStep: React.FC<ResetPasswordStepProps> = ({
             <div className={styles.requirementsBox}>
               <div className={styles.requirementsTitle}>Requisitos de contraseña:</div>
               <ul className={styles.requirementsList}>
-                <li className={`${styles.requirementItem} ${passwordStatus.hasMinimumLength ? styles.requirementMet : ''}`}>
+                <li
+                  className={`${styles.requirementItem} ${passwordStatus.hasMinimumLength ? styles.requirementMet : ''}`}
+                >
                   {passwordStatus.hasMinimumLength ? '✓' : '○'} Mínimo 8 caracteres
                 </li>
-                <li className={`${styles.requirementItem} ${passwordStatus.hasUppercaseLetter ? styles.requirementMet : ''}`}>
+                <li
+                  className={`${styles.requirementItem} ${passwordStatus.hasUppercaseLetter ? styles.requirementMet : ''}`}
+                >
                   {passwordStatus.hasUppercaseLetter ? '✓' : '○'} Al menos una mayúscula
                 </li>
-                <li className={`${styles.requirementItem} ${passwordStatus.hasNumericDigit ? styles.requirementMet : ''}`}>
+                <li
+                  className={`${styles.requirementItem} ${passwordStatus.hasNumericDigit ? styles.requirementMet : ''}`}
+                >
                   {passwordStatus.hasNumericDigit ? '✓' : '○'} Al menos un número
                 </li>
-                <li className={`${styles.requirementItem} ${passwordStatus.hasSpecialCharacter ? styles.requirementMet : ''}`}>
-                  {passwordStatus.hasSpecialCharacter ? '✓' : '○'} Al menos un carácter especial (!@#$...)
+                <li
+                  className={`${styles.requirementItem} ${passwordStatus.hasSpecialCharacter ? styles.requirementMet : ''}`}
+                >
+                  {passwordStatus.hasSpecialCharacter ? '✓' : '○'} Al menos un carácter especial
+                  (!@#$...)
                 </li>
               </ul>
             </div>

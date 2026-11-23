@@ -14,7 +14,7 @@ import {
   validateLegalAdultAge,
   evaluatePasswordComplexity,
   validatePasswordConfirmationMatch,
-  validateMaximumLength
+  validateMaximumLength,
 } from '@/utils/formValidators';
 import styles from '../Register.module.css';
 
@@ -25,7 +25,7 @@ const REGISTRATION_STEPS: StepDefinition[] = [
 ];
 
 export interface RegistrationFormData {
-  roleId: number;
+  roleId: 1 | 2;
   firstName: string;
   firstLastName: string;
   secondLastName: string;
@@ -90,15 +90,21 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
       validateMaximumLength('Apellido paterno', 40),
     ]);
 
-    if (firstNameError) errors.firstName = firstNameError;
-    if (firstLastNameError) errors.firstLastName = firstLastNameError;
+    if (firstNameError) {
+      errors.firstName = firstNameError;
+    }
+    if (firstLastNameError) {
+      errors.firstLastName = firstLastNameError;
+    }
 
     if (formData.secondLastName.trim().length > 0) {
       const secondLastNameError = executeFieldValidation(formData.secondLastName, [
         validateAlphabeticTextOnly('Apellido materno'),
         validateMaximumLength('Apellido materno', 40),
       ]);
-      if (secondLastNameError) errors.secondLastName = secondLastNameError;
+      if (secondLastNameError) {
+        errors.secondLastName = secondLastNameError;
+      }
     }
 
     setFieldErrors(errors);
@@ -109,15 +115,21 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
     const errors: Record<string, string> = {};
 
     const emailError = executeFieldValidation(formData.email, [
-      validateEmailAddress, 
-      validateMaximumLength('Correo electrónico', 80)
+      validateEmailAddress,
+      validateMaximumLength('Correo electrónico', 80),
     ]);
     const phoneError = executeFieldValidation(formData.phone, [validateTelephoneNumber]);
     const ageError = executeFieldValidation(formData.birthDate, [validateLegalAdultAge]);
 
-    if (emailError) errors.email = emailError;
-    if (phoneError) errors.phone = phoneError;
-    if (ageError) errors.birthDate = ageError;
+    if (emailError) {
+      errors.email = emailError;
+    }
+    if (phoneError) {
+      errors.phone = phoneError;
+    }
+    if (ageError) {
+      errors.birthDate = ageError;
+    }
 
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
@@ -148,7 +160,7 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
     return Object.keys(errors).length === 0;
   };
 
-  const handleNextStepSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleNextStepSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (currentStep === 1 && validatePersonalIdentityStep()) {
@@ -321,7 +333,8 @@ export const RegisterWizard: React.FC<RegisterWizardProps> = ({
                     passwordRequirementsStatus.hasSpecialCharacter ? styles.requirementMet : ''
                   }`}
                 >
-                  {passwordRequirementsStatus.hasSpecialCharacter ? '✓' : '○'} Al menos un carácter especial (!@#$...)
+                  {passwordRequirementsStatus.hasSpecialCharacter ? '✓' : '○'} Al menos un carácter
+                  especial (!@#$...)
                 </li>
               </ul>
             </div>

@@ -7,25 +7,17 @@ export interface ColorBarProps {
   className?: string;
 }
 
-export const ColorBar: React.FC<ColorBarProps> = ({
-  height = 6,
-  className = '',
-}) => {
+export const ColorBar: React.FC<ColorBarProps> = ({ height = 6, className = '' }) => {
   const barHeight = typeof height === 'number' ? `${height}px` : height;
 
   return (
     <div
-      role="presentation"
       aria-hidden="true"
       className={`${styles.container} ${className}`.trim()}
       style={{ height: barHeight }}
     >
       {CULTURAL_BAND_COLORS.map((colorHex) => (
-        <span
-          key={colorHex}
-          className={styles.segment}
-          style={{ backgroundColor: colorHex }}
-        />
+        <span key={colorHex} className={styles.segment} style={{ backgroundColor: colorHex }} />
       ))}
     </div>
   );

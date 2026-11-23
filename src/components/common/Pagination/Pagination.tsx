@@ -40,14 +40,22 @@ export const Pagination: React.FC<PaginationProps> = ({
     }
 
     if (currentPage <= 3) {
-      return [1, 2, 3, 4, '..', totalPages];
+      return [1, 2, 3, 4, 'trailing-gap', totalPages];
     }
 
     if (currentPage >= totalPages - 2) {
-      return [1, '..', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+      return [1, 'leading-gap', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
     }
 
-    return [1, '..', currentPage - 1, currentPage, currentPage + 1, '..', totalPages];
+    return [
+      1,
+      'leading-gap',
+      currentPage - 1,
+      currentPage,
+      currentPage + 1,
+      'trailing-gap',
+      totalPages,
+    ];
   };
 
   const pageItems = computePageNumbers();
@@ -74,8 +82,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       aria-label="Paginación de resultados"
     >
       <p className={styles.recordsSummary}>
-        Mostrando{' '}
-        <span className={styles.recordsCountBold}>{firstRecordIndex}</span> a{' '}
+        Mostrando <span className={styles.recordsCountBold}>{firstRecordIndex}</span> a{' '}
         <span className={styles.recordsCountBold}>{lastRecordIndex}</span> de{' '}
         <span className={styles.recordsCountBold}>{totalRecords}</span> registros
       </p>
@@ -93,10 +100,10 @@ export const Pagination: React.FC<PaginationProps> = ({
           </button>
         </li>
 
-        {pageItems.map((item, index) => {
+        {pageItems.map((item) => {
           if (typeof item === 'string') {
             return (
-              <li key={`ellipsis-${index}`} className={styles.controlItem}>
+              <li key={item} className={styles.controlItem}>
                 <span className={styles.ellipsisSpacer} aria-hidden="true">
                   ..
                 </span>

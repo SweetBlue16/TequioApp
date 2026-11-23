@@ -46,9 +46,7 @@ export const Stepper: React.FC<StepperProps> = ({
 }) => {
   const totalSteps = steps.length;
   const progressPercentage =
-    totalSteps > 1
-      ? ((Math.min(currentStep, totalSteps) - 1) / (totalSteps - 1)) * 100
-      : 0;
+    totalSteps > 1 ? ((Math.min(currentStep, totalSteps) - 1) / (totalSteps - 1)) * 100 : 0;
 
   return (
     <nav
@@ -56,53 +54,53 @@ export const Stepper: React.FC<StepperProps> = ({
       aria-label="Progreso del formulario"
     >
       <div className={styles.connectorLine} aria-hidden="true">
-        <div
-          className={styles.connectorProgress}
-          style={{ width: `${progressPercentage}%` }}
-        />
+        <div className={styles.connectorProgress} style={{ width: `${progressPercentage}%` }} />
       </div>
 
       {steps.map((step) => {
         const isCompleted = step.stepNumber < currentStep;
         const isActive = step.stepNumber === currentStep;
-        const isClickable = Boolean(onStepClick && isCompleted);
+        let stepStateClass = styles.pending;
+        if (isCompleted) {
+          stepStateClass = styles.completed;
+        } else if (isActive) {
+          stepStateClass = styles.active;
+        }
 
-        const stepStateClass = isCompleted
-          ? styles.completed
-          : isActive
-          ? styles.active
-          : styles.pending;
-
-        const handleClick = () => {
-          if (isClickable && onStepClick) {
-            onStepClick(step.stepNumber);
-          }
-        };
-
-        return (
-          <div
-            key={step.stepNumber}
-            className={`${styles.stepItem} ${stepStateClass} ${
-              isClickable ? styles.stepClickable : ''
-            }`.trim()}
-            onClick={handleClick}
-            role={isClickable ? 'button' : 'listitem'}
-            tabIndex={isClickable ? 0 : undefined}
-            onKeyDown={(e) => {
-              if (isClickable && (e.key === 'Enter' || e.key === ' ')) {
-                handleClick();
-              }
-            }}
-            aria-current={isActive ? 'step' : undefined}
-          >
-            <div className={styles.circle}>
+        const label = (
+          <>
+            <span className={styles.circle}>
               {isCompleted ? (
                 <Check size={18} strokeWidth={3} aria-hidden="true" />
               ) : (
                 <span>{step.stepNumber}</span>
               )}
-            </div>
+            </span>
             <span className={styles.label}>{step.label}</span>
+          </>
+        );
+        const stepClass = `${styles.stepItem} ${stepStateClass}`;
+
+        if (onStepClick && isCompleted) {
+          return (
+            <button
+              key={step.stepNumber}
+              type="button"
+              className={`${stepClass} ${styles.stepClickable}`}
+              onClick={() => onStepClick(step.stepNumber)}
+            >
+              {label}
+            </button>
+          );
+        }
+
+        return (
+          <div
+            key={step.stepNumber}
+            className={stepClass}
+            aria-current={isActive ? 'step' : undefined}
+          >
+            {label}
           </div>
         );
       })}

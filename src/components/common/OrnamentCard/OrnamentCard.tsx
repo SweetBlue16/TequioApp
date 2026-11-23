@@ -37,11 +37,7 @@ export const OrnamentCard: React.FC<OrnamentCardProps> = ({
 
   return (
     <section className={`${styles.card} ${className}`.trim()}>
-      <div
-        className={`${styles.ribbon} ${positionClass}`}
-        role="presentation"
-        aria-hidden="true"
-      />
+      <div className={`${styles.ribbon} ${positionClass}`} aria-hidden="true" />
       <div className={styles.content}>{children}</div>
     </section>
   );

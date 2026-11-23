@@ -49,7 +49,9 @@ export const Toast: React.FC<ToastProps> = ({
   ...props
 }) => {
   useEffect(() => {
-    if (!duration || duration <= 0 || !onClose) return;
+    if (!duration || duration <= 0 || !onClose) {
+      return;
+    }
 
     const timer = setTimeout(() => {
       onClose();
@@ -58,18 +60,12 @@ export const Toast: React.FC<ToastProps> = ({
     return () => clearTimeout(timer);
   }, [duration, onClose]);
 
-  const resolvedClassName = [
-    styles.toast,
-    styles[variant],
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const resolvedClassName = [styles.toast, styles[variant], className].filter(Boolean).join(' ');
 
   return (
     <div
-      role={variant === 'error' ? 'alert' : 'status'}
-      aria-live={variant === 'error' ? 'assertive' : 'polite'}
+      role={variant === 'error' ? 'alert' : undefined}
+      aria-live={variant === 'error' ? 'assertive' : undefined}
       className={resolvedClassName}
       {...props}
     >
@@ -77,7 +73,13 @@ export const Toast: React.FC<ToastProps> = ({
         <span className={styles.icon} aria-hidden="true">
           {variant === 'error' ? '⚠️' : 'ℹ️'}
         </span>
-        <div className={styles.message}>{message}</div>
+        {variant === 'error' ? (
+          <div className={styles.message}>{message}</div>
+        ) : (
+          <output className={styles.message} aria-live="polite">
+            {message}
+          </output>
+        )}
       </div>
 
       {dismissible && onClose && (

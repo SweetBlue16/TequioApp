@@ -26,6 +26,16 @@ export const Avatar: React.FC<AvatarProps> = ({
 
   const initial = altName.trim().charAt(0).toUpperCase();
 
+  const fallback = initial ? (
+    <span className={styles.initial} aria-hidden="true">
+      {initial}
+    </span>
+  ) : (
+    <span className={styles.iconWrapper} aria-hidden="true">
+      <User />
+    </span>
+  );
+
   return (
     <div
       className={`${styles.container} ${className}`.trim()}
@@ -40,14 +50,8 @@ export const Avatar: React.FC<AvatarProps> = ({
           className={styles.image}
           onError={() => setHasError(true)}
         />
-      ) : initial ? (
-        <span className={styles.initial} aria-hidden="true">
-          {initial}
-        </span>
       ) : (
-        <div className={styles.iconWrapper} aria-hidden="true">
-          <User />
-        </div>
+        fallback
       )}
     </div>
   );

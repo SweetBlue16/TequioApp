@@ -20,14 +20,22 @@ describe('Toast', () => {
     render(<Toast message="Datos guardados." />);
     expect(screen.getByRole('status')).toHaveTextContent('Datos guardados.');
     expect(screen.getByRole('status')).toHaveAttribute('aria-live', 'polite');
-    expect(screen.getByRole('status')).toHaveClass('info');
+    expect(screen.getByRole('status').closest('.toast')).toHaveClass('info');
   });
 
   it('should call onClose once and allow the parent to dismiss it manually', async () => {
     const onClose = jest.fn();
     function Host() {
       const [open, setOpen] = useState(true);
-      return open ? <Toast message="Aviso" onClose={() => { onClose(); setOpen(false); }} /> : null;
+      return open ? (
+        <Toast
+          message="Aviso"
+          onClose={() => {
+            onClose();
+            setOpen(false);
+          }}
+        />
+      ) : null;
     }
     render(<Host />);
     await userEvent.click(screen.getByRole('button', { name: 'Cerrar notificación' }));
@@ -45,11 +53,17 @@ describe('Toast', () => {
     jest.useFakeTimers();
     const onClose = jest.fn();
     render(<Toast message="Aviso" duration={2000} onClose={onClose} />);
-    act(() => { jest.advanceTimersByTime(1999); });
+    act(() => {
+      jest.advanceTimersByTime(1999);
+    });
     expect(onClose).not.toHaveBeenCalled();
-    act(() => { jest.advanceTimersByTime(1); });
+    act(() => {
+      jest.advanceTimersByTime(1);
+    });
     expect(onClose).toHaveBeenCalledTimes(1);
-    act(() => { jest.advanceTimersByTime(5000); });
+    act(() => {
+      jest.advanceTimersByTime(5000);
+    });
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
@@ -57,7 +71,9 @@ describe('Toast', () => {
     jest.useFakeTimers();
     const onClose = jest.fn();
     render(<Toast message="Aviso" duration={duration} onClose={onClose} />);
-    act(() => { jest.advanceTimersByTime(10000); });
+    act(() => {
+      jest.advanceTimersByTime(10000);
+    });
     expect(onClose).not.toHaveBeenCalled();
     expect(jest.getTimerCount()).toBe(0);
   });
@@ -69,7 +85,9 @@ describe('Toast', () => {
     expect(jest.getTimerCount()).toBe(1);
     view.unmount();
     expect(jest.getTimerCount()).toBe(0);
-    act(() => { jest.advanceTimersByTime(2000); });
+    act(() => {
+      jest.advanceTimersByTime(2000);
+    });
     expect(onClose).not.toHaveBeenCalled();
   });
 
@@ -78,13 +96,19 @@ describe('Toast', () => {
     const firstClose = jest.fn();
     const nextClose = jest.fn();
     const view = render(<Toast message="Aviso" duration={2000} onClose={firstClose} />);
-    act(() => { jest.advanceTimersByTime(1000); });
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
     view.rerender(<Toast message="Nuevo aviso" duration={3000} onClose={nextClose} />);
     expect(jest.getTimerCount()).toBe(1);
-    act(() => { jest.advanceTimersByTime(2999); });
+    act(() => {
+      jest.advanceTimersByTime(2999);
+    });
     expect(firstClose).not.toHaveBeenCalled();
     expect(nextClose).not.toHaveBeenCalled();
-    act(() => { jest.advanceTimersByTime(1); });
+    act(() => {
+      jest.advanceTimersByTime(1);
+    });
     expect(nextClose).toHaveBeenCalledTimes(1);
   });
 });

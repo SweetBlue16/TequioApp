@@ -20,14 +20,24 @@ export const EditDeliveryPoint: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [toastState, setToastState] = useState<{
     message: string;
-    variant: 'info' | 'error';
+    variant: 'error';
   } | null>(null);
 
   useEffect(() => {
     const loadPoint = async (): Promise<void> => {
       const parsedId = Number(id);
       if (!parsedId) {
-        navigate(ROUTES.ADMIN.DELIVERY_POINTS);
+        try {
+          await navigate(ROUTES.ADMIN.DELIVERY_POINTS);
+        } catch (error) {
+          console.error('Could not open delivery points for an invalid ID.', error);
+          setToastState({
+            message: 'No pudimos abrir la lista de puntos de entrega.',
+            variant: 'error',
+          });
+        } finally {
+          setIsLoading(false);
+        }
         return;
       }
 
@@ -44,8 +54,24 @@ export const EditDeliveryPoint: React.FC = () => {
     void loadPoint();
   }, [id, navigate]);
 
+  const returnToList = async (deliveryPointNotice?: string): Promise<void> => {
+    try {
+      await navigate(ROUTES.ADMIN.DELIVERY_POINTS, {
+        state: { deliveryPointNotice },
+      });
+    } catch (error) {
+      console.error('Could not open delivery points.', error);
+      setToastState({
+        message: 'No pudimos abrir la lista de puntos de entrega.',
+        variant: 'error',
+      });
+    }
+  };
+
   const handleEditSubmit = async (data: DeliveryPointSummaryData): Promise<void> => {
-    if (!pointRecord) return;
+    if (!pointRecord) {
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -63,14 +89,7 @@ export const EditDeliveryPoint: React.FC = () => {
         longitude: data.longitude,
       });
 
-      setToastState({
-        message: 'Cambios guardados con éxito.',
-        variant: 'info',
-      });
-
-      setTimeout(() => {
-        navigate(ROUTES.ADMIN.DELIVERY_POINTS);
-      }, 900);
+      await returnToList('Cambios guardados con éxito.');
     } catch (error) {
       setToastState({
         message: deliveryPointErrorMessage(error),
@@ -94,13 +113,15 @@ export const EditDeliveryPoint: React.FC = () => {
         />
       )}
 
-      {pointRecord && <DeliveryPointWizard
-        mode="edit"
-        initialData={pointRecord}
-        isSubmitting={isSubmitting}
-        onCancel={() => navigate(ROUTES.ADMIN.DELIVERY_POINTS)}
-        onSubmit={(data) => void handleEditSubmit(data)}
-      />}
+      {pointRecord && (
+        <DeliveryPointWizard
+          mode="edit"
+          initialData={pointRecord}
+          isSubmitting={isSubmitting}
+          onCancel={() => returnToList()}
+          onSubmit={(data) => void handleEditSubmit(data)}
+        />
+      )}
     </>
   );
 };

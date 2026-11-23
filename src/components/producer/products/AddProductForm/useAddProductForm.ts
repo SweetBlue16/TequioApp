@@ -33,7 +33,9 @@ export const useAddProductForm = (onSubmit: (data: ProductFormData) => void) => 
   }, []);
 
   const subcategoryOptions = useMemo<ComboBoxOption[]>(() => {
-    if (!parentCategoryId) return [];
+    if (!parentCategoryId) {
+      return [];
+    }
     const parent = PRODUCT_CATEGORIES_TREE.find((item) => item.id === parentCategoryId);
     return parent ? parent.subcategories.map((sub) => ({ value: sub.id, label: sub.label })) : [];
   }, [parentCategoryId]);
@@ -44,7 +46,9 @@ export const useAddProductForm = (onSubmit: (data: ProductFormData) => void) => 
 
   const clearError = (field: string) => {
     setFieldErrors((prev) => {
-      if (!prev[field]) return prev;
+      if (!prev[field]) {
+        return prev;
+      }
       const updated = { ...prev };
       delete updated[field];
       return updated;
@@ -76,17 +80,27 @@ export const useAddProductForm = (onSubmit: (data: ProductFormData) => void) => 
   const validate = (): boolean => {
     const errors: Record<string, string> = {};
 
-    if (!imageFile) errors.image = 'Debes subir una fotografía de tu producto.';
+    if (!imageFile) {
+      errors.image = 'Debes subir una fotografía de tu producto.';
+    }
 
     const nameErr = executeFieldValidation(name, [
       validateRequiredField('Nombre del producto'),
       validateMaximumLength('Nombre del producto', 50),
     ]);
-    if (nameErr) errors.name = nameErr;
+    if (nameErr) {
+      errors.name = nameErr;
+    }
 
-    if (!parentCategoryId) errors.category = 'Selecciona una categoría principal.';
-    if (!subcategoryId) errors.subcategory = 'Selecciona una subcategoría.';
-    if (!measurementUnit) errors.measurementUnit = 'Selecciona la unidad de medida.';
+    if (!parentCategoryId) {
+      errors.category = 'Selecciona una categoría principal.';
+    }
+    if (!subcategoryId) {
+      errors.subcategory = 'Selecciona una subcategoría.';
+    }
+    if (!measurementUnit) {
+      errors.measurementUnit = 'Selecciona la unidad de medida.';
+    }
 
     const descErr = executeFieldValidation(shortDescription, [
       validateRequiredField('Descripción'),
@@ -102,9 +116,11 @@ export const useAddProductForm = (onSubmit: (data: ProductFormData) => void) => 
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate()) {
+      return;
+    }
     onSubmit({
       name: name.trim(),
       shortDescription: shortDescription.trim(),
@@ -120,8 +136,14 @@ export const useAddProductForm = (onSubmit: (data: ProductFormData) => void) => 
     fieldErrors,
     options: { parentCategoryOptions, subcategoryOptions, measurementUnitOptions },
     handlers: {
-      setName: (val: string) => { setName(val); clearError('name'); },
-      setShortDescription: (val: string) => { setShortDescription(val); clearError('shortDescription'); },
+      setName: (val: string) => {
+        setName(val);
+        clearError('name');
+      },
+      setShortDescription: (val: string) => {
+        setShortDescription(val);
+        clearError('shortDescription');
+      },
       handleParentCategoryChange,
       handleSubcategoryChange,
       handleMeasurementChange,

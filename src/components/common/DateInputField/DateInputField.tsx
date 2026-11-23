@@ -37,13 +37,10 @@ export const DateInputField: React.FC<DateInputFieldProps> = ({
   const generatedId = useId();
   const inputId = id || generatedId;
   const errorId = `${inputId}-error`;
-  const helperId = `${inputId}-helper`;
+  const helperId = helperText ? `${inputId}-helper` : undefined;
+  const descriptionId = errorMessage ? errorId : helperId;
 
-  const inputClasses = [
-    styles.dateInput,
-    errorMessage ? styles.inputError : '',
-    className,
-  ]
+  const inputClasses = [styles.dateInput, errorMessage ? styles.inputError : '', className]
     .filter(Boolean)
     .join(' ');
 
@@ -62,9 +59,7 @@ export const DateInputField: React.FC<DateInputFieldProps> = ({
           disabled={disabled}
           className={inputClasses}
           aria-invalid={Boolean(errorMessage)}
-          aria-describedby={
-            errorMessage ? errorId : helperText ? helperId : undefined
-          }
+          aria-describedby={descriptionId}
           {...props}
         />
 
@@ -73,15 +68,16 @@ export const DateInputField: React.FC<DateInputFieldProps> = ({
         </span>
       </div>
 
-      {errorMessage ? (
+      {errorMessage && (
         <span id={errorId} className={styles.errorMessage} role="alert">
           {errorMessage}
         </span>
-      ) : helperText ? (
+      )}
+      {!errorMessage && helperText && (
         <span id={helperId} className={styles.errorMessage}>
           {helperText}
         </span>
-      ) : null}
+      )}
     </div>
   );
 };

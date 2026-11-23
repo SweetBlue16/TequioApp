@@ -1,7 +1,7 @@
 import { Toast } from '@/components/common/Toast';
 import { deliveryPointErrorMessage } from '@/services/deliveryPoints/deliveryPointError';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import Pagination from '@/components/common/Pagination';
@@ -54,6 +54,9 @@ const filterAndSortDeliveryPoints = (
  */
 export const DeliveryPoints: React.FC = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const [dismissedNotice, setDismissedNotice] = useState(false);
+  const deliveryPointNotice: unknown = state?.deliveryPointNotice;
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [deliveryPoints, setDeliveryPoints] = useState<DeliveryPoint[]>([]);
@@ -76,7 +79,9 @@ export const DeliveryPoints: React.FC = () => {
         items.push(...response.items);
         totalCount = response.totalCount;
         pageIndex += 1;
-        if (!response.items.length) break;
+        if (!response.items.length) {
+          break;
+        }
       } while (items.length < totalCount);
       setDeliveryPoints(items);
     } catch (error) {
@@ -112,16 +117,26 @@ export const DeliveryPoints: React.FC = () => {
     setCurrentPage(1);
   };
 
-  const handleEditPoint = (pointId: number): void => {
-    navigate(ROUTES.ADMIN.EDIT_DELIVERY_POINT.replace(':id', String(pointId)));
+  const handleEditPoint = async (pointId: number): Promise<void> => {
+    try {
+      await navigate(ROUTES.ADMIN.EDIT_DELIVERY_POINT.replace(':id', String(pointId)));
+    } catch (error) {
+      console.error('Could not open delivery point editor.', error);
+      setErrorMessage('No pudimos abrir el formulario de edición.');
+    }
   };
 
   const handleConfirmToggleStatus = async (): Promise<void> => {
-    if (!pointToToggle) return;
+    if (!pointToToggle) {
+      return;
+    }
 
     setIsUpdatingStatus(true);
     try {
-      await deliveryPointService.toggleDeliveryPointStatus(pointToToggle.id, !pointToToggle.isActive);
+      await deliveryPointService.toggleDeliveryPointStatus(
+        pointToToggle.id,
+        !pointToToggle.isActive
+      );
       await loadDeliveryPoints();
       setPointToToggle(null);
     } catch (error) {
@@ -144,7 +159,17 @@ export const DeliveryPoints: React.FC = () => {
 
   return (
     <div className={styles.pageContainer}>
-      {errorMessage && <Toast message={errorMessage} variant="error" onClose={() => setErrorMessage(null)} />}
+      {errorMessage && (
+        <Toast message={errorMessage} variant="error" onClose={() => setErrorMessage(null)} />
+      )}
+      {!errorMessage && !dismissedNotice && typeof deliveryPointNotice === 'string' && (
+        <Toast
+          message={deliveryPointNotice}
+          variant="info"
+          duration={3500}
+          onClose={() => setDismissedNotice(true)}
+        />
+      )}
       <header className={styles.headerSection}>
         <h1 className={styles.pageTitle}>Puntos de entrega autorizados</h1>
       </header>
@@ -157,7 +182,14 @@ export const DeliveryPoints: React.FC = () => {
             selectedSort={selectedSort}
             onSortChange={handleSortChange}
             sortOptions={SORT_OPTIONS}
-            onAddDeliveryPoint={() => navigate(ROUTES.ADMIN.NEW_DELIVERY_POINT)}
+            onAddDeliveryPoint={async () => {
+              try {
+                await navigate(ROUTES.ADMIN.NEW_DELIVERY_POINT);
+              } catch (error) {
+                console.error('Could not open delivery point form.', error);
+                setErrorMessage('No pudimos abrir el formulario de registro.');
+              }
+            }}
           />
 
           <DeliveryPointListTable
@@ -181,10 +213,7 @@ export const DeliveryPoints: React.FC = () => {
         </div>
       </Card>
 
-      <Modal
-        isOpen={pointToToggle !== null}
-        onClose={() => setPointToToggle(null)}
-      >
+      <Modal isOpen={pointToToggle !== null} onClose={() => setPointToToggle(null)}>
         {pointToToggle && (
           <div className={styles.modalBody}>
             <h2 className={styles.modalTitle}>

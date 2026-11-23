@@ -8,7 +8,7 @@ export interface RequestCodeStepProps {
   fieldError?: string;
   isLoading: boolean;
   onIdentifierChange: (value: string) => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
 }
 
 /**

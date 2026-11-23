@@ -18,6 +18,10 @@
 }
 
 .stepClickable {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font: inherit;
   cursor: pointer;
 }
 
@@ -30,7 +34,10 @@
   justify-content: center;
   font-size: 0.95rem;
   font-weight: 800;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
   user-select: none;
 }
 
@@ -45,7 +52,7 @@
 .active .circle {
   background-color: #00bfa5;
   border: 2px solid #00bfa5;
-  color: #ffffff;
+  color: #18110a;
   box-shadow: 0 0 0 4px rgba(0, 191, 165, 0.2);
 }
 

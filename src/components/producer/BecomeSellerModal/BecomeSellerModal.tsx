@@ -16,22 +16,26 @@ const SELLER_POLICIES: readonly PolicyClause[] = [
   {
     id: 'origin',
     title: '1. Origen local y producción genuina',
-    description: 'Los productos y cosechas ofertados deben provenir directamente de tu huerto, finca o taller artesanal regional. Queda estrictamente prohibida la reventa de productos industrializados.',
+    description:
+      'Los productos y cosechas ofertados deben provenir directamente de tu huerto, finca o taller artesanal regional. Queda estrictamente prohibida la reventa de productos industrializados.',
   },
   {
     id: 'packaging',
     title: '2. Empaque y venta en paquetes cerrados',
-    description: 'La comercialización se realiza exclusivamente en paquetes cerrados, higiénicos y previamente especificados. No se permite la entrega a granel sin empaque protector.',
+    description:
+      'La comercialización se realiza exclusivamente en paquetes cerrados, higiénicos y previamente especificados. No se permite la entrega a granel sin empaque protector.',
   },
   {
     id: 'commitment',
     title: '3. Cumplimiento de metas y entregas',
-    description: 'Al confirmarse un lote por alcanzar la meta comunitaria, te comprometes a entregar el pedido en la fecha y en el punto de recolección físico autorizado seleccionado.',
+    description:
+      'Al confirmarse un lote por alcanzar la meta comunitaria, te comprometes a entregar el pedido en la fecha y en el punto de recolección físico autorizado seleccionado.',
   },
   {
     id: 'fair-pricing',
     title: '4. Transparencia y precio justo',
-    description: 'El precio pactado al publicar el lote es definitivo. No se permiten cobros adicionales ni modificaciones arancelarias al momento de validar la entrega física.',
+    description:
+      'El precio pactado al publicar el lote es definitivo. No se permiten cobros adicionales ni modificaciones arancelarias al momento de validar la entrega física.',
   },
 ] as const;
 
@@ -61,7 +65,9 @@ export const BecomeSellerModal: React.FC<BecomeSellerModalProps> = ({
   };
 
   const handleConfirmClick = (): void => {
-    if (!hasAcceptedTerms) return;
+    if (!hasAcceptedTerms) {
+      return;
+    }
     onConfirm();
   };
 
@@ -73,10 +79,8 @@ export const BecomeSellerModal: React.FC<BecomeSellerModalProps> = ({
       description="Antes de habilitar tu panel de vendedor, acepta los principios de comercio justo de Tequio."
     >
       <div className={styles.modalContainer}>
-        <div
+        <section
           className={styles.termsScrollBox}
-          tabIndex={0}
-          role="region"
           aria-label="Políticas y lineamientos para vendedores"
         >
           {SELLER_POLICIES.map((policy) => (
@@ -85,7 +89,7 @@ export const BecomeSellerModal: React.FC<BecomeSellerModalProps> = ({
               <p className={styles.policyText}>{policy.description}</p>
             </article>
           ))}
-        </div>
+        </section>
 
         <label className={styles.checkboxLabel}>
           <input
@@ -94,16 +98,13 @@ export const BecomeSellerModal: React.FC<BecomeSellerModalProps> = ({
             onChange={handleCheckboxChange}
             className={styles.checkboxInput}
           />
-          <span>He leído y me comprometo a respetar los lineamientos y reglas de entrega comunitaria.</span>
+          <span>
+            He leído y me comprometo a respetar los lineamientos y reglas de entrega comunitaria.
+          </span>
         </label>
 
         <div className={styles.actionButtons}>
-          <Button
-            variant="outline"
-            onClick={onClose}
-            disabled={isSubmitting}
-            type="button"
-          >
+          <Button variant="outline" onClick={onClose} disabled={isSubmitting} type="button">
             Cancelar
           </Button>
           <Button

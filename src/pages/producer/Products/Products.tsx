@@ -36,11 +36,16 @@ const ITEMS_PER_PAGE = 10;
  * Traduce el categoryId que viene de la BD al nombre legible de la categoría.
  */
 const resolveCategoryName = (categoryId?: number): string => {
-  if (!categoryId) return 'General';
+  if (!categoryId) {
+    return 'General';
+  }
   for (const parent of PRODUCT_CATEGORIES_TREE) {
-    if (parent.id === categoryId) return parent.label;
-    const sub = parent.subcategories.find((s) => s.id === categoryId);
-    if (sub) return `${parent.label}`;
+    if (parent.id === categoryId) {
+      return parent.label;
+    }
+    if (parent.subcategories.some((subcategory) => subcategory.id === categoryId)) {
+      return `${parent.label}`;
+    }
   }
   return 'General';
 };
@@ -48,14 +53,12 @@ const resolveCategoryName = (categoryId?: number): string => {
 /**
  * Maps raw backend response items to the visual representation required by ProductListItem.
  */
-const mapToPresentationItems = (
-  items: readonly ProductItemResponse[]
-): ProductItemData[] => {
+const mapToPresentationItems = (items: readonly ProductItemResponse[]): ProductItemData[] => {
   return items.map((item) => ({
     id: item.id,
     name: item.name,
     category: resolveCategoryName(item.categoryId), // <-- Nombre real de la categoría
-    subcategory: item.measurementUnit || 'Pieza',   // <-- Columna "Unidad"
+    subcategory: item.measurementUnit || 'Pieza', // <-- Columna "Unidad"
     imageUrl: item.imageUrl,
     isActive: item.isActive ?? true,
   }));
@@ -81,7 +84,9 @@ export const Products: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const reloadProducts = useCallback(async (): Promise<void> => {
-    if (producerId <= 0) return;
+    if (producerId <= 0) {
+      return;
+    }
 
     try {
       setIsLoading(true);
@@ -105,14 +110,18 @@ export const Products: React.FC = () => {
   }, [producerId, currentPage]);
 
   useEffect(() => {
-    if (producerId <= 0) return;
+    if (producerId <= 0) {
+      return;
+    }
 
     let isCurrent = true;
 
     productService
       .getProductsByProducer(producerId, currentPage, ITEMS_PER_PAGE)
       .then((response) => {
-        if (!isCurrent) return;
+        if (!isCurrent) {
+          return;
+        }
         const list = response?.products ?? response?.items ?? [];
         const total = response?.itemCount ?? response?.totalCount ?? list.length;
 
@@ -138,9 +147,7 @@ export const Products: React.FC = () => {
 
   const filteredProducts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
-    const result = products.filter((item) =>
-      item.name.toLowerCase().includes(query)
-    );
+    const result = products.filter((item) => item.name.toLowerCase().includes(query));
 
     if (selectedSort === 'name_asc') {
       return [...result].sort((a, b) => a.name.localeCompare(b.name));
@@ -155,8 +162,13 @@ export const Products: React.FC = () => {
     return result;
   }, [products, searchTerm, selectedSort]);
 
-  const handleNavigateToNewProduct = (): void => {
-    navigate(ROUTES.PRODUCER.NEW_PRODUCT);
+  const handleNavigateToNewProduct = async (): Promise<void> => {
+    try {
+      await navigate(ROUTES.PRODUCER.NEW_PRODUCT);
+    } catch (error) {
+      console.error('Could not open the product form.', error);
+      setToastMessage('No pudimos abrir el formulario de productos.');
+    }
   };
 
   const handleProductClick = (productId: number): void => {
@@ -174,7 +186,9 @@ export const Products: React.FC = () => {
   };
 
   const handleConfirmDeactivation = async (): Promise<void> => {
-    if (!productToDelete) return;
+    if (!productToDelete) {
+      return;
+    }
 
     try {
       setIsDeactivating(true);
@@ -284,11 +298,7 @@ export const Products: React.FC = () => {
       </Modal>
 
       {toastMessage && (
-        <Toast
-          message={toastMessage}
-          variant="error"
-          onClose={() => setToastMessage(null)}
-        />
+        <Toast message={toastMessage} variant="error" onClose={() => setToastMessage(null)} />
       )}
     </div>
   );

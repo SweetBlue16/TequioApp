@@ -28,7 +28,10 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [notification, setNotification] = useState<{ message: string; variant: 'info' | 'error' } | null>(null);
+  const [notification, setNotification] = useState<{
+    message: string;
+    variant: 'info' | 'error';
+  } | null>(null);
   const { login } = useSession();
   const navigate = useNavigate();
   const location = useLocation();
@@ -50,8 +53,12 @@ export const Login: React.FC = () => {
       validateMaximumLength('Contraseña', 64),
     ]);
 
-    if (identifierError) errors.identifier = identifierError;
-    if (passwordError) errors.password = passwordError;
+    if (identifierError) {
+      errors.identifier = identifierError;
+    }
+    if (passwordError) {
+      errors.password = passwordError;
+    }
 
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
@@ -60,7 +67,7 @@ export const Login: React.FC = () => {
   /**
    * Manejador de envío con compuerta de validación previa.
    */
-  const handleLoginSubmit = async (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!validateLoginForm()) {
@@ -78,9 +85,14 @@ export const Login: React.FC = () => {
       const session = await login(loginRequest);
       const defaultRoute = ROLE_DEFAULT_ROUTES[session.roleId] ?? ROUTES.PUBLIC.HOME;
       const from = (location.state as { from?: string } | null)?.from;
-      void navigate(from?.startsWith('/') && !from.startsWith('//') ? from : defaultRoute, { replace: true });
+      void navigate(from?.startsWith('/') && !from.startsWith('//') ? from : defaultRoute, {
+        replace: true,
+      });
     } catch {
-      setNotification({ message: 'Credenciales incorrectas o error de conexión.', variant: 'error' });
+      setNotification({
+        message: 'Credenciales incorrectas o error de conexión.',
+        variant: 'error',
+      });
     } finally {
       setIsLoggingIn(false);
     }
@@ -96,14 +108,10 @@ export const Login: React.FC = () => {
         <div className={styles.greetingContainer}>
           <span className={styles.greetingMedium}>Hola</span>
           <span className={styles.greetingLarge}>Tequio!</span>
-          <span className={styles.greetingItalic}>
-            El lugar donde apoyas el comercio local
-          </span>
+          <span className={styles.greetingItalic}>El lugar donde apoyas el comercio local</span>
         </div>
 
-        <div className={styles.footerText}>
-          @2026 Tequio. All rights reserved.
-        </div>
+        <div className={styles.footerText}>@2026 Tequio. All rights reserved.</div>
       </div>
 
       <div className={styles.rightDivision}>

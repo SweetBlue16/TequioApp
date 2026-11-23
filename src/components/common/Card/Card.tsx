@@ -50,12 +50,9 @@ export const Card: React.FC<CardProps> = ({
   style,
   ...props
 }) => {
-  const resolvedPaddingClass =
-    padding === 'sm'
-      ? styles.paddingSm
-      : padding === 'lg'
-      ? styles.paddingLg
-      : styles.paddingMd;
+  const resolvedPaddingClass = { sm: styles.paddingSm, md: styles.paddingMd, lg: styles.paddingLg }[
+    padding
+  ];
 
   const resolvedClasses = [
     styles.card,

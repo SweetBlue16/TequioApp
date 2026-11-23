@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { Card } from '@/components/common/Card';
@@ -35,12 +35,32 @@ export const AddProduct: React.FC = () => {
     setPendingFormData(data);
   };
 
-  const handleCancel = (): void => {
-    navigate(ROUTES.PRODUCER.PRODUCTS);
-  };
+  const handleCancel = useCallback(async (): Promise<void> => {
+    try {
+      await navigate(ROUTES.PRODUCER.PRODUCTS);
+    } catch (error) {
+      console.error('Could not open products.', error);
+      setErrorMessage('No pudimos abrir la lista de productos.');
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!showSuccessModal) {
+      return;
+    }
+
+    const redirectTimer = window.setTimeout(() => {
+      setShowSuccessModal(false);
+      handleCancel().catch(console.error);
+    }, 1500);
+
+    return () => window.clearTimeout(redirectTimer);
+  }, [handleCancel, showSuccessModal]);
 
   const handleConfirmSave = async (): Promise<void> => {
-    if (!pendingFormData || !pendingFormData.imageFile) return;
+    if (!pendingFormData?.imageFile) {
+      return;
+    }
 
     const producerId = session?.userId ? Number(session.userId) : 0;
     if (producerId <= 0) {
@@ -63,14 +83,11 @@ export const AddProduct: React.FC = () => {
 
       setPendingFormData(null);
       setShowSuccessModal(true);
-
-      setTimeout(() => {
-        setShowSuccessModal(false);
-        navigate(ROUTES.PRODUCER.PRODUCTS);
-      }, 1500);
     } catch (error) {
       console.error('Error al registrar el producto base:', error);
-      setErrorMessage('No se pudo registrar el producto. Verifica tu conexión e inténtalo de nuevo.');
+      setErrorMessage(
+        'No se pudo registrar el producto. Verifica tu conexión e inténtalo de nuevo.'
+      );
     } finally {
       setIsSubmitting(false);
     }

@@ -9,10 +9,12 @@ import { EditDeliveryPoint } from '@/pages/admin/EditDeliveryPoint';
 /**
  * Dedicated sub-router for all administrator dashboard views.
  */
-export const AdminRoutes: React.FC = () => {
+export const AdminRoutes: React.FC<Readonly<{ onLogoutNavigationError: () => void }>> = ({
+  onLogoutNavigationError,
+}) => {
   return (
     <Routes>
-      <Route element={<Admin />}>
+      <Route element={<Admin onLogoutNavigationError={onLogoutNavigationError} />}>
         <Route index element={<AdminWelcome />} />
         <Route path="puntos-entrega" element={<DeliveryPoints />} />
         <Route path="puntos-entrega/nuevo" element={<AddDeliveryPoint />} />

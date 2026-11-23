@@ -30,43 +30,25 @@ export const DeliveryPointListItem: React.FC<DeliveryPointListItemProps> = ({
 }) => {
   const streetLine = `${deliveryPoint.street} #${deliveryPoint.number}, Col. ${deliveryPoint.neighborhood}`;
   const cityLine = `${deliveryPoint.city} • C.P. ${deliveryPoint.zipCode}`;
-  const googleMapsUrl = buildGoogleMapsSearchUrl(
-    deliveryPoint.latitude,
-    deliveryPoint.longitude
-  );
-
-  const handleRowKeyDown = (event: React.KeyboardEvent<HTMLElement>): void => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      onSelect(deliveryPoint);
-    }
-  };
-
-  const handleEditClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
-    event.stopPropagation();
-    onEdit(deliveryPoint.id);
-  };
-
-  const handleToggleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
-    event.stopPropagation();
-    onToggleStatus(deliveryPoint);
-  };
+  const googleMapsUrl = buildGoogleMapsSearchUrl(deliveryPoint.latitude, deliveryPoint.longitude);
 
   const statusButtonClass = deliveryPoint.isActive
     ? styles.deactivateButton
     : styles.activateButton;
 
   return (
-    <article
-      role="button"
-      tabIndex={0}
-      onClick={() => onSelect(deliveryPoint)}
-      onKeyDown={handleRowKeyDown}
-      className={styles.itemRow}
-      aria-label={`Ver detalles de ${deliveryPoint.name}`}
-    >
+    <li className={styles.itemRow}>
       <div className={styles.columnName}>
-        <h3 className={styles.pointName}>{deliveryPoint.name}</h3>
+        <h3 className={styles.pointName}>
+          <button
+            type="button"
+            className={styles.detailsButton}
+            onClick={() => onSelect(deliveryPoint)}
+            aria-label={`Ver detalles de ${deliveryPoint.name}`}
+          >
+            {deliveryPoint.name}
+          </button>
+        </h3>
         <span
           className={`${styles.statusBadge} ${
             deliveryPoint.isActive ? styles.statusActive : styles.statusInactive
@@ -88,7 +70,6 @@ export const DeliveryPointListItem: React.FC<DeliveryPointListItemProps> = ({
           href={googleMapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={(event) => event.stopPropagation()}
           className={styles.mapsButton}
           title="Abrir ubicación en Google Maps"
           aria-label={`Abrir ${deliveryPoint.name} en Google Maps`}
@@ -98,7 +79,7 @@ export const DeliveryPointListItem: React.FC<DeliveryPointListItemProps> = ({
 
         <button
           type="button"
-          onClick={handleEditClick}
+          onClick={() => onEdit(deliveryPoint.id)}
           className={`${styles.actionButton} ${styles.editButton}`}
           aria-label={`Editar ${deliveryPoint.name}`}
         >
@@ -107,14 +88,14 @@ export const DeliveryPointListItem: React.FC<DeliveryPointListItemProps> = ({
 
         <button
           type="button"
-          onClick={handleToggleClick}
+          onClick={() => onToggleStatus(deliveryPoint)}
           className={`${styles.actionButton} ${statusButtonClass}`}
           aria-label={`${deliveryPoint.isActive ? 'Desactivar' : 'Activar'} ${deliveryPoint.name}`}
         >
           {deliveryPoint.isActive ? 'Desactivar' : 'Activar'}
         </button>
       </div>
-    </article>
+    </li>
   );
 };
 

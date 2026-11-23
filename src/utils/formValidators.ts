@@ -60,7 +60,7 @@ export const validateAlphabeticTextOnly = (fieldDisplayName: string): ValidatorF
 };
 
 /**
- * Validates standard email address format according to RFC 5322.
+ * Checks the email shape accepted by the registration form.
  */
 export const validateEmailAddress: ValidatorFunction = (emailAddress: string): ValidationResult => {
   const trimmedEmail = emailAddress.trim();
@@ -68,8 +68,15 @@ export const validateEmailAddress: ValidatorFunction = (emailAddress: string): V
     return createFailureResult('Ingresa tu correo electrónico.');
   }
 
-  const emailRegularExpression = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegularExpression.test(trimmedEmail)
+  const separator = trimmedEmail.indexOf('@');
+  const domain = trimmedEmail.slice(separator + 1);
+  const domainDot = domain.indexOf('.', 1);
+  const hasInteriorDot = domainDot !== -1 && domainDot < domain.length - 1;
+
+  return separator > 0 &&
+    !trimmedEmail.includes('@', separator + 1) &&
+    !/\s/.test(trimmedEmail) &&
+    hasInteriorDot
     ? createSuccessResult()
     : createFailureResult('Ingresa un correo electrónico con formato válido.');
 };
@@ -77,7 +84,9 @@ export const validateEmailAddress: ValidatorFunction = (emailAddress: string): V
 /**
  * Validates that a mobile telephone string contains exactly 10 numeric digits.
  */
-export const validateTelephoneNumber: ValidatorFunction = (telephoneNumber: string): ValidationResult => {
+export const validateTelephoneNumber: ValidatorFunction = (
+  telephoneNumber: string
+): ValidationResult => {
   const numericDigitsOnly = telephoneNumber.replace(/\D/g, '');
   if (!numericDigitsOnly) {
     return createFailureResult('Ingresa tu número de teléfono.');
@@ -98,7 +107,9 @@ export const validateMaximumLength = (
   return (value: string): ValidationResult => {
     return value.trim().length <= maxLength
       ? createSuccessResult()
-      : createFailureResult(`El ${fieldDisplayName.toLowerCase()} no puede exceder los ${maxLength} caracteres.`);
+      : createFailureResult(
+          `El ${fieldDisplayName.toLowerCase()} no puede exceder los ${maxLength} caracteres.`
+        );
   };
 };
 
@@ -112,17 +123,22 @@ export const calculateAgeFromBirthDate = (birthDateString: string): number => {
   let calculatedAge = currentDate.getFullYear() - birthDate.getFullYear();
   const monthDifference = currentDate.getMonth() - birthDate.getMonth();
 
-  if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())
+  ) {
     calculatedAge -= 1;
   }
-  return isNaN(calculatedAge) ? 0 : calculatedAge;
+  return Number.isNaN(calculatedAge) ? 0 : calculatedAge;
 };
 
 /**
  * Validates that the provided birth date corresponds to a legal adult (at least 18 years old)
  * and does not exceed a reasonable human lifespan (maximum 100 years).
  */
-export const validateLegalAdultAge: ValidatorFunction = (birthDateString: string): ValidationResult => {
+export const validateLegalAdultAge: ValidatorFunction = (
+  birthDateString: string
+): ValidationResult => {
   if (!birthDateString) {
     return createFailureResult('Selecciona tu fecha de nacimiento.');
   }
@@ -195,7 +211,7 @@ export const validatePasswordConfirmationMatch = (
 // ============================================================================
 
 const MAXIMUM_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MiB
-const ACCEPTED_IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const ACCEPTED_IMAGE_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
 /**
  * Validates that an image file exists, adheres to permitted MIME formats,
@@ -206,7 +222,7 @@ export const validateImageFile = (file: File | null): ValidationResult => {
     return createFailureResult('Debes seleccionar una fotografía.');
   }
 
-  if (!ACCEPTED_IMAGE_MIME_TYPES.includes(file.type)) {
+  if (!ACCEPTED_IMAGE_MIME_TYPES.has(file.type)) {
     return createFailureResult('Solo se admiten fotografías en formato JPG, PNG o WebP.');
   }
 
@@ -235,6 +251,4 @@ export const executeFieldValidation = (
     }
   }
   return null;
-
-  
 };

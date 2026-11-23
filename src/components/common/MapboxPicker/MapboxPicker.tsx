@@ -9,10 +9,7 @@ import styles from './MapboxPicker.module.css';
 /**
  * Geographic bounding box formatted as [[minLng, minLat], [maxLng, maxLat]].
  */
-export type GeographicBounds = readonly [
-  readonly [number, number],
-  readonly [number, number],
-];
+export type GeographicBounds = readonly [readonly [number, number], readonly [number, number]];
 
 /**
  * Properties contract for the MapboxPicker component.
@@ -42,15 +39,20 @@ export const MapboxPicker: React.FC<MapboxPickerProps> = ({
   const markerRef = useRef<mapboxgl.Marker | null>(null);
   const accessToken = getMapboxAccessToken();
 
-  const hasValidCoordinates = Number.isFinite(coordinates.latitude) && Number.isFinite(coordinates.longitude)
-    && Math.abs(coordinates.latitude) <= 90 && Math.abs(coordinates.longitude) <= 180;
+  const hasValidCoordinates =
+    Number.isFinite(coordinates.latitude) &&
+    Number.isFinite(coordinates.longitude) &&
+    Math.abs(coordinates.latitude) <= 90 &&
+    Math.abs(coordinates.longitude) <= 180;
   const changeHandlerRef = useRef(onCoordinatesChange);
   useEffect(() => {
     changeHandlerRef.current = onCoordinatesChange;
   }, [onCoordinatesChange]);
 
   useEffect(() => {
-    if (!containerRef.current || !accessToken || !hasValidCoordinates) return;
+    if (!containerRef.current || !accessToken || !hasValidCoordinates) {
+      return;
+    }
 
     mapboxgl.accessToken = accessToken;
 
@@ -115,7 +117,9 @@ export const MapboxPicker: React.FC<MapboxPickerProps> = ({
   }, [interactive, accessToken, hasValidCoordinates]);
 
   useEffect(() => {
-    if (!mapRef.current || !markerRef.current || !hasValidCoordinates) return;
+    if (!mapRef.current || !markerRef.current || !hasValidCoordinates) {
+      return;
+    }
 
     markerRef.current.setLngLat([coordinates.longitude, coordinates.latitude]);
     mapRef.current.flyTo({
@@ -136,16 +140,13 @@ export const MapboxPicker: React.FC<MapboxPickerProps> = ({
 
   return (
     <div className={styles.mapWrapper}>
-      <div
+      <section
         ref={containerRef}
         className={styles.mapCanvas}
-        role="region"
         aria-label="Mapa de ubicación del punto de entrega"
       />
       {interactive && (
-        <span className={styles.helperBadge}>
-          Arrastra el marcador o haz clic en el mapa
-        </span>
+        <span className={styles.helperBadge}>Arrastra el marcador o haz clic en el mapa</span>
       )}
     </div>
   );

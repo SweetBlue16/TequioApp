@@ -15,8 +15,7 @@ export const ALLOWED_DELIVERY_MUNICIPALITIES: readonly string[] = [
   'Naolinco',
 ] as const;
 
-const VALID_STREET_NUMBER_REGEX =
-  /^(s\/n|sn|\d+[a-zA-Z0-9\-\/\s.]*|km\.?\s*\d+(\.\d+)?)$/i;
+const VALID_STREET_NUMBER_REGEX = /^(?:s[/]?n|[0-9][a-z0-9/\s.-]*|km\.?\s*[0-9]+(?:\.[0-9]+)?)$/i;
 
 const TIME_24H_REGEX = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
@@ -30,7 +29,9 @@ export const matchAllowedMunicipality = (rawCity: string): string | null => {
     .toLowerCase()
     .trim();
 
-  if (!normalized) return null;
+  if (!normalized) {
+    return null;
+  }
 
   const matched = ALLOWED_DELIVERY_MUNICIPALITIES.find((municipality) => {
     const target = municipality
@@ -53,7 +54,9 @@ export const validateRequiredText = (
   minLength = 3
 ): string | null => {
   const trimmed = value.trim();
-  if (!trimmed) return `El campo ${fieldName} es obligatorio.`;
+  if (!trimmed) {
+    return `El campo ${fieldName} es obligatorio.`;
+  }
   if (trimmed.length < minLength) {
     return `El campo ${fieldName} debe tener al menos ${minLength} caracteres.`;
   }
@@ -71,8 +74,12 @@ export const validateRequiredText = (
  */
 export const validateStreetNumber = (value: string): string | null => {
   const trimmed = value.trim();
-  if (!trimmed) return 'El número exterior es obligatorio.';
-  if (trimmed.length > 50) return 'El número no debe exceder 50 caracteres.';
+  if (!trimmed) {
+    return 'El número exterior es obligatorio.';
+  }
+  if (trimmed.length > 50) {
+    return 'El número no debe exceder 50 caracteres.';
+  }
   if (!VALID_STREET_NUMBER_REGEX.test(trimmed)) {
     return 'Ingresa un número válido (ej. 123, 45-B, Km 2 o S/N).';
   }
@@ -84,7 +91,9 @@ export const validateStreetNumber = (value: string): string | null => {
  */
 export const validatePostalCode = (zipCode: string): string | null => {
   const trimmed = zipCode.trim();
-  if (!trimmed) return 'El código postal es obligatorio.';
+  if (!trimmed) {
+    return 'El código postal es obligatorio.';
+  }
   if (!/^\d{5}$/.test(trimmed)) {
     return 'El C.P. debe contener exactamente 5 dígitos.';
   }
@@ -99,7 +108,9 @@ export const validatePostalCode = (zipCode: string): string | null => {
  * Validates that the municipality belongs to Xalapa and its surrounding region.
  */
 export const validateRegionalMunicipality = (city: string): string | null => {
-  if (!city.trim()) return 'Selecciona un municipio de la región.';
+  if (!city.trim()) {
+    return 'Selecciona un municipio de la región.';
+  }
   if (!matchAllowedMunicipality(city)) {
     return 'Solo se permiten puntos en Xalapa y municipios cercanos.';
   }
@@ -109,10 +120,7 @@ export const validateRegionalMunicipality = (city: string): string | null => {
 /**
  * Validates opening and closing business hours in 24-hour HH:MM format.
  */
-export const validateBusinessHoursRange = (
-  openTime: string,
-  closeTime: string
-): string | null => {
+export const validateBusinessHoursRange = (openTime: string, closeTime: string): string | null => {
   if (!TIME_24H_REGEX.test(openTime) || !TIME_24H_REGEX.test(closeTime)) {
     return 'Selecciona una hora de apertura y cierre válidas.';
   }
@@ -127,7 +135,9 @@ export const validateBusinessHoursRange = (
  */
 export const validateOptionalReferences = (references?: string | null): string | null => {
   const trimmed = (references ?? '').trim();
-  if (!trimmed) return null;
+  if (!trimmed) {
+    return null;
+  }
   if (trimmed.length < 5) {
     return 'Las referencias deben tener al menos 5 caracteres si decides agregarlas.';
   }
@@ -157,7 +167,9 @@ export const validateDeliveryPointForm = (
   ];
 
   checks.forEach(([field, message]) => {
-    if (message) errors[field] = message;
+    if (message) {
+      errors[field] = message;
+    }
   });
 
   return errors;

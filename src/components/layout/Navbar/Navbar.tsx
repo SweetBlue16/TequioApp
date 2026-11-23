@@ -8,30 +8,49 @@ import { useSession } from '@/contexts/AuthContext';
 import { ROUTES } from '@/constants/routes';
 import tequioLogo from '@/assets/images/tequioLogoTexto.png';
 import cartIcon from '@/assets/icons/icon_carroCompra.png';
+import { Toast } from '@/components/common/Toast';
 import styles from './Navbar.module.css';
 
 export const Navbar: React.FC = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const { session, profile, logout } = useSession();
   const navigate = useNavigate();
+  const [navigationError, setNavigationError] = useState(false);
 
   const userName = profile?.firstName || 'Mi cuenta';
 
   const toggleMobile = () => setIsMobileOpen((prev) => !prev);
   const closeMobile = () => setIsMobileOpen(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     closeMobile();
     logout();
-    navigate(ROUTES.PUBLIC.HOME);
+    try {
+      await navigate(ROUTES.PUBLIC.HOME, { replace: true });
+    } catch (error) {
+      console.error('Could not navigate after signing out.', error);
+      setNavigationError(true);
+    }
   };
 
   return (
     <header className={styles.header}>
       <ColorBar height={6} />
+      {navigationError && (
+        <Toast
+          message="Cerraste sesión, pero no pudimos abrir el inicio."
+          variant="error"
+          onClose={() => setNavigationError(false)}
+        />
+      )}
 
       <div className={styles.container}>
-        <Link to="/" className={styles.brand} onClick={closeMobile} aria-label="Ir al inicio de Tequio">
+        <Link
+          to="/"
+          className={styles.brand}
+          onClick={closeMobile}
+          aria-label="Ir al inicio de Tequio"
+        >
           <img src={tequioLogo} alt="Logotipo de Tequio" className={styles.logoImage} />
         </Link>
 
@@ -59,12 +78,20 @@ export const Navbar: React.FC = () => {
             <>
               <Link to="/perfil" className={styles.userProfile} onClick={closeMobile}>
                 <div className={styles.avatarWrapper}>
-                  <Avatar key={profile?.profilePictureUrl ?? 'no-photo'} src={profile?.profilePictureUrl} altName={userName} />
+                  <Avatar
+                    key={profile?.profilePictureUrl ?? 'no-photo'}
+                    src={profile?.profilePictureUrl}
+                    altName={userName}
+                  />
                 </div>
                 <span className={styles.userName}>Hola, {userName}</span>
               </Link>
 
-              <Link to={ROUTES.BUYER.CART} className={styles.cartButton} aria-label="Carrito de compras">
+              <Link
+                to={ROUTES.BUYER.CART}
+                className={styles.cartButton}
+                aria-label="Carrito de compras"
+              >
                 <img src={cartIcon} alt="" aria-hidden="true" className={styles.cartIcon} />
               </Link>
 
@@ -91,10 +118,22 @@ export const Navbar: React.FC = () => {
           <NavTextButton label="Categorías" to={ROUTES.PUBLIC.CATALOG} onClick={closeMobile} />
           {session ? (
             <>
-              <NavTextButton label="Panel de vendedor" to={ROUTES.PRODUCER.ROOT} onClick={closeMobile} />
-              <NavTextButton label="Mis compras" to={ROUTES.BUYER.MY_PURCHASES} onClick={closeMobile} />
+              <NavTextButton
+                label="Panel de vendedor"
+                to={ROUTES.PRODUCER.ROOT}
+                onClick={closeMobile}
+              />
+              <NavTextButton
+                label="Mis compras"
+                to={ROUTES.BUYER.MY_PURCHASES}
+                onClick={closeMobile}
+              />
               {session.roleId === 3 && (
-                <NavTextButton label="Panel de administración" to={ROUTES.ADMIN.ROOT} onClick={closeMobile} />
+                <NavTextButton
+                  label="Panel de administración"
+                  to={ROUTES.ADMIN.ROOT}
+                  onClick={closeMobile}
+                />
               )}
               <NavTextButton label="Mi perfil" to="/perfil" onClick={closeMobile} />
               <button

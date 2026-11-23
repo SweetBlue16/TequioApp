@@ -26,9 +26,9 @@ export const ProductListTable: React.FC<ProductListTableProps> = ({
 }) => {
   if (products.length === 0) {
     return (
-      <div className={styles.emptyState} role="status">
-        <p>No se encontraron productos registrados con ese criterio.</p>
-      </div>
+      <output className={styles.emptyState}>
+        No se encontraron productos registrados con ese criterio.
+      </output>
     );
   }
 

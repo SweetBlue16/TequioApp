@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type SubmitEvent } from 'react';
 import { useSession } from '@/contexts/AuthContext';
 import type { UpdateUserProfile, UserProfile } from '@/services/profile/ProfileService';
 import InputField from '@/components/common/InputField';
@@ -25,25 +25,42 @@ function toForm(profile: UserProfile): UpdateUserProfile {
 
 function validate(form: UpdateUserProfile): Record<string, string> {
   const errors: Record<string, string> = {};
-  for (const [name, label] of [['firstName', 'El nombre'], ['paternalLastName', 'El apellido paterno']] as const) {
-    if (!form[name].trim()) errors[name] = `${label} es obligatorio.`;
+  for (const [name, label] of [
+    ['firstName', 'El nombre'],
+    ['paternalLastName', 'El apellido paterno'],
+  ] as const) {
+    if (!form[name].trim()) {
+      errors[name] = `${label} es obligatorio.`;
+    }
   }
   for (const [name, label, max] of [
-    ['firstName', 'El nombre', 100], ['paternalLastName', 'El apellido paterno', 100],
-    ['maternalLastName', 'El apellido materno', 100], ['phoneNumber', 'El teléfono', 20],
+    ['firstName', 'El nombre', 100],
+    ['paternalLastName', 'El apellido paterno', 100],
+    ['maternalLastName', 'El apellido materno', 100],
+    ['phoneNumber', 'El teléfono', 20],
     ['locality', 'La localidad', 100],
   ] as const) {
-    if ((form[name] ?? '').trim().length > max) errors[name] = `${label} no puede exceder ${max} caracteres.`;
+    if ((form[name] ?? '').trim().length > max) {
+      errors[name] = `${label} no puede exceder ${max} caracteres.`;
+    }
   }
   const date = form.birthDate;
   const parsed = new Date(`${date}T00:00:00Z`);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== date || parsed.getTime() > Date.now()) {
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+    Number.isNaN(parsed.getTime()) ||
+    parsed.toISOString().slice(0, 10) !== date ||
+    parsed.getTime() > Date.now()
+  ) {
     errors.birthDate = 'Ingresa una fecha de nacimiento válida que no sea futura.';
   }
   return errors;
 }
 
-function ProfileForm({ profile, notify }: { profile: UserProfile; notify: (notice: Notice) => void }) {
+function ProfileForm({
+  profile,
+  notify,
+}: Readonly<{ profile: UserProfile; notify: (notice: Notice) => void }>) {
   const { profileService, refreshProfile } = useSession();
   const [form, setForm] = useState<UpdateUserProfile>(() => toForm(profile));
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -56,12 +73,16 @@ function ProfileForm({ profile, notify }: { profile: UserProfile; notify: (notic
     setErrors((previous) => ({ ...previous, [name]: '' }));
   };
 
-  const save = async (event: FormEvent) => {
+  const save = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (saving || uploading || !profileService) return;
+    if (saving || uploading || !profileService) {
+      return;
+    }
     const nextErrors = validate(form);
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length) return;
+    if (Object.keys(nextErrors).length) {
+      return;
+    }
     setSaving(true);
     try {
       await profileService.updateProfile({
@@ -76,19 +97,31 @@ function ProfileForm({ profile, notify }: { profile: UserProfile; notify: (notic
       notify({ message: 'Perfil actualizado correctamente.', variant: 'info' });
       await refreshProfile();
     } catch {
-      notify({ message: 'No se pudo completar la actualización o recargar el perfil. Consulta los datos antes de reintentar.', variant: 'error' });
+      notify({
+        message:
+          'No se pudo completar la actualización o recargar el perfil. Consulta los datos antes de reintentar.',
+        variant: 'error',
+      });
     } finally {
       setSaving(false);
     }
   };
 
   const upload = async () => {
-    if (!file || uploading || saving || !profileService) return;
+    if (!file || uploading || saving || !profileService) {
+      return;
+    }
     setUploading(true);
     try {
       // Validate again in case a caller bypasses the uploader's selection checks.
-      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024) {
-        notify({ message: 'Selecciona una imagen JPG, PNG o WebP de máximo 5 MiB.', variant: 'error' });
+      if (
+        !['image/jpeg', 'image/png', 'image/webp'].includes(file.type) ||
+        file.size > 5 * 1024 * 1024
+      ) {
+        notify({
+          message: 'Selecciona una imagen JPG, PNG o WebP de máximo 5 MiB.',
+          variant: 'error',
+        });
         return;
       }
       const url = await profileService.uploadImage(file);
@@ -97,7 +130,11 @@ function ProfileForm({ profile, notify }: { profile: UserProfile; notify: (notic
       notify({ message: 'Fotografía actualizada correctamente.', variant: 'info' });
       await refreshProfile();
     } catch {
-      notify({ message: 'No se pudo completar la carga o asociación de la foto. La fotografía anterior permanece visible.', variant: 'error' });
+      notify({
+        message:
+          'No se pudo completar la carga o asociación de la foto. La fotografía anterior permanece visible.',
+        variant: 'error',
+      });
     } finally {
       setUploading(false);
     }
@@ -111,33 +148,101 @@ function ProfileForm({ profile, notify }: { profile: UserProfile; notify: (notic
           <Avatar src={profile.profilePictureUrl} altName={profile.firstName} size={88} />
           <p>Fotografía guardada</p>
         </div>
-        <ImageUploader file={file} onChange={setFile} showErrorToast={(message) => notify({ message, variant: 'error' })} />
-        <Button variant="terracotta" onClick={() => void upload()} disabled={!file || saving} isLoading={uploading}>Guardar fotografía</Button>
+        <ImageUploader
+          file={file}
+          onChange={setFile}
+          showErrorToast={(message) => notify({ message, variant: 'error' })}
+        />
+        <Button
+          variant="terracotta"
+          onClick={() => void upload()}
+          disabled={!file || saving}
+          isLoading={uploading}
+        >
+          Guardar fotografía
+        </Button>
       </section>
 
       <section className={styles.card} aria-labelledby="data-heading">
         <h2 id="data-heading">Datos personales</h2>
         <form onSubmit={(event) => void save(event)} noValidate className={styles.form}>
-          <InputField label="Nombre *" value={form.firstName} maxLength={101} onChange={(event) => update('firstName', event.target.value)} errorMessage={errors.firstName} />
-          <InputField label="Apellido paterno *" value={form.paternalLastName} maxLength={101} onChange={(event) => update('paternalLastName', event.target.value)} errorMessage={errors.paternalLastName} />
-          <InputField label="Apellido materno" value={form.maternalLastName ?? ''} maxLength={101} onChange={(event) => update('maternalLastName', event.target.value)} errorMessage={errors.maternalLastName} />
-          <DateInputField label="Fecha de nacimiento *" value={form.birthDate} max={new Date().toISOString().slice(0, 10)} onChange={(event) => update('birthDate', event.target.value)} errorMessage={errors.birthDate} />
-          <InputField label="Teléfono" value={form.phoneNumber ?? ''} maxLength={21} onChange={(event) => update('phoneNumber', event.target.value)} errorMessage={errors.phoneNumber} />
-          <InputField label="Localidad" value={form.locality ?? ''} maxLength={101} onChange={(event) => update('locality', event.target.value)} errorMessage={errors.locality} />
-          <label className={styles.field}>Biografía
-            <textarea value={form.biography ?? ''} onChange={(event) => update('biography', event.target.value)} rows={4} />
+          <InputField
+            label="Nombre *"
+            value={form.firstName}
+            maxLength={101}
+            onChange={(event) => update('firstName', event.target.value)}
+            errorMessage={errors.firstName}
+          />
+          <InputField
+            label="Apellido paterno *"
+            value={form.paternalLastName}
+            maxLength={101}
+            onChange={(event) => update('paternalLastName', event.target.value)}
+            errorMessage={errors.paternalLastName}
+          />
+          <InputField
+            label="Apellido materno"
+            value={form.maternalLastName ?? ''}
+            maxLength={101}
+            onChange={(event) => update('maternalLastName', event.target.value)}
+            errorMessage={errors.maternalLastName}
+          />
+          <DateInputField
+            label="Fecha de nacimiento *"
+            value={form.birthDate}
+            max={new Date().toISOString().slice(0, 10)}
+            onChange={(event) => update('birthDate', event.target.value)}
+            errorMessage={errors.birthDate}
+          />
+          <InputField
+            label="Teléfono"
+            value={form.phoneNumber ?? ''}
+            maxLength={21}
+            onChange={(event) => update('phoneNumber', event.target.value)}
+            errorMessage={errors.phoneNumber}
+          />
+          <InputField
+            label="Localidad"
+            value={form.locality ?? ''}
+            maxLength={101}
+            onChange={(event) => update('locality', event.target.value)}
+            errorMessage={errors.locality}
+          />
+          <label className={styles.field}>
+            <span>Biografía</span>
+            <textarea
+              value={form.biography ?? ''}
+              onChange={(event) => update('biography', event.target.value)}
+              rows={4}
+            />
           </label>
-          <div className={styles.fullRow}><Button type="submit" variant="terracotta" disabled={uploading} isLoading={saving}>Guardar cambios</Button></div>
+          <div className={styles.fullRow}>
+            <Button type="submit" variant="terracotta" disabled={uploading} isLoading={saving}>
+              Guardar cambios
+            </Button>
+          </div>
         </form>
       </section>
 
       <section className={styles.card} aria-labelledby="account-heading">
         <h2 id="account-heading">Datos de cuenta</h2>
         <dl className={styles.details}>
-          <div><dt>Correo electrónico</dt><dd>{profile.email}</dd></div>
-          <div><dt>Estado</dt><dd>{profile.isVerified ? 'Verificada' : 'Pendiente de verificación'}</dd></div>
-          <div><dt>Registro</dt><dd>{new Date(profile.registrationDate).toLocaleDateString('es-MX')}</dd></div>
-          <div><dt>ID</dt><dd>{profile.id}</dd></div>
+          <div>
+            <dt>Correo electrónico</dt>
+            <dd>{profile.email}</dd>
+          </div>
+          <div>
+            <dt>Estado</dt>
+            <dd>{profile.isVerified ? 'Verificada' : 'Pendiente de verificación'}</dd>
+          </div>
+          <div>
+            <dt>Registro</dt>
+            <dd>{new Date(profile.registrationDate).toLocaleDateString('es-MX')}</dd>
+          </div>
+          <div>
+            <dt>ID</dt>
+            <dd>{profile.id}</dd>
+          </div>
         </dl>
       </section>
     </>
@@ -151,11 +256,27 @@ export function ProfilePage() {
   return (
     <div className={styles.page}>
       <h1>Mi perfil</h1>
-      {profileStatus === 'loading' && <p role="status">Cargando perfil…</p>}
-      {profileStatus === 'error' && <div role="alert">No se pudo cargar el perfil. <button type="button" onClick={() => void refreshProfile().catch(() => undefined)}>Reintentar</button></div>}
+      {profileStatus === 'loading' && <output>Cargando perfil…</output>}
+      {profileStatus === 'error' && (
+        <div role="alert">
+          No se pudo cargar el perfil.{' '}
+          <button type="button" onClick={() => void refreshProfile().catch(() => undefined)}>
+            Reintentar
+          </button>
+        </div>
+      )}
       {!profile && profileStatus === 'ready' && <p>No hay datos de perfil disponibles.</p>}
-      {profile && <ProfileForm key={JSON.stringify(profile)} profile={profile} notify={setNotice} />}
-      {notice && <Toast message={notice.message} variant={notice.variant} duration={5000} onClose={() => setNotice(null)} />}
+      {profile && (
+        <ProfileForm key={JSON.stringify(profile)} profile={profile} notify={setNotice} />
+      )}
+      {notice && (
+        <Toast
+          message={notice.message}
+          variant={notice.variant}
+          duration={5000}
+          onClose={() => setNotice(null)}
+        />
+      )}
     </div>
   );
 }

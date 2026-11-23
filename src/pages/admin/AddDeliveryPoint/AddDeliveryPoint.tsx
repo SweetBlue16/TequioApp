@@ -15,8 +15,22 @@ export const AddDeliveryPoint: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [toastState, setToastState] = useState<{
     message: string;
-    variant: 'info' | 'error';
+    variant: 'error';
   } | null>(null);
+
+  const returnToList = async (deliveryPointNotice?: string): Promise<void> => {
+    try {
+      await navigate(ROUTES.ADMIN.DELIVERY_POINTS, {
+        state: { deliveryPointNotice },
+      });
+    } catch (error) {
+      console.error('Could not open delivery points.', error);
+      setToastState({
+        message: 'No pudimos abrir la lista de puntos de entrega.',
+        variant: 'error',
+      });
+    }
+  };
 
   const handleCreateSubmit = async (data: DeliveryPointSummaryData): Promise<void> => {
     setIsSubmitting(true);
@@ -34,14 +48,7 @@ export const AddDeliveryPoint: React.FC = () => {
         longitude: data.longitude,
       });
 
-      setToastState({
-        message: 'Punto de entrega registrado con éxito.',
-        variant: 'info',
-      });
-
-      setTimeout(() => {
-        navigate(ROUTES.ADMIN.DELIVERY_POINTS);
-      }, 900);
+      await returnToList('Punto de entrega registrado con éxito.');
     } catch (error) {
       setToastState({
         message: deliveryPointErrorMessage(error),
@@ -64,7 +71,7 @@ export const AddDeliveryPoint: React.FC = () => {
       <DeliveryPointWizard
         mode="create"
         isSubmitting={isSubmitting}
-        onCancel={() => navigate(ROUTES.ADMIN.DELIVERY_POINTS)}
+        onCancel={() => returnToList()}
         onSubmit={(data) => void handleCreateSubmit(data)}
       />
     </>

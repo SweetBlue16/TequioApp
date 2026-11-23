@@ -5,7 +5,6 @@ import { Card } from '@/components/common/Card';
 import { InputField } from '@/components/common/InputField';
 import { CodeInput } from '@/components/common/CodeInput';
 import { Button } from '@/components/common/Button';
-import { TextLink } from '@/components/common/TextLink';
 import { ColorBar } from '@/components/common/ColorBar';
 import { useAuthService } from '@/contexts/AuthContext';
 import type { VerificationRequest } from '@/types/registration/VerificationRequest';
@@ -45,7 +44,7 @@ const VerificationSuccessView: React.FC = () => (
     <p className={styles.successMessage}>
       ¡Tu cuenta ha sido creada con éxito, bienvenido a Tequio!
     </p>
-    <div className={styles.spinner} role="status" aria-label="Cargando" />
+    <output className={styles.spinner} aria-label="Cargando" />
     <p className={styles.instructionText}>Llevándote a la página de ingreso...</p>
   </div>
 );
@@ -103,7 +102,7 @@ export const VerifyAccount: React.FC = () => {
   /**
    * Handles account verification form submission.
    */
-  const handleVerificationSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleVerificationSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!validateFormInputs()) {
@@ -125,10 +124,7 @@ export const VerifyAccount: React.FC = () => {
       await authService.verify(payload);
       setIsVerifiedSuccessfully(true);
     } catch (error: unknown) {
-      const resolvedMessage = resolveErrorMessage(
-        error,
-        'El código es incorrecto o ha expirado.'
-      );
+      const resolvedMessage = resolveErrorMessage(error, 'El código es incorrecto o ha expirado.');
       setCodeErrorMessage(resolvedMessage);
     } finally {
       setIsVerifying(false);
@@ -160,7 +156,9 @@ export const VerifyAccount: React.FC = () => {
         await candidateService.resendVerificationCode(email.trim().toLowerCase());
       }
 
-      setInfoMessage('Si tu cuenta existe y tiene verificación pendiente, enviamos un nuevo código.');
+      setInfoMessage(
+        'Si tu cuenta existe y tiene verificación pendiente, enviamos un nuevo código.'
+      );
     } catch (error: unknown) {
       const resolvedMessage = resolveErrorMessage(
         error,
@@ -182,7 +180,8 @@ export const VerifyAccount: React.FC = () => {
             <>
               <h1 className={styles.title}>Verificación de cuenta</h1>
               <p className={styles.instructionText}>
-                Hemos enviado un código a tu correo electrónico. Revisa tu bandeja de entrada o la carpeta de correo no deseado.
+                Hemos enviado un código a tu correo electrónico. Revisa tu bandeja de entrada o la
+                carpeta de correo no deseado.
               </p>
 
               {generalErrorMessage && (
@@ -192,9 +191,12 @@ export const VerifyAccount: React.FC = () => {
               )}
 
               {infoMessage && (
-                <div role="status" className={styles.alertBox} style={{ backgroundColor: '#e8f5e9', color: '#1b5e20' }}>
+                <output
+                  className={styles.alertBox}
+                  style={{ backgroundColor: '#e8f5e9', color: '#1b5e20' }}
+                >
                   {infoMessage}
-                </div>
+                </output>
               )}
 
               <form onSubmit={handleVerificationSubmit} noValidate className={styles.formContent}>
@@ -205,25 +207,29 @@ export const VerifyAccount: React.FC = () => {
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
-                    if (emailErrorMessage) setEmailErrorMessage(null);
+                    if (emailErrorMessage) {
+                      setEmailErrorMessage(null);
+                    }
                   }}
                   errorMessage={emailErrorMessage || undefined}
                   maxLength={150}
                   required
                 />
 
-                <div className={styles.codeBlock}>
-                  <label className={styles.codeLabel}>Código de verificación*</label>
+                <fieldset className={styles.codeBlock}>
+                  <legend className={styles.codeLabel}>Código de verificación*</legend>
                   <CodeInput
                     length={6}
                     value={verificationCode}
                     onChange={(updatedCode) => {
                       setVerificationCode(updatedCode);
-                      if (codeErrorMessage) setCodeErrorMessage(null);
+                      if (codeErrorMessage) {
+                        setCodeErrorMessage(null);
+                      }
                     }}
                     errorMessage={codeErrorMessage || undefined}
                   />
-                </div>
+                </fieldset>
 
                 <Button type="submit" fullWidth isLoading={isVerifying}>
                   Verificar cuenta
@@ -239,11 +245,14 @@ export const VerifyAccount: React.FC = () => {
                   onClick={handleRequestNewCode}
                   className={styles.linkButton}
                   disabled={isResending}
-                  style={{ background: 'none', border: 'none', padding: 0, cursor: isResending ? 'not-allowed' : 'pointer' }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    cursor: isResending ? 'not-allowed' : 'pointer',
+                  }}
                 >
-                  <TextLink to="#" variant="terracotta">
-                    {isResending ? 'Enviando código...' : 'Solicita un nuevo código aquí'}
-                  </TextLink>
+                  {isResending ? 'Enviando código...' : 'Solicita un nuevo código aquí'}
                 </button>
               </div>
             </>
@@ -251,9 +260,7 @@ export const VerifyAccount: React.FC = () => {
         </Card>
       </div>
 
-      {!isVerifiedSuccessfully && (
-        <ColorBar height={6} className={styles.bottomColorBar} />
-      )}
+      {!isVerifiedSuccessfully && <ColorBar height={6} className={styles.bottomColorBar} />}
     </div>
   );
 };
